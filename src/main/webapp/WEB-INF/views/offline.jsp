@@ -15,6 +15,7 @@
 <!-- <meta http-equiv="refresh" content="5;url=${pageContext.servletContext.contextPath}/srv/offline"></meta>  -->
 <meta http-equiv="refresh" content="60"></meta>	
 
+
 <jsp:include page="lib.jsp" />
 <title>P R C E K</title>
 
