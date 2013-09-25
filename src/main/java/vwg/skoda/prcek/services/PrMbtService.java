@@ -1,0 +1,41 @@
+package vwg.skoda.prcek.services;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import vwg.skoda.prcek.entities.PrMbt;
+import vwg.skoda.prcek.entities.PrMbtPK;
+
+@Service
+@Transactional
+public class PrMbtService {
+	
+	static Logger log = Logger.getLogger(PrMbt.class);
+
+	@PersistenceContext(name = "EvidencniBodyService")
+	private EntityManager entityManager;
+	
+	public PrMbt getPr(String produkt, String pr) {
+		log.debug("###\t\t getPr("+produkt+", "+pr+");");
+		return entityManager.find(PrMbt.class, new PrMbtPK(produkt, pr) );
+	}
+	
+/*	
+	public PrMbt getPr(String produkt, String pr) {
+		log.debug("###\t getPr("+produkt+" - "+pr+");");
+		return entityManager.createQuery("SELECT u FROM PrMbt u WHERE u.produkt=:prod AND u.pr=:prnr", PrMbt.class).setParameter("prod", produkt).setParameter("prnr", pr).getSingleResult();
+	}
+*/	
+	public List<PrMbt> getPr(String produkt) {
+		log.debug("###\t\t getPr("+produkt+");");
+		return entityManager.createQuery("SELECT u FROM PrMbt u WHERE u.pkz=:prod", PrMbt.class).setParameter("prod", produkt).getResultList();
+	}
+
+
+}

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+	<display-name>prcek</display-name>
+
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!-- Encoding filtr pro naSETotovani requestu na UTF-8 -->
+	<filter>
+		<filter-name>Enc</filter-name>
+		<filter-class>vwg.skoda.prcek.objects.EncodingFiltr</filter-class>
+		<async-supported>true</async-supported>
+	</filter>
+	<filter-mapping>
+		<filter-name>Enc</filter-name>
+		<url-pattern>/srv/*</url-pattern>
+	</filter-mapping>
+
+	<!-- servlet na ktery jsou posilany pozadavky (konfigurovan v dispatcher-servlet.xml) -->
+	<servlet>
+		<servlet-name>dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+		<async-supported>true</async-supported>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>dispatcher</servlet-name>
+		<url-pattern>*.html</url-pattern>
+		<url-pattern>/srv/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>QueryServlet</servlet-name>
+		<servlet-class>cz.gelion.jpqlw.QueryServlet</servlet-class>
+		<init-param>
+			<param-name>persistence.unit</param-name>
+			<param-value>PrcekPersistence</param-value>
+		</init-param>
+		<async-supported>true</async-supported>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>QueryServlet</servlet-name>
+		<url-pattern>/query</url-pattern>
+	</servlet-mapping>
+	<security-role>
+		<description>Standardní uživatelé</description>
+		<role-name>USERS</role-name>
+	</security-role>
+
+	<security-role>
+		<description>Service Desk</description>
+		<role-name>SERVICEDESK</role-name>
+	</security-role>
+
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>ALL</web-resource-name>
+			<url-pattern>/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>USERS</role-name>
+			<role-name>SERVICEDESK</role-name>
+		</auth-constraint>
+	</security-constraint>
+
+	<!-- Jen informace pro WebSpheru, jaky dataSource aplikace pouziva. WasAdmini 
+		ho pak dle tohoto nastavi na websphere -->
+	<resource-ref>
+		<description></description>
+		<res-ref-name>jdbc/Prcek</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Container</res-auth>
+		<res-sharing-scope>Shareable</res-sharing-scope>
+	</resource-ref>
+
+
+</web-app>

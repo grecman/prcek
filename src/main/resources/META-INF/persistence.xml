@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0"
+	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+
+	<!-- toto pouziva EntityManager (definovan v service.xml) -->
+	<persistence-unit name="PrcekPersistence">
+
+		<!-- Hibernatovsky provider pro dataSource (alternativa je tady treba EclipseLink) -->
+		<!-- !!! musi byt uveden pred dataSourcem !!! -->
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+
+		<!-- dataSource ktery pouzije muj lokalni server, tedy Achape-tomcat. Kompletni 
+			ConnectString je nakonfigurovan v context.xml na lokalnim serveru (tomcat) -->
+		<non-jta-data-source>java://comp/env/jdbc/Prcek</non-jta-data-source>
+		<class>vwg.skoda.prcek.entities.SadyPrehled</class>
+		<class>vwg.skoda.prcek.entities.Zakazky</class>
+		<class>vwg.skoda.prcek.entities.OfflineJob</class>
+		<class>vwg.skoda.prcek.entities.Vysledek</class>
+
+		<properties>
+			<!-- oracle driver, ktery hibernate pozije, otazka je jestli je to potreba, 
+				protoze na lokalu predhazujeme serveru knihovnu OJDBC.jar ale kdo vi jak 
+				to funguje na websphere :) -->
+			<property name="hibernate.connection.driver_class" value="oracle.jdbc.driver.OracleDriver" />
+
+			<!-- Urcuje verzi DB jakou ma hibernate ocekavat (tuto nebo vyssi) -->
+			<property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect" />
+
+
+			<!-- Jen pro MAIN -->
+			<!-- <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@lskifa.skoda-db"/> -->
+			<!-- <property name="javax.persistence.jdbc.user" value="prcek"/> -->
+			<!-- <property name="javax.persistence.jdbc.password" value="OBR_1_acene"/> -->
+			<!-- <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/> -->
+
+			<!-- Defaultni nastaveni schematu. Nemusi se nastavovat pokud u kazde 
+				entity to nastavime separatne !!! -->
+			<!-- <property name="hibernate.default_schema" value="prcek" /> -->
+
+		</properties>
+
+	</persistence-unit>
+
+</persistence>

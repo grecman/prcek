@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+
+	<entry key="duplikovatSadu">Duplikovat sadu</entry>
+	<entry key="editace">Editace</entry>
+	<entry key="editacePrPodminky">Editace PR podmínky</entry>	
+	<entry key="importTxt">Import TXT</entry>	
+	<entry key="modelovaTrida">Modelová třída</entry>
+	<entry key="modelovaTridaShort">MT</entry>
+	<entry key="monitoring">Monitoring</entry>
+	<entry key="nahrat">Nahrát</entry>
+	<entry key="nahratSoubor">Nahrát soubor</entry>
+	<entry key="napoveda">Nápověda</entry>
+	<entry key="novaPrPodminka">Nová PR podmínka</entry>
+	<entry key="novaSada">Nová sada</entry>
+	<entry key="nazevSady">Název sady</entry>	
+	<entry key="seznamPrPodminekSady">Seznam PR-podmínek sady</entry>	
+	<entry key="offlineZpracovani">Off-line zpracování</entry>
+	<entry key="poradi">Pořadí</entry>
+	<entry key="poznamka">Poznámka</entry>
+	<entry key="prPodminka">PR podmínka</entry>
+	<entry key="produkt">Produkt</entry>
+	<entry key="produktM">produkt</entry>
+	<entry key="prejmenovatSadu">Přejmenovat sadu</entry>
+	<entry key="prejmenovatSaduShort">Přejmenovat s.</entry>	
+	<entry key="pridatRadek">Přidat řádek</entry>
+	<entry key="puvodniNazev">Původní název</entry>
+	<entry key="smazatSadu">Smazat sadu</entry>
+	<entry key="smazatVse">Smazat vše</entry>
+	<entry key="soubor">Soubor</entry>
+	<entry key="spustVypocet">Spusť výpočet</entry>
+	<entry key="ulozit">Uložit</entry>
+	<entry key="uspesneNahran">úspěšně nahrán</entry>
+	<entry key="uzivatel">Uživatel</entry>
+	<entry key="vypocet">Výpočet</entry>
+	<entry key="zadaniVypoctu">Zadání výpočtu</entry>
+	<entry key="zpet">Zpět</entry>
+		
+	<entry key="skodaAutoFooter">© ŠKODA AUTO a.s., Service Desk Škoda Auto, +420 326 8 17777, </entry>
+
+
+</properties>
