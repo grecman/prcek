@@ -70,7 +70,6 @@ public class RozpadController {
 				log.debug("### ASYNC ###\t call(" + Thread.currentThread() + ")");
 				return "redirect:/srv/offline";
 			}
-
 		};
 
 		// nastavi casovy limit pro vyse uvedeny proces 
