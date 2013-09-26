@@ -12,12 +12,33 @@
 	<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 
-<!-- <meta http-equiv="refresh" content="5;url=${pageContext.servletContext.contextPath}/srv/offline"></meta>  -->
-<meta http-equiv="refresh" content="60"></meta>	
-
-
 <jsp:include page="lib.jsp" />
 <title>P R C E K</title>
+
+<!-- Zajisteni, aby se stranka automaticky obnovila (redirect) po urcitem casovem limitu. Lze to delat pres meta nebo jquery -->
+<!-- <meta http-equiv="refresh" content="60"></meta> -->
+<!-- <meta http-equiv="refresh" content="5;url=${pageContext.servletContext.contextPath}/srv/offline"></meta>  -->
+
+<!-- ZDROJ: http://jquerybyexample.blogspot.com/2013/06/jquery-redirect-page-after-few-seconds.html  -->
+<script type="text/javascript">
+	$(document)
+			.ready(
+					function() {
+						window
+								.setInterval(
+										function() {
+											var iTimeRemaining = $(
+													"#spnSeconds").html();
+											iTimeRemaining = eval(iTimeRemaining);
+											if (iTimeRemaining == 0) {
+												window.location.href = "${pageContext.servletContext.contextPath}/srv/offline";
+											} else {
+												$("#spnSeconds").html(
+														iTimeRemaining - 1);
+											}
+										}, 1000);
+					});
+</script>
 
 </head>
 
@@ -80,7 +101,10 @@
 			</TABLE>
 		</DIV>
 		<BR />
-
+		<p align="right" style="color: gray; font-size: xx-small;">
+			Stránka bude automaticky obnovena za: <span id="spnSeconds">59</span>
+			seconds.
+		</p>
 
 		<jsp:include page="footer.jsp" />
 	</div>

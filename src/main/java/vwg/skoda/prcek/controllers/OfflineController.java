@@ -28,7 +28,7 @@ public class OfflineController {
 	
 	@RequestMapping(value = "/offline")
 	public String offline(Model model, HttpServletRequest req) {
-		log.debug("###\t offline");
+		log.debug("###\t offline    (refresh po 60s, nastaveno v <meta> v offline.jsp ");
 		
 		User u = serviceUser.getUser(req.getUserPrincipal().getName());
 		

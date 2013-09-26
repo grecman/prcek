@@ -81,14 +81,14 @@ public class FileUploadController {
 	@RequestMapping(value = "/saveFile/{vybranaSada}", method = RequestMethod.POST)
 	public WebAsyncTask<String> saveFile(@PathVariable final long vybranaSada, final @ModelAttribute("uploadForm") FileUploadForm uploadForm,
 			Model model, final HttpServletRequest req) throws IOException {
-		log.debug("###\t saveFile(" + vybranaSada + "\t " + Thread.currentThread() + ")");
+		log.debug("###ASYNC###\t saveFile(" + vybranaSada + "\t " + Thread.currentThread() + ")");
 
 		final User u = serviceUser.getUser(req.getUserPrincipal().getName());
 		final Sada s = serviceSada.getSadaOne(vybranaSada);
 
 		Callable<String> c = new Callable<String>() {
 			public String call() throws Exception {
-				log.debug("###\t call(" + Thread.currentThread() + ")");
+				log.debug("###ASYNC###\t call1(" + Thread.currentThread() + ")");
 
 				// LISTy a FOR cyklus jsou tady kvuli tomu, ze je moznost importovat vice souboru najednou (coz ja v JSP zakazuji a pracuji jen s
 				// prvnim) ... ale jde to :)
@@ -141,7 +141,7 @@ public class FileUploadController {
 
 			@Override
 			public String call() throws Exception {
-				log.trace("### Prekrocen povoleny casovy limit = skok na nejake jsp.");
+				log.debug("###ASYNC###\t call ... onTimeOut (" + Thread.currentThread() + ")");
 				return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
 			}
 

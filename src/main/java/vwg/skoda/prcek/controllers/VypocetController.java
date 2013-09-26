@@ -202,7 +202,7 @@ public class VypocetController {
 
 			// nastaveni parametru AGREGACE
 			Long lastAgr = serviceOfflineJob.getLastAgregace(u);
-			
+
 			for (int i = 0; i < f.getIdcka().length; i++) {
 				Sada s = serviceSada.getSadaOne(f.getIdcka()[i]);
 
@@ -221,30 +221,10 @@ public class VypocetController {
 				off.setAgregace((f.getIdcka().length <= 1) ? null : (lastAgr + 1));
 				off.setUtime(new Date());
 				off.setUuser(u.getNetusername());
-				
+
 				serviceOfflineJob.addOfflineJob(off);
 
 			}
-
-			/*
-			 * // spusteni samotneho porovnani List<PrPodminka> prPod = servicePrPodminka.getPrPodminka(s); MBT mbt = new MBT(); Vysledek vysl = new
-			 * Vysledek(); for (int i = 0; i < f.getIdcka().length; i++) { Sada s = serviceSada.getSadaOne(f.getIdcka()[i]);
-			 * 
-			 * List<Zakazky> zak = serviceZakazky.getZakazky(s.getSk30tMt().getMt(), e.getKbodKod(), e.getKbodWk(), e.getKbodEvid(), datumOd, datumDo,
-			 * f.getStornoVetyVystup()); log.debug("\t\t ... nacteno zakazek: "+zak.size()); List<PrPodminka> prPod =
-			 * servicePrPodminka.getPrPodminka(s); Date casSpusteni = new Date();
-			 * 
-			 * 
-			 * for (PrPodminka pr : prPod) { int count = 0; for (Zakazky z : zak) { try { PRCondition prZak = mbt.getPRCondition(z.getPrpoz()); if
-			 * (prZak.isSubset(mbt.getPRCondition(pr.getPr()))) { count++;
-			 * 
-			 * } } catch (Exception ex) { log.error("Chyba rozpadu: ", ex); } } vysl.setSk30tEvidencniBody(e); vysl.setSk30tSada(s);
-			 * vysl.setSk30tUser(u); vysl.setSk30tPrPodminka(pr); vysl.setSoucet(new BigDecimal(count)); vysl.setCasSpusteni(casSpusteni);;
-			 * vysl.setCasUkonceni(new Date()); vysl.setPlatnost(platnost); vysl.setVystupAgregace(f.getAgregaceVystup());
-			 * vysl.setVystupRazeni(f.getTriditDleVystup()); vysl.setVystupZakazky((f.getZakazkyVystup()) ? "ano" : "ne");
-			 * 
-			 * vysl.setUtime(new Date()); vysl.setUuser(u.getNetusername()); serviceVysledek.addVysledek(vysl); }
-			 */
 
 			return "redirect:/srv/offline";
 		}
