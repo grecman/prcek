@@ -17,7 +17,7 @@ public class UserService {
 
 	static Logger log = Logger.getLogger(User.class);
 	
-	@PersistenceContext(name = "UserService")
+	@PersistenceContext
 	private EntityManager entityManager;
 	
 	public User getUser(long id) {
@@ -51,7 +51,7 @@ public class UserService {
 			log.debug("\t\t   ... User nalezen ("+neco+")");
 			return true;
 		} catch (Exception e) {
-			log.debug("\t\t   ... User neexistuje!");
+			log.error("\t\t   ... User neexistuje :",e);
 			return false;
 		}
 

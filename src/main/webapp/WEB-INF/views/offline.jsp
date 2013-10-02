@@ -18,7 +18,7 @@
 <!-- Zajisteni, aby se stranka automaticky obnovila (redirect) po urcitem casovem limitu. Lze to delat pres meta nebo jquery -->
 <!-- <meta http-equiv="refresh" content="60"></meta> -->
 <!-- <meta http-equiv="refresh" content="5;url=${pageContext.servletContext.contextPath}/srv/offline"></meta>  -->
-
+            
 <!-- ZDROJ: http://jquerybyexample.blogspot.com/2013/06/jquery-redirect-page-after-few-seconds.html  -->
 <script type="text/javascript">
 	$(document)
@@ -102,7 +102,7 @@
 		</DIV>
 		<BR />
 		<p align="right" style="color: gray; font-size: xx-small;">
-			Stránka bude automaticky obnovena za: <span id="spnSeconds">59</span>
+			Stránka bude automaticky obnovena za: <span id="spnSeconds">90</span>
 			seconds.
 		</p>
 

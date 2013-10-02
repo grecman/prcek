@@ -172,7 +172,7 @@ public class VypocetController {
 			model.addAttribute("evidBod", e);
 			model.addAttribute("vybraneSady", s);
 			model.addAttribute("platnostVyplnena", platnost);
-			model.addAttribute("info", "Nebyla vybrána žádná sada ke zpracování!");
+			model.addAttribute("info", "Nebyla vybrï¿½na ï¿½ï¿½dnï¿½ sada ke zpracovï¿½nï¿½!");
 			return "/vypocet";
 		} else {
 			EvidencniBody e = serviceEvidencniBody.getEvidencniBodyOne(idEvidBod);
@@ -226,7 +226,7 @@ public class VypocetController {
 
 			}
 
-			return "redirect:/srv/offline";
+			return "redirect:/srv/offline/rozpad";
 		}
 	}
 }

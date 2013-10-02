@@ -75,8 +75,7 @@ public class FileUploadController {
 	}
 
 	// ZDROJ: http://viralpatel.net/blogs/spring-mvc-multiple-file-upload-example/
-	// ZDROJ: http://blog.springsource.org/2012/05/06/spring-mvc-3-2-preview-introducing-servlet-3-async-support/
-
+	
 	// kontroler nacita soubor a zaroven jede cela metoda asynchrone
 	@RequestMapping(value = "/saveFile/{vybranaSada}", method = RequestMethod.POST)
 	public WebAsyncTask<String> saveFile(@PathVariable final long vybranaSada, final @ModelAttribute("uploadForm") FileUploadForm uploadForm,
@@ -86,6 +85,8 @@ public class FileUploadController {
 		final User u = serviceUser.getUser(req.getUserPrincipal().getName());
 		final Sada s = serviceSada.getSadaOne(vybranaSada);
 
+		// V tomto bloku v implementovane metode call() se pousti asynchrone nejaky "dlouhy" proces (export/import/rozpad...)
+		// return v teto metode se provede pouze pokud proces nepresahne nize uvedeny casovy limit
 		Callable<String> c = new Callable<String>() {
 			public String call() throws Exception {
 				log.debug("###ASYNC###\t call1(" + Thread.currentThread() + ")");
@@ -135,8 +136,11 @@ public class FileUploadController {
 			};
 		};
 
-		// 
-		WebAsyncTask<String> w = new WebAsyncTask<String>(10000, c); //10000 = 10s
+		// nastavi casovy limit pro vyse uvedeny proces 
+		// tento WebAsyncTask jede vlastne soubezne s tim Callable a po uplynulem casovem limitu ji opusti a vrati "return" ktery je v tom ".onTimeout"
+		WebAsyncTask<String> w = new WebAsyncTask<String>(30000, c); //1000 = 1s; 60000 = 1min
+		
+		// pokud je limit prekrocenm, tak implementovana metoda call() okamzite vrati
 		w.onTimeout(new Callable<String>() {
 
 			@Override

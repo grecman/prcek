@@ -13,10 +13,6 @@
 		<!-- dataSource ktery pouzije muj lokalni server, tedy Achape-tomcat. Kompletni 
 			ConnectString je nakonfigurovan v context.xml na lokalnim serveru (tomcat) -->
 		<non-jta-data-source>java://comp/env/jdbc/Prcek</non-jta-data-source>
-		<class>vwg.skoda.prcek.entities.SadyPrehled</class>
-		<class>vwg.skoda.prcek.entities.Zakazky</class>
-		<class>vwg.skoda.prcek.entities.OfflineJob</class>
-		<class>vwg.skoda.prcek.entities.Vysledek</class>
 
 		<properties>
 			<!-- oracle driver, ktery hibernate pozije, otazka je jestli je to potreba, 
