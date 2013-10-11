@@ -43,7 +43,7 @@ public class IndexController {
 		 * neprohledaval cely WebContent (ale nejsem si uplne jisty :)).
 		 */
 		
-		//	Ulozeni role do promenne, ktera je videt v cele sessione ... pak v kteremkoliv JSP mohu vypsat stringovou hodnotu jako ${userRole}
+		//	Ulozeni role do promenne, ktera je videt v cele sessione ... pak v kteremkoliv JSP mohu vypsat stringovou hodnotu jako ${userRole} nebo session.getAttribute v controlleru
 		
 		String role = null;
 		
@@ -63,7 +63,7 @@ public class IndexController {
 
 			UserZentaAdm userZentaAdm = serviceUserZentaAdm.getUserZentaAdm(req.getUserPrincipal().getName().toUpperCase());
 			if (userZentaAdm == null || userZentaAdm.getNetUsername().isEmpty()) {
-				log.error("Pøihlášený uživatel " + req.getUserPrincipal().getName().toUpperCase() + " nenalezen v db ZentaAdm");
+				log.error("Pï¿½ihlï¿½enï¿½ uï¿½ivatel " + req.getUserPrincipal().getName().toUpperCase() + " nenalezen v db ZentaAdm");
 			}
 
 			User newUser = new User();
@@ -85,7 +85,7 @@ public class IndexController {
 		}
 
 		/*
-		 * TODO: - v pripade role SERVICEDESK presmerovat na MONITORING (ale toto asi bude reseno filtrem na cele sessionì) nebo na kazde hlavni
+		 * TODO: - v pripade role SERVICEDESK presmerovat na MONITORING (ale toto asi bude reseno filtrem na cele sessionï¿½) nebo na kazde hlavni
 		 * obrazovce (edicate/vypocet/offline) ... napovedu bych jim nechal.
 		 */
 

@@ -1,6 +1,7 @@
 package vwg.skoda.prcek.controllers;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -155,9 +156,9 @@ public class VypocetController {
 		return "/vypocet";
 	}
 
-	@RequestMapping(value = "/vypocet/spusteni/{platnost}/{idEvidBod}/")
-	public String spusteni(@PathVariable String platnost, @PathVariable long idEvidBod, FormObj f, EvidencniBody eb, Model model, HttpServletRequest req) {
-		log.debug("###\t spusteni(" + platnost + ", " + idEvidBod + ")");
+	@RequestMapping(value = "/vypocet/zafrontovani/{platnost}/{idEvidBod}/")
+	public String zafrontovani(@PathVariable String platnost, @PathVariable long idEvidBod, FormObj f, EvidencniBody eb, Model model, HttpServletRequest req) throws ParseException {
+		log.debug("###\t zafrontovani(" + platnost + ", " + idEvidBod + ")");
 
 		User u = serviceUser.getUser(req.getUserPrincipal().getName());
 
@@ -172,7 +173,7 @@ public class VypocetController {
 			model.addAttribute("evidBod", e);
 			model.addAttribute("vybraneSady", s);
 			model.addAttribute("platnostVyplnena", platnost);
-			model.addAttribute("info", "Nebyla vybr�na ��dn� sada ke zpracov�n�!");
+			model.addAttribute("info", "Nebyla vybrána žádná sada ke zpracování!");
 			return "/vypocet";
 		} else {
 			EvidencniBody e = serviceEvidencniBody.getEvidencniBodyOne(idEvidBod);
@@ -181,17 +182,22 @@ public class VypocetController {
 			// vypisy parametru a nastaveni datumu
 			String datumOd = null;
 			String datumDo = null;
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+			Date platnostOd;
+			Date platnostDo;
 			platnost = platnost.replace(".", "").trim();
 			if (platnost.indexOf('-') > 0) {
 				datumOd = platnost.substring(0, platnost.indexOf('-'));
 				datumDo = platnost.substring(platnost.indexOf('-') + 1, platnost.length());
-				;
-				log.debug("###\t\t ... rozsah obdobi: " + datumOd + " - " + datumDo);
+				platnostOd = formatter.parse(datumOd);
+				platnostDo = formatter.parse(datumDo);
 			} else {
 				datumOd = platnost + "01";
 				datumDo = platnost + "31";
-				log.debug("###\t\t ... rozsah obdobi: " + datumOd + " - " + datumDo);
+				platnostOd = formatter.parse(datumOd);
+				platnostDo = formatter.parse(datumDo);
 			}
+			log.debug("###\t\t ... rozsah obdobi: " + platnostOd + " - " + platnostDo);
 			log.debug("###\t\t ... vystup " + f.getAgregaceVystup() + " agregace/i");
 			log.debug("###\t\t ... vystup serazen dle: " + f.getTriditDleVystup());
 			log.debug("###\t\t ... vystup vcetne detailu zakazek: " + f.getZakazkyVystup());
@@ -210,23 +216,22 @@ public class VypocetController {
 				log.debug("\t\t ... nacteno zakazek COUNT: " + zakCount);
 
 				OfflineJob off = new OfflineJob();
-
 				off.setSk30tEvidencniBody(e);
 				off.setSk30tSada(s);
 				off.setCasSpusteni(new Date());
+				// off.setStorno((f.getStornoVetyVystup()) ? "ano" : "ne");
+				off.setStorno(f.getStornoVetyVystup());
 				off.setPocetZakazek(new BigDecimal(zakCount));
-				off.setPlatnost(platnost);
+				off.setPlatnostOd(platnostOd);
+				off.setPlatnostDo(platnostDo);
 				off.setVystupRazeni(f.getTriditDleVystup());
-				off.setVystupZakazky((f.getZakazkyVystup()) ? "ano" : "ne");
+				off.setVystupZakazky(f.getZakazkyVystup());
 				off.setAgregace((f.getIdcka().length <= 1) ? null : (lastAgr + 1));
 				off.setUtime(new Date());
 				off.setUuser(u.getNetusername());
-
 				serviceOfflineJob.addOfflineJob(off);
-
 			}
-
-			return "redirect:/srv/offline/rozpad";
+			return "redirect:/srv/offline/startJob";
 		}
 	}
 }

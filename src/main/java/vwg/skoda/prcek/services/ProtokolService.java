@@ -19,7 +19,7 @@ public class ProtokolService {
 	private EntityManager entityManager;
 	
  	public void addProtokol(Protokol newProtokol) {
-		log.debug("###\t\t addProtokol("+newProtokol+")");
+		log.trace("###\t\t addProtokol("+newProtokol+")");
 		entityManager.merge(newProtokol);		
 	}
 

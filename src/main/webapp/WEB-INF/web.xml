@@ -55,6 +55,7 @@
 		<servlet-name>QueryServlet</servlet-name>
 		<url-pattern>/query</url-pattern>
 	</servlet-mapping>
+	
 	<security-role>
 		<description>Standardní uživatelé</description>
 		<role-name>USERS</role-name>
@@ -85,6 +86,5 @@
 		<res-auth>Container</res-auth>
 		<res-sharing-scope>Shareable</res-sharing-scope>
 	</resource-ref>
-
 
 </web-app>

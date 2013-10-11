@@ -80,7 +80,7 @@
 				<c:set var="zpetPopisek">
 					<f:message>zpet</f:message>
 				</c:set>
-				<form:form commandName="sada" action="${pageContext.servletContext.contextPath}/srv/editace">
+				<form:form commandName="sada" action="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${vybranaMt.sk30tUser.netusername}/${vybranaMt.mt}/${vybranaSada.id}">
 					<input type="submit" value="${zpetPopisek}" />
 				</form:form>
 			</div>

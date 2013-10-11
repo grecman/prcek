@@ -13,29 +13,6 @@
 <head>
 <jsp:include page="lib.jsp" />
 <title>P R C E K</title>
-
-<!-- 
-<script>
-//add more file components if Add is clicked ... 
-// GRE: na teto strance to nepouzivam !!!
-	$(document)
-			.ready(
-					function() {
-						$('#addFile')
-								.click(
-										function() {
-											var fileIndex = $('#fileTable tr')
-													.children().length - 1;
-											$('#fileTable')
-													.append(
-															'<tr><td>'
-																	+ '   <input type="file" name="files['+ fileIndex +']" />'
-																	+ '</td></tr>');
-										});
-
-					});
-</script>
- -->
 </head>
 
 <body>
@@ -48,15 +25,12 @@
 		</div>
 		<BR />
 		<form:form method="post"
-			action="${pageContext.servletContext.contextPath}/srv/fileUpload/saveFile/${vybranaSada.id}"
+			action="${pageContext.servletContext.contextPath}/srv/fileUpload/saveFileAsync/${vybranaSada.id}"
 			modelAttribute="uploadForm" enctype="multipart/form-data">
 
-			<!-- funkce pro pridani vice fajlovych importovacich policek (vice souboru najednou), proto se vsude (controller, jsp) pracuje se seznamama a ne s jednim Filem ci Stringem. 
-			<input id="addFile" type="button" value="Add File" />
-			-->
 			<table id="fileTable">
 				<TR>
-					<TD><input name="files[0]" type="file"
+					<TD><input name="filePrcek" type="file"
 						style="background: none; width: 300px; color: red; padding-left: 0px;" /></TD>
 					<TD><c:set var="nahratSouborPopisek">
 							<f:message>nahratSoubor</f:message>
@@ -64,9 +38,10 @@
 				</TR>
 				<TR>
 					<TD></TD>
-					<TD width="50px;"><SPAN style="color: gray; font-size: smaller;">POZOR:
-							tato akce může trvat i několik minut! Pokud se import nestihne do
-							90 sekund, tak se aplikace vrátí zpět na obrazovku "Seznam PR
+					<TD width="50px;"><SPAN
+						style="color: gray; font-size: smaller;">POZOR: tato akce
+							může trvat i několik minut! Pokud se import nestihne do 90
+							sekund, tak se aplikace vrátí zpět na obrazovku "Seznam PR
 							podmínek sady" a import bude dobíhat na pozadí.</SPAN></TD>
 				</TR>
 				<TR height="100px">
@@ -87,19 +62,6 @@
 
 			</table>
 		</form:form>
-		<DIV style="height: 100px;">&#160;</DIV>
-
-		<!-- 
-		<c:if test="${not(empty(files))}">
-			<f:message>soubor</f:message>:
-			<ol style="padding-left: 100px;">
-				<c:forEach items="${files}" var="file">
-					<li>${file}</li>
-				</c:forEach>
-			</ol>
-			...<f:message>uspesneNahran</f:message>.
-		</c:if>
- -->
 		<DIV style="height: 100px;">&#160;</DIV>
 
 		<div class="zonaTlacitek">

@@ -305,7 +305,7 @@ public class EditaceController {
 		s.setUuser(u.getNetusername());
 		s.setUtime(new Date());
 		serviceSada.setSada(s);
-
+		
 		return "redirect:/srv/editace/zobrazPr/"+u.getNetusername()+"/"+s.getSk30tMt().getMt()+"/"+s.getId();
 	}
 
@@ -413,18 +413,17 @@ public class EditaceController {
 		User u = serviceUser.getUser(s.getSk30tMt().getSk30tUser().getNetusername());
 
 		List<PrPodminka> pr = servicePrPodminka.getPrPodminka(s);
-
-		int pocetSmazanychPr = 0;
-		for (PrPodminka p : pr) {
-			try {
-				servicePrPodminka.removePrPodminka(p.getId());
-			} catch (Exception e) {
-				log.debug("ERROR - smazatVsechnyPr(" + u.getNetusername() + ", " + s.getSk30tMt().getMt() + ", " + s.getNazev() + ", " + p.getPr()
-						+ ") ...: " + e);
-			} finally {
-				pocetSmazanychPr++;
-			}
-		}
+		int pocetSmazanychPr = pr.size();
+		servicePrPodminka.removeAllPrPodminka(s);
+		
+//		for (PrPodminka p : pr) {
+//			try {
+//				servicePrPodminka.removePrPodminka(p.getId());
+//			} catch (Exception e) {
+//				log.debug("ERROR - smazatVsechnyPr(" + u.getNetusername() + ", " + s.getSk30tMt().getMt() + ", " + s.getNazev() + ", " + p.getPr()
+//						+ ") ...: " + e);
+//			} 
+//		}
 		Protokol newProtokol = new Protokol();
 		newProtokol.setNetusername(req.getUserPrincipal().getName().toUpperCase());
 		newProtokol.setAction("Smazani vsech PR podminek");

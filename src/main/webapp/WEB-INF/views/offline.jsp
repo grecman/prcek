@@ -16,9 +16,9 @@
 <title>P R C E K</title>
 
 <!-- Zajisteni, aby se stranka automaticky obnovila (redirect) po urcitem casovem limitu. Lze to delat pres meta nebo jquery -->
-<!-- <meta http-equiv="refresh" content="60"></meta> -->
+<!-- <meta http-equiv="refresh" content="5"></meta> -->
 <!-- <meta http-equiv="refresh" content="5;url=${pageContext.servletContext.contextPath}/srv/offline"></meta>  -->
-            
+
 <!-- ZDROJ: http://jquerybyexample.blogspot.com/2013/06/jquery-redirect-page-after-few-seconds.html  -->
 <script type="text/javascript">
 	$(document)
@@ -31,7 +31,7 @@
 													"#spnSeconds").html();
 											iTimeRemaining = eval(iTimeRemaining);
 											if (iTimeRemaining == 0) {
-												window.location.href = "${pageContext.servletContext.contextPath}/srv/offline";
+												window.location.href = "${pageContext.servletContext.contextPath}/srv/offline/startJob";
 											} else {
 												$("#spnSeconds").html(
 														iTimeRemaining - 1);
@@ -53,14 +53,14 @@
 		</div>
 
 		<BR />
-		<DIV class="scroll" style="height: 350px; overflow: auto;">
+		<DIV class="scroll" style="height: 500px; overflow: auto;">
 			<TABLE id="tab1" width="100%" style="table-layout: fixed;">
 				<col width="30px" />
 				<col width="*" />
 				<col width="55px" />
 				<col width="55px" />
 				<col width="100px" />
-				<col width="145px" />
+				<col width="175px" />
 				<col width="135px" />
 				<col width="135px" />
 				<col width="45px" />
@@ -82,15 +82,27 @@
 						<tr height="25px"
 							class="${ (iterator.index mod 2) == 0 ? 'rowOdd' : 'rowEven' }">
 							<td align="center">${i.sk30tSada.sk30tMt.mt}</td>
-							<td>${i.sk30tSada.nazev}</td>
+							<td><a
+								href="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${i.sk30tSada.sk30tMt.sk30tUser.netusername}/${i.sk30tSada.sk30tMt.mt}/${i.sk30tSada.id}">
+									<span style="color: #4BA82E; font-weight: bold;">${i.sk30tSada.nazev}</span>
+							</a></td>
 							<td align="center">${i.agregace}</td>
-							<td align="right">${i.pocetZakazek}</td>
+							<td align="right" title="Storno věty: ${i.storno}">${i.pocetZakazek}</td>
 							<td align="center">${i.sk30tEvidencniBody.kbodWk}-${i.sk30tEvidencniBody.kbodKod}-${i.sk30tEvidencniBody.kbodEvid}</td>
-							<td>${i.platnost}</td>
+							<td><f:formatDate pattern="yyyy-MM-dd"
+									value="${i.platnostOd}" /> - <f:formatDate
+									pattern="yyyy-MM-dd" value="${i.platnostDo}" /></td>
 							<td><f:formatDate pattern="yyyy-MM-dd HH:mm"
 									value="${i.casSpusteni}" /></td>
-							<td><f:formatDate pattern="yyyy-MM-dd HH:mm"
-									value="${i.casUkonceni}" /></td>
+							<td><c:choose>
+									<c:when test="${(empty(i.casUkonceni))}">
+										<P style="color: red;">${i.proces}</P>
+									</c:when>
+									<c:otherwise>
+										<f:formatDate pattern="yyyy-MM-dd HH:mm"
+											value="${i.casUkonceni}" />
+									</c:otherwise>
+								</c:choose></td>
 							<td align="center"><c:if test="${not(empty(i.casUkonceni))}">
 									<img
 										src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" />
@@ -100,9 +112,21 @@
 				</tbody>
 			</TABLE>
 		</DIV>
-		<BR />
+
+		<div class="zonaTlacitek">
+
+			<div class="tlacitka">
+
+				<form:form commandName="prPodminka"
+					action="${pageContext.servletContext.contextPath}/srv/offline/startJob">
+					<input type="submit" value="Start" />
+				</form:form>
+			</div>
+
+		</div>
+
 		<p align="right" style="color: gray; font-size: xx-small;">
-			Stránka bude automaticky obnovena za: <span id="spnSeconds">90</span>
+			Stránka bude automaticky obnovena za: <span id="spnSeconds">119</span>
 			seconds.
 		</p>
 

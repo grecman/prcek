@@ -34,7 +34,13 @@ public class OfflineJob implements Serializable {
 	@Column(name="ERR_LOG")
 	private String errLog;
 
-	private String platnost;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="PLATNOST_OD")
+	private Date platnostOd;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="PLATNOST_DO")
+	private Date platnostDo;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date utime;
@@ -45,7 +51,11 @@ public class OfflineJob implements Serializable {
 	private String vystupRazeni;
 
 	@Column(name="VYSTUP_ZAKAZKY")
-	private String vystupZakazky;
+	private Boolean vystupZakazky;
+	
+	private Boolean storno;
+	
+	private String proces;
 
 	//bi-directional many-to-one association to Sk30tEvidencniBody
 	@ManyToOne
@@ -121,14 +131,6 @@ public class OfflineJob implements Serializable {
 		this.errLog = errLog;
 	}
 
-	public String getPlatnost() {
-		return this.platnost;
-	}
-
-	public void setPlatnost(String platnost) {
-		this.platnost = platnost;
-	}
-
 	public Date getUtime() {
 		return this.utime;
 	}
@@ -153,11 +155,27 @@ public class OfflineJob implements Serializable {
 		this.vystupRazeni = vystupRazeni;
 	}
 
-	public String getVystupZakazky() {
-		return this.vystupZakazky;
+	public Date getPlatnostOd() {
+		return platnostOd;
 	}
 
-	public void setVystupZakazky(String vystupZakazky) {
+	public void setPlatnostOd(Date platnostOd) {
+		this.platnostOd = platnostOd;
+	}
+
+	public Date getPlatnostDo() {
+		return platnostDo;
+	}
+
+	public void setPlatnostDo(Date platnostDo) {
+		this.platnostDo = platnostDo;
+	}
+
+	public Boolean getVystupZakazky() {
+		return vystupZakazky;
+	}
+
+	public void setVystupZakazky(Boolean vystupZakazky) {
 		this.vystupZakazky = vystupZakazky;
 	}
 
@@ -177,6 +195,21 @@ public class OfflineJob implements Serializable {
 		this.sk30tSada = sk30tSada;
 	}
 
+	public Boolean getStorno() {
+		return storno;
+	}
+
+	public void setStorno(Boolean storno) {
+		this.storno = storno;
+	}
+
+	public String getProces() {
+		return proces;
+	}
+
+	public void setProces(String proces) {
+		this.proces = proces;
+	}
 
 
 }

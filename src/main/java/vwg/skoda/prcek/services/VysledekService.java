@@ -10,16 +10,16 @@ import org.springframework.transaction.annotation.Transactional;
 import vwg.skoda.prcek.entities.Vysledek;
 
 @Service
-@Transactional
 public class VysledekService {
 	
 	static Logger log = Logger.getLogger(Vysledek.class);
 
 	@PersistenceContext(name = "VysledekService")
 	private EntityManager entityManager;
-	
+
+	@Transactional
  	public void addVysledek(Vysledek newVysledek) {
-		log.debug("###\t\t addVysledek("+newVysledek+")");
+		log.trace("###\t\t addVysledek("+newVysledek+")");
 		entityManager.merge(newVysledek);		
 	}
 

@@ -8,8 +8,12 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
+	<!-- Automaticke oskenovani anotaci aspektu -->
+	<context:component-scan base-package="vwg.skoda.prcek" />
+
 	<!-- persistentUnitName je konfigurovan v persistence.xml -->
-	<bean id="entityManagerFactory"	class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
 		<property name="persistenceUnitName" value="PrcekPersistence" />
 	</bean>
 
@@ -17,12 +21,9 @@
 
 	<!-- Zapnuti podpory transakci -->
 	<tx:annotation-driven transaction-manager="transactionManager" />
+
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 
-	
-	<!-- Automaticke oskenovani anotaci aspektu -->
-	<context:component-scan base-package="vwg.skoda.prcek" />
-	
 </beans>

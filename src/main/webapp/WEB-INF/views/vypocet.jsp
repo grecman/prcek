@@ -183,14 +183,13 @@
 		<BR />
 
 		<form:form commandName="formObj"
-			action="${pageContext.servletContext.contextPath}/srv/vypocet/spusteni/${platnostVyplnena}/${evidBod.id}/">
+			action="${pageContext.servletContext.contextPath}/srv/vypocet/zafrontovani/${platnostVyplnena}/${evidBod.id}/">
 			<DIV style="height: 20px; font-size: 14px; font-weight: bold;">Sady
 				PR-podmínek</DIV>
 			<DIV class="scroll" style="height: 250px; overflow: auto;">
 				<TABLE id="tab1" width="100%" style="table-layout: fixed;">
 					<col width="100px" />
 					<col width="*" />
-					<col width="100px" />
 					<col width="100px" />
 					<col width="100px" />
 					<thead>
@@ -200,8 +199,7 @@
 									třída</a></th>
 							<th>Název sady</th>
 							<th title="... pouze validní PR podmínky">Počet PR</th>
-							<th>Online dávka</th>
-							<th>Offline dávka</th>
+							<th>Agregace</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -211,11 +209,6 @@
 								<td align="center">${i.mt}</td>
 								<td>${i.nazev}</td>
 								<td align="right" title="Nevalidní PR: ${i.pocetNevalidnichPr}">${i.pocetValidnichPr}</td>
-								<td align="center"><c:if
-										test="${(i.pocetValidnichPr &lt; 10) and (not(empty(evidBod)))}">
-										<img
-											src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" />
-									</c:if></td>
 								<td align="center"><c:if test="${not(empty(evidBod))}">
 										<form:checkbox path="idcka" style="width: 0px;"
 											value="${i.idSada}" />
