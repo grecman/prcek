@@ -3,8 +3,8 @@
 		<entity-name>vwg.skoda.prcek.entities.Protokol</entity-name>
 		<entity-width>120</entity-width>
 		<entity-height>188</entity-height>
-		<entity-X-Coordinate>820</entity-X-Coordinate>
-		<entity-Y-Coordinate>20</entity-Y-Coordinate>
+		<entity-X-Coordinate>660</entity-X-Coordinate>
+		<entity-Y-Coordinate>19</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>
 		<relation-collapsed>false</relation-collapsed>
 		<basic-collapsed>false</basic-collapsed>
@@ -15,7 +15,7 @@
 		<entity-width>120</entity-width>
 		<entity-height>226</entity-height>
 		<entity-X-Coordinate>20</entity-X-Coordinate>
-		<entity-Y-Coordinate>385</entity-Y-Coordinate>
+		<entity-Y-Coordinate>351</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>
 		<relation-collapsed>false</relation-collapsed>
 		<basic-collapsed>false</basic-collapsed>
@@ -37,7 +37,7 @@
 		<entity-width>120</entity-width>
 		<entity-height>246</entity-height>
 		<entity-X-Coordinate>227</entity-X-Coordinate>
-		<entity-Y-Coordinate>384</entity-Y-Coordinate>
+		<entity-Y-Coordinate>352</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>
 		<relation-collapsed>false</relation-collapsed>
 		<basic-collapsed>false</basic-collapsed>
@@ -47,8 +47,8 @@
 		<entity-name>vwg.skoda.prcek.entities.SadyPrehled</entity-name>
 		<entity-width>120</entity-width>
 		<entity-height>228</entity-height>
-		<entity-X-Coordinate>820</entity-X-Coordinate>
-		<entity-Y-Coordinate>249</entity-Y-Coordinate>
+		<entity-X-Coordinate>227</entity-X-Coordinate>
+		<entity-Y-Coordinate>610</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>
 		<relation-collapsed>false</relation-collapsed>
 		<basic-collapsed>false</basic-collapsed>
@@ -79,9 +79,20 @@
 	<entity>
 		<entity-name>vwg.skoda.prcek.entities.PrPodminka</entity-name>
 		<entity-width>120</entity-width>
-		<entity-height>306</entity-height>
+		<entity-height>286</entity-height>
 		<entity-X-Coordinate>227</entity-X-Coordinate>
 		<entity-Y-Coordinate>20</entity-Y-Coordinate>
+		<primary-collapsed>false</primary-collapsed>
+		<relation-collapsed>false</relation-collapsed>
+		<basic-collapsed>false</basic-collapsed>
+	</entity>
+
+	<entity>
+		<entity-name>vwg.skoda.prcek.entities.EvidencniBody</entity-name>
+		<entity-width>120</entity-width>
+		<entity-height>246</entity-height>
+		<entity-X-Coordinate>660</entity-X-Coordinate>
+		<entity-Y-Coordinate>341</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>
 		<relation-collapsed>false</relation-collapsed>
 		<basic-collapsed>false</basic-collapsed>
@@ -99,28 +110,6 @@
 	</entity>
 
 	<entity>
-		<entity-name>vwg.skoda.prcek.entities.EvidencniBody</entity-name>
-		<entity-width>120</entity-width>
-		<entity-height>246</entity-height>
-		<entity-X-Coordinate>660</entity-X-Coordinate>
-		<entity-Y-Coordinate>254</entity-Y-Coordinate>
-		<primary-collapsed>false</primary-collapsed>
-		<relation-collapsed>false</relation-collapsed>
-		<basic-collapsed>false</basic-collapsed>
-	</entity>
-
-	<entity>
-		<entity-name>vwg.skoda.prcek.entities.OfflineJob</entity-name>
-		<entity-width>120</entity-width>
-		<entity-height>366</entity-height>
-		<entity-X-Coordinate>442</entity-X-Coordinate>
-		<entity-Y-Coordinate>385</entity-Y-Coordinate>
-		<primary-collapsed>false</primary-collapsed>
-		<relation-collapsed>false</relation-collapsed>
-		<basic-collapsed>false</basic-collapsed>
-	</entity>
-
-	<entity>
 		<entity-name>vwg.skoda.prcek.entities.User</entity-name>
 		<entity-width>120</entity-width>
 		<entity-height>246</entity-height>
@@ -132,11 +121,22 @@
 	</entity>
 
 	<entity>
+		<entity-name>vwg.skoda.prcek.entities.OfflineJob</entity-name>
+		<entity-width>120</entity-width>
+		<entity-height>406</entity-height>
+		<entity-X-Coordinate>442</entity-X-Coordinate>
+		<entity-Y-Coordinate>343</entity-Y-Coordinate>
+		<primary-collapsed>false</primary-collapsed>
+		<relation-collapsed>false</relation-collapsed>
+		<basic-collapsed>false</basic-collapsed>
+	</entity>
+
+	<entity>
 		<entity-name>vwg.skoda.prcek.entities.MtSeznam</entity-name>
 		<entity-width>120</entity-width>
 		<entity-height>168</entity-height>
-		<entity-X-Coordinate>820</entity-X-Coordinate>
-		<entity-Y-Coordinate>517</entity-Y-Coordinate>
+		<entity-X-Coordinate>16</entity-X-Coordinate>
+		<entity-Y-Coordinate>610</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>
 		<relation-collapsed>false</relation-collapsed>
 		<basic-collapsed>false</basic-collapsed>

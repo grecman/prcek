@@ -67,7 +67,7 @@
 					<TD></TD>
 					<TD><input
 						onclick="return check('kontrola', {'poradi' : /^[0-9]{0,5}$/, 'prPodminka' : /^((([/+]{1})([A-Za-z0-9]{3}))+)$/, 'poznamka' : /^[,-.a-zA-Z0-9áäéëěíóöôúůüýčďňřšťžĺľĚŠČŘŽÝÁÍÉ\u0020]{0,39}$/});" 
-						type="submit" value="ok" /></TD>
+						type="submit" value="ok" class="submit"/></TD>
 					<TD></TD>
 				</TR>
 				<TR height="100px;"></TR>
@@ -81,7 +81,7 @@
 					<f:message>zpet</f:message>
 				</c:set>
 				<form:form commandName="sada" action="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${vybranaMt.sk30tUser.netusername}/${vybranaMt.mt}/${vybranaSada.id}">
-					<input type="submit" value="${zpetPopisek}" />
+					<input type="submit" value="${zpetPopisek}" class="submit"/>
 				</form:form>
 			</div>
 		</div>

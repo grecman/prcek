@@ -62,61 +62,7 @@ public class FileUploadController {
 		Sada s = serviceSada.getSadaOne(vybranaSada);
 		model.addAttribute("vybranaSada", s);
 
-		return "file_upload_form";
-	}
-
-	// ZDROJ: http://viralpatel.net/blogs/spring-mvc-multiple-file-upload-example/
-	// Ale ja to mam zjednodusene, protoze nabizim import vzdy pouze jednomu souboru a nepouzivam tridu FileUploadForm
-	//    misto toho jako paramert moji metody volam primo MultipartHttpServletRequest 
-
-	// tato metoda se nepousti !!!! pousti se ta asynchronni (nize)
-	@RequestMapping(value = "/saveFileNoAsync/{vybranaSada}", method = RequestMethod.POST)
-	public String saveFileNoAsync(@PathVariable long vybranaSada, Model model, MultipartHttpServletRequest req) throws IOException {
-		log.debug("###\t saveFileNoAsync(" + vybranaSada + ",\t " + Thread.currentThread() + ")");
-
-		final User u = serviceUser.getUser(req.getUserPrincipal().getName());
-		final Sada s = serviceSada.getSadaOne(vybranaSada);
-
-		List<MultipartFile> files = req.getFiles("filePrcek");
-		List<String> fileNames = new ArrayList<String>();
-		log.trace("#\t###\t Nacteny file: " + files);
-		if (null != files && files.size() > 0) {
-			for (MultipartFile multipartFile : files) {
-
-				String fileName = multipartFile.getOriginalFilename();
-				fileNames.add(fileName);
-
-				LineNumberReader row = new LineNumberReader(new InputStreamReader(multipartFile.getInputStream()));
-				String prpod;
-				int pocetPr = 0;
-				while ((prpod = row.readLine()) != null) {
-					PrPodminka prp = new PrPodminka();
-					// System.out.println("line: " + pocetPr + "\t" + prpod);
-
-					prp.setPr(prpod.toUpperCase());
-					prp.setPoradi(new BigDecimal(pocetPr));
-					pocetPr = pocetPr + 5;
-					prp.setUuser(u.getNetusername());
-					prp.setUtime(new Date());
-					prp.setSk30tSada(s);
-
-					// MBT kontrola
-					try {
-						Mt mt = serviceMt.getMtOne(s.getSk30tMt().getId());
-						List<PrMbt> pr = servicePrMbt.getPr(mt.getProdukt());
-						MBT mbt = new MBT();
-						mbt.setMBTSource(pr);
-						mbt.getPRCondition(prpod.toUpperCase());
-						prp.setErrMbt(null);
-					} catch (Exception e) {
-						// log.error("###\t Chyba pri obsahove kontrole PR podminky (import TXT): " + e);
-						prp.setErrMbt(e.getMessage());
-					}
-					servicePrPodminka.addPrPodminka(prp);
-				}
-			}
-		}
-		return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
+		return "fileUploadForm";
 	}
 
 	// ZDROJ: http://viralpatel.net/blogs/spring-mvc-multiple-file-upload-example/
@@ -149,15 +95,25 @@ public class FileUploadController {
 						fileNames.add(fileName);
 
 						LineNumberReader row = new LineNumberReader(new InputStreamReader(multipartFile.getInputStream()));
+						
 						String prpod;
-						int pocetPr = 0;
+						List<String> prPodminky = new ArrayList<String>(); 
 						while ((prpod = row.readLine()) != null) {
+							prPodminky.add(prpod.toUpperCase());
+						}
+						
+						Long prCount = servicePrPodminka.getPrPodminkaCount(s);
+						s.setPocet(prPodminky.size()+prCount.intValue());
+						serviceSada.setSada(s);
+						
+						int poradiPr = 0;
+						for (String p : prPodminky) {
+							
 							PrPodminka prp = new PrPodminka();
-							//System.out.println("line: " + pocetPr + "\t" + prpod);
 
-							prp.setPr(prpod.toUpperCase());
-							prp.setPoradi(new BigDecimal(pocetPr));
-							pocetPr = pocetPr + 5;
+							prp.setPr(p.toUpperCase());
+							prp.setPoradi(new BigDecimal(poradiPr));
+							poradiPr = poradiPr + 5;
 							prp.setUuser(u.getNetusername());
 							prp.setUtime(new Date());
 							prp.setSk30tSada(s);
@@ -168,14 +124,15 @@ public class FileUploadController {
 								List<PrMbt> pr = servicePrMbt.getPr(mt.getProdukt());
 								MBT mbt = new MBT();
 								mbt.setMBTSource(pr);
-								mbt.getPRCondition(prpod.toUpperCase());
+								mbt.getPRCondition(p.toUpperCase());
 								prp.setErrMbt(null);
 							} catch (Exception e) {
-								// log.error("###\t Chyba pri obsahove kontrole PR podminky (import TXT): " + e);
+								log.error("###\t Chyba pri obsahove kontrole PR podminky (import TXT): " + e);
 								prp.setErrMbt(e.getMessage());
 							}
 							servicePrPodminka.addPrPodminka(prp);
 						}
+					
 					}
 				}
 				return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
@@ -185,7 +142,7 @@ public class FileUploadController {
 		// nastavi casovy limit pro vyse uvedeny proces
 		// tento WebAsyncTask jede vlastne soubezne s tim Callable a po uplynulem casovem limitu ji opusti a vrati "return" ktery je v tom
 		// ".onTimeout"
-		WebAsyncTask<String> w = new WebAsyncTask<String>(30000, c); // 1000 = 1s; 60000 = 1min
+		WebAsyncTask<String> w = new WebAsyncTask<String>(1, c); // 1000 = 1s; 60000 = 1min
 
 		// pokud je limit prekrocenm, tak implementovana metoda call() okamzite vrati
 		w.onTimeout(new Callable<String>() {
@@ -193,11 +150,83 @@ public class FileUploadController {
 			@Override
 			public String call() throws Exception {
 				log.debug("###ASYNC###\t call ... onTimeOut (" + Thread.currentThread() + ")");
-				return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
+				//return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
+				return "redirect:/srv/fileUpload/fileUploadProces/"+s.getId();
 			}
 
 		});
 		return w;
 	}
+	
+	@RequestMapping(value = "/fileUploadProces/{vybranaSada}")
+	public String fileUploadProces(@PathVariable long vybranaSada, Model model, HttpServletRequest req) {
+		log.debug("###\t fileUploadProces(" + vybranaSada +")");
+
+		User u = serviceUser.getUser(req.getUserPrincipal().getName());
+		Sada s = serviceSada.getSadaOne(vybranaSada);
+		// ty co tam uz jsou + ty co tam chci 
+		int celkovyPocerPR = s.getPocet();
+		Long prCount = servicePrPodminka.getPrPodminkaCount(s);
+		
+		if(celkovyPocerPR==prCount.intValue()){
+			return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
+		} else {
+			model.addAttribute("prCount", prCount);
+			model.addAttribute("vybranaSada", s);
+			return "fileUploadProces";
+		}
+		
+
+	}
+	
+	// !!! TUTO METODU V APLIKACI VUBEC NEPOUSTIM !!!
+//	@RequestMapping(value = "/saveFileNoAsync/{vybranaSada}", method = RequestMethod.POST)
+//	public String saveFileNoAsync(@PathVariable long vybranaSada, Model model, MultipartHttpServletRequest req) throws IOException {
+//		log.debug("###\t saveFileNoAsync(" + vybranaSada + ",\t " + Thread.currentThread() + ")");
+//
+//		final User u = serviceUser.getUser(req.getUserPrincipal().getName());
+//		final Sada s = serviceSada.getSadaOne(vybranaSada);
+//
+//		List<MultipartFile> files = req.getFiles("filePrcek");
+//		List<String> fileNames = new ArrayList<String>();
+//		log.trace("#\t###\t Nacteny file: " + files);
+//		if (null != files && files.size() > 0) {
+//			for (MultipartFile multipartFile : files) {
+//
+//				String fileName = multipartFile.getOriginalFilename();
+//				fileNames.add(fileName);
+//
+//				LineNumberReader row = new LineNumberReader(new InputStreamReader(multipartFile.getInputStream()));
+//				String prpod;
+//				int pocetPr = 0;
+//				while ((prpod = row.readLine()) != null) {
+//					PrPodminka prp = new PrPodminka();
+//
+//					prp.setPr(prpod.toUpperCase());
+//					prp.setPoradi(new BigDecimal(pocetPr));
+//					pocetPr = pocetPr + 5;
+//					prp.setUuser(u.getNetusername());
+//					prp.setUtime(new Date());
+//					prp.setSk30tSada(s);
+//
+//					// MBT kontrola
+//					try {
+//						Mt mt = serviceMt.getMtOne(s.getSk30tMt().getId());
+//						List<PrMbt> pr = servicePrMbt.getPr(mt.getProdukt());
+//						MBT mbt = new MBT();
+//						mbt.setMBTSource(pr);
+//						mbt.getPRCondition(prpod.toUpperCase());
+//						prp.setErrMbt(null);
+//					} catch (Exception e) {
+//						// log.error("###\t Chyba pri obsahove kontrole PR podminky (import TXT): " + e);
+//						prp.setErrMbt(e.getMessage());
+//					}
+//					servicePrPodminka.addPrPodminka(prp);
+//				}
+//			}
+//		}
+//		return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
+//	}
+
 
 }

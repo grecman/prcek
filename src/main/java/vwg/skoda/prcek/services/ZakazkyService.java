@@ -28,7 +28,7 @@ public class ZakazkyService {
 		log.trace("###\t\t getZakazkyCount(" + mt + ", " + kod + ", " + wk + ", " + evid + ", " + platOd + "-" + platDo + ", " + sv + ")");
 		return entityManager
 				.createQuery(
-						"SELECT count(s) FROM Zakazky s WHERE s.modelTr=:modt AND s.kbodKod=:kkod AND s.kbodWk=:kwk AND s.kbodEvid=:kevid AND s.datSkut>=:plOd AND s.datSkut<:plDo AND s.kbodOpak LIKE :stv ",
+						"SELECT count(s) FROM Zakazky s WHERE s.modelTr=:modt AND s.kbodKod=:kkod AND s.kbodWk=:kwk AND s.kbodEvid=:kevid AND s.datSkut>=:plOd AND s.datSkut<=:plDo AND s.kbodOpak LIKE :stv ",
 						Long.class).setParameter("modt", mt).setParameter("kkod", kod).setParameter("kwk", wk).setParameter("kevid", evid)
 				.setParameter("plOd", platOd).setParameter("plDo", platDo).setParameter("stv", sv).getSingleResult();
 	}
@@ -38,7 +38,7 @@ public class ZakazkyService {
 		log.trace("###\t\t getZakazky(" + mt + ", " + kbodkod + ", " + wk + ", " + evid + ", " + platOd + "-" + platDo + ", " + sv + ")");
 		return entityManager
 				.createQuery(
-						"SELECT s FROM Zakazky s WHERE s.modelTr=:modt AND s.kbodKod=:kkod AND s.kbodWk=:kwk AND s.kbodEvid=:kevid AND s.datSkut>=:plOd AND s.datSkut<:plDo AND s.kbodOpak LIKE :stv ",
+						"SELECT s FROM Zakazky s WHERE s.modelTr=:modt AND s.kbodKod=:kkod AND s.kbodWk=:kwk AND s.kbodEvid=:kevid AND s.datSkut>=:plOd AND s.datSkut<=:plDo AND s.kbodOpak LIKE :stv ",
 						Zakazky.class).setParameter("modt", mt).setParameter("kkod", kbodkod).setParameter("kwk", wk).setParameter("kevid", evid)
 				.setParameter("plOd", platOd).setParameter("plDo", platDo).setParameter("stv", sv).getResultList();
 	}

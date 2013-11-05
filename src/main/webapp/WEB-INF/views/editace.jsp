@@ -113,7 +113,7 @@
 				</c:set>
 				<form:form commandName="sada"
 					action="${pageContext.servletContext.contextPath}/srv/editace/novaSada">
-					<input type="submit" value="${novaSadaPopisek}" />
+					<input type="submit" value="${novaSadaPopisek}" class="submit" />
 				</form:form>
 
 				<c:if test="${not(empty(vybranaSada))}">
@@ -121,8 +121,8 @@
 						<f:message>duplikovatSadu</f:message>
 					</c:set>
 					<form:form commandName="sada"
-						action="${pageContext.servletContext.contextPath}/srv/editace/duplikovatSadu">
-						<input type="submit" value="${duplikovatSaduPopisek}" />
+						action="${pageContext.servletContext.contextPath}/srv/editace/duplikovatSadu/${vybranaSada.id}">
+						<input type="submit" value="${duplikovatSaduPopisek}"  class="submit"/>
 					</form:form>
 
 					<c:if test="${moznoEditovatSadu}">
@@ -132,7 +132,7 @@
 						<form:form commandName="sada"
 							action="${pageContext.servletContext.contextPath}/srv/editace/smazatSadu/${vybranyUzivatel.netusername}/${vybranaMt.mt}/${vybranaSada.id}">
 							<input onClick="return confirm('Opravdu?!')" type="submit"
-								value="${smazatSaduPopisek}" />
+								value="${smazatSaduPopisek}"  class="submit"/>
 						</form:form>
 
 						<c:set var="prejmenovatSaduPopisek">
@@ -140,7 +140,7 @@
 						</c:set>
 						<form:form commandName="sada"
 							action="${pageContext.servletContext.contextPath}/srv/editace/prejmenovatSadu/${vybranaSada.id}">
-							<input type="submit" value="${prejmenovatSaduPopisek}" />
+							<input type="submit" value="${prejmenovatSaduPopisek}"  class="submit"/>
 						</form:form>
 					</c:if>
 				</c:if>
@@ -219,7 +219,7 @@
 					</c:set>
 					<form:form commandName="prPodminka"
 						action="${pageContext.servletContext.contextPath}/srv/editace/novaPrPodminka/${vybranaSada.id}">
-						<input type="submit" value="${pridatRadekPopisek}" />
+						<input type="submit" value="${pridatRadekPopisek}"  class="submit"/>
 					</form:form>
 
 					<c:if test="${not(empty(prPodminkaList))}">
@@ -229,7 +229,7 @@
 						<form:form commandName="sada"
 							action="${pageContext.servletContext.contextPath}/srv/editace/smazatVsechnyPr/${vybranaSada.id}">
 							<input onClick="return confirm('Opravdu?!')" type="submit"
-								value="${smazatVsePopisek}" />
+								value="${smazatVsePopisek}"  class="submit"/>
 						</form:form>
 					</c:if>
 
@@ -238,7 +238,7 @@
 					</c:set>
 					<form:form commandName="sada"
 						action="${pageContext.servletContext.contextPath}/srv/fileUpload/importTxt/${vybranaSada.id}">
-						<input type="submit" value="${importTxt}" />
+						<input type="submit" value="${importTxt}"  class="submit"/>
 					</form:form>
 
 				</c:if>

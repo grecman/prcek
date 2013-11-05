@@ -58,22 +58,23 @@
 				<col width="30px" />
 				<col width="*" />
 				<col width="55px" />
-				<col width="55px" />
 				<col width="100px" />
 				<col width="175px" />
 				<col width="135px" />
 				<col width="135px" />
+				<col width="40px" />
+				<col width="30px" />
 				<col width="45px" />
 				<thead>
 					<tr>
 						<th>MT</th>
 						<th>Název sady</th>
-						<th>Agregace</th>
 						<th>Počet zakázek</th>
 						<th>K.bod</th>
 						<th>Platnost</th>
 						<th>Čas spuštění</th>
 						<th>Čas ukončení</th>
+						<th colspan="2">Export s agregací</th>
 						<th>Export</th>
 					</tr>
 				</thead>
@@ -86,8 +87,15 @@
 								href="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${i.sk30tSada.sk30tMt.sk30tUser.netusername}/${i.sk30tSada.sk30tMt.mt}/${i.sk30tSada.id}">
 									<span style="color: #4BA82E; font-weight: bold;">${i.sk30tSada.nazev}</span>
 							</a></td>
-							<td align="center">${i.agregace}</td>
-							<td align="right" title="Storno věty: ${i.storno}">${i.pocetZakazek}</td>
+							<c:choose>
+								<c:when test="${i.stornoZakazky}">
+									<c:set var="stornoVety">Včetně storno vět</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="stornoVety">Bez storno vět</c:set>
+								</c:otherwise>
+							</c:choose>
+							<td align="right" title="${stornoVety}">${i.pocetZakazek}</td>
 							<td align="center">${i.sk30tEvidencniBody.kbodWk}-${i.sk30tEvidencniBody.kbodKod}-${i.sk30tEvidencniBody.kbodEvid}</td>
 							<td><f:formatDate pattern="yyyy-MM-dd"
 									value="${i.platnostOd}" /> - <f:formatDate
@@ -103,9 +111,22 @@
 											value="${i.casUkonceni}" />
 									</c:otherwise>
 								</c:choose></td>
-							<td align="center"><c:if test="${not(empty(i.casUkonceni))}">
-									<img
-										src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" />
+							
+							<td align="center">${i.agregace}</td>
+							<td align="center">
+								<c:if test="${not(empty(i.casUkonceni)) and not(empty(i.agregace))}">
+									<a
+										href="${pageContext.servletContext.contextPath}/srv/offline/vysledekSAgregaci/${i.id}"><img
+										title="Editovat" style="border: 0px; padding-top: 3px;"
+										src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a>
+								</c:if>
+							</td>
+							<td align="center">
+								<c:if test="${not(empty(i.casUkonceni))}">
+									<a
+										href="${pageContext.servletContext.contextPath}/srv/offline/vysledek/${i.id}"><img
+										title="Editovat" style="border: 0px; padding-top: 3px;"
+										src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a>
 								</c:if></td>
 						</tr>
 					</c:forEach>
@@ -117,17 +138,16 @@
 
 			<div class="tlacitka">
 
-				<form:form commandName="prPodminka"
+				<form:form
 					action="${pageContext.servletContext.contextPath}/srv/offline/startJob">
-					<input type="submit" value="Start" />
+					<input type="submit" value="Start"  class="submit"/>
 				</form:form>
 			</div>
 
 		</div>
 
 		<p align="right" style="color: gray; font-size: xx-small;">
-			Stránka bude automaticky obnovena za: <span id="spnSeconds">119</span>
-			seconds.
+			Další Off-line výpočet bude spuštěn za: <span id="spnSeconds">119</span> sekund.
 		</p>
 
 		<jsp:include page="footer.jsp" />

@@ -50,10 +50,11 @@ public class OfflineJob implements Serializable {
 	@Column(name="VYSTUP_RAZENI")
 	private String vystupRazeni;
 
-	@Column(name="VYSTUP_ZAKAZKY")
-	private Boolean vystupZakazky;
+	@Column(name="STORNO_ZAKAZKY")
+	private Boolean stornoZakazky;
 	
-	private Boolean storno;
+	@Column(name="ZAKAZKY_VYSTUP")
+	private Boolean zakazkyVystup;
 	
 	private String proces;
 
@@ -171,12 +172,12 @@ public class OfflineJob implements Serializable {
 		this.platnostDo = platnostDo;
 	}
 
-	public Boolean getVystupZakazky() {
-		return vystupZakazky;
+	public Boolean getStornoZakazky() {
+		return stornoZakazky;
 	}
 
-	public void setVystupZakazky(Boolean vystupZakazky) {
-		this.vystupZakazky = vystupZakazky;
+	public void setStornoZakazky(Boolean stornoZakazky) {
+		this.stornoZakazky = stornoZakazky;
 	}
 
 	public EvidencniBody getSk30tEvidencniBody() {
@@ -195,14 +196,6 @@ public class OfflineJob implements Serializable {
 		this.sk30tSada = sk30tSada;
 	}
 
-	public Boolean getStorno() {
-		return storno;
-	}
-
-	public void setStorno(Boolean storno) {
-		this.storno = storno;
-	}
-
 	public String getProces() {
 		return proces;
 	}
@@ -211,5 +204,14 @@ public class OfflineJob implements Serializable {
 		this.proces = proces;
 	}
 
+	public Boolean getZakazkyVystup() {
+		return zakazkyVystup;
+	}
+
+	public void setZakazkyVystup(Boolean zakazkyVystup) {
+		this.zakazkyVystup = zakazkyVystup;
+	}
+
+	
 
 }

@@ -28,6 +28,7 @@ public class Sada implements Serializable {
 	@Column(length=30)
 	private String uuser;
 	
+	// pocet importovanych PR ze vstupniho souboru
 	@Column
 	private Integer pocet;
 

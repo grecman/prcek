@@ -61,14 +61,15 @@
 
 		<jsp:include page="header.jsp" />
 		<BR />
+		<!-- OBDOBI -->
 		<TABLE>
 			<col width="100px" />
-			<col width="250px" />
+			<col width="200px" />
+			<col width="*" />
+			<col width="175px" />
 			<col width="30px" />
-			<col width="150px" />
-			<col width="30px" />
-			<col width="150px" />
-			<col width="150px" />
+			<col width="175px" />
+			<col width="175px" />
 			<c:choose>
 				<c:when test="${empty(platnostVyplnena)}">
 					<TR>
@@ -101,13 +102,14 @@
 							<TD>do</TD>
 							<TD><form:input path="platnostDo" id="datepickerDo"
 									class="kalendar"></form:input></TD>
-							<TD><input type="submit" value="ok" /></TD>
+							<TD><input type="submit" value="ok"  class="submit"/></TD>
 						</form:form>
 					</TR>
 				</c:when>
 				<c:otherwise>
 					<TR>
 						<TD style="font-size: 14px; font-weight: bold;">Období</TD>
+						<TD></TD>
 						<TD style="font-size: 14px; font-weight: bold;"><a
 							href="${pageContext.servletContext.contextPath}/srv/vypocet">
 								<span style="color: #4BA82E;">${platnostVyplnena}</span>
@@ -118,7 +120,7 @@
 		</TABLE>
 		<BR />
 
-
+		<!-- ZAKAZKY -->
 		<TABLE>
 			<col width="100px" />
 			<col width="200px" />
@@ -182,6 +184,7 @@
 		</TABLE>
 		<BR />
 
+		<!-- SADY (tabulka) -->
 		<form:form commandName="formObj"
 			action="${pageContext.servletContext.contextPath}/srv/vypocet/zafrontovani/${platnostVyplnena}/${evidBod.id}/">
 			<DIV style="height: 20px; font-size: 14px; font-weight: bold;">Sady
@@ -199,7 +202,7 @@
 									třída</a></th>
 							<th>Název sady</th>
 							<th title="... pouze validní PR podmínky">Počet PR</th>
-							<th>Agregace</th>
+							<th>Zpracování</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -209,7 +212,7 @@
 								<td align="center">${i.mt}</td>
 								<td>${i.nazev}</td>
 								<td align="right" title="Nevalidní PR: ${i.pocetNevalidnichPr}">${i.pocetValidnichPr}</td>
-								<td align="center"><c:if test="${not(empty(evidBod))}">
+								<td align="center"><c:if test="${not(empty(evidBod)) and (i.pocetValidnichPr > 0)}">
 										<form:checkbox path="idcka" style="width: 0px;"
 											value="${i.idSada}" />
 									</c:if></td>
@@ -220,6 +223,7 @@
 			</DIV>
 			<BR />
 
+			<!-- VYSTUPY -->
 			<TABLE>
 				<col width="100px" />
 				<col width="5px" />
@@ -230,31 +234,31 @@
 				<TR>
 					<TD style="font-size: 14px; font-weight: bold;">Výstupy</TD>
 					<TD><form:radiobutton path="agregaceVystup" value="bez"
-							style="width: 0px;" /></TD>
+							class="radiobutton" /></TD>
 					<TD>Četnost bez agregace</TD>
 					<TD>Seřadit dle:</TD>
 					<TD><form:radiobutton path="triditDleVystup" value="poradi"
-							style="width: 0px;" /></TD>
+							class="radiobutton" /></TD>
 					<TD>Pořadí</TD>
 				</TR>
 				<TR>
 					<TD></TD>
 					<TD><form:radiobutton path="agregaceVystup" value="s"
-							style="width: 0px;" /></TD>
-					<TD>Četnost s agregace</TD>
+							class="radiobutton" /></TD>
+					<TD>Četnost s agregaci</TD>
 					<TD></TD>
 					<TD><form:radiobutton path="triditDleVystup" value="pr"
-							style="width: 0px;" /></TD>
+							class="radiobutton" /></TD>
 					<TD>PR podmínky</TD>
 				</TR>
 				<TR>
 					<TD></TD>
-					<TD><form:checkbox path="zakazkyVystup" style="width: 0px;" /></TD>
+					<TD><form:checkbox path="zakazkyVystup" class="checkbox" /></TD>
 					<TD>Detailní seznam zakázek</TD>
 				</TR>
 				<TR>
 					<TD></TD>
-					<TD><form:checkbox path="stornoVetyVystup" style="width: 0px;" /></TD>
+					<TD><form:checkbox path="stornoVetyVystup" class="checkbox" /></TD>
 					<TD>Zakázky včetně storno vět (opakované odvádění)</TD>
 				</TR>
 			</TABLE>
@@ -264,8 +268,8 @@
 			<div class="zonaTlacitek">
 				<div class="tlacitka">
 					<c:if test="${not(empty(evidBod))}">
-						<input type="submit" value="Spustit výpočet" />
-							<SPAN style="color: red; font-weight: bold;">&#160;${info}</SPAN>
+						<input type="submit" value="Spustit výpočet"  class="submit"/>
+						<SPAN style="color: red; font-weight: bold;">&#160;${info}</SPAN>
 					</c:if>
 				</div>
 			</div>

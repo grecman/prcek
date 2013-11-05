@@ -13,7 +13,7 @@ public class PrMbtPK  implements Serializable {
 	@Column
 	private String prnr;
 	
-	// GRE: nutno vytvorit (vygenerovat) tento kontruktor, abychom to v servisni vrstve meli jak volat 
+	// GRE: nutno vytvorit (vygenerovat) tento konstruktor, abychom to v servisni vrstve meli jak volat 
 	public PrMbtPK(String pkz, String prnr) {
 		super();
 		this.pkz = pkz;

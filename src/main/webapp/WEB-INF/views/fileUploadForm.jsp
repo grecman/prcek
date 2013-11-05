@@ -34,15 +34,21 @@
 						style="background: none; width: 300px; color: red; padding-left: 0px;" /></TD>
 					<TD><c:set var="nahratSouborPopisek">
 							<f:message>nahratSoubor</f:message>
-						</c:set> <input type="submit" value="${nahratSouborPopisek}" /></TD>
+						</c:set> <input type="submit" value="${nahratSouborPopisek}"
+						class="submit" /></TD>
 				</TR>
 				<TR>
 					<TD></TD>
-					<TD width="50px;"><SPAN
+					<TD width="650px"><SPAN
 						style="color: gray; font-size: smaller;">POZOR: tato akce
-							může trvat i několik minut! Pokud se import nestihne do 90
-							sekund, tak se aplikace vrátí zpět na obrazovku "Seznam PR
-							podmínek sady" a import bude dobíhat na pozadí.</SPAN></TD>
+							může trvat i desítky minut! Záleží na počtu importovaných PR
+							podmínek. Pokud se import nestihne do 90 sekund, tak se aplikace
+							vrátí zpět na obrazovku "Seznam PR podmínek sady" a import bude
+							dobíhat na pozadí. Dle porovnání celkového počtu vámi
+							importovaných PR podmínek (počet PR v souboru) s počtem již
+							naimportovaných PR podmínek, které jsou vidět v záhlaví sloupce
+							PR (aktualizace pomocí klavesy F5) zjistíte zda-li již máte
+							naimportovány všechny PR podmínky.</SPAN></TD>
 				</TR>
 				<TR height="100px">
 					<TD />
@@ -72,7 +78,7 @@
 				</c:set>
 				<form:form
 					action="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${vybranaSada.sk30tMt.sk30tUser.netusername}/${vybranaSada.sk30tMt.mt}/${vybranaSada.id}">
-					<input type="submit" value="${zpetPopisek}" />
+					<input type="submit" value="${zpetPopisek}" class="submit" />
 				</form:form>
 
 			</div>

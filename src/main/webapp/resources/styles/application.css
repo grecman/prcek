@@ -1,14 +1,33 @@
 @CHARSET "UTF-8";
 
+/* *:not(button) { */
+/* 	margin: 0; */
+/* 	padding: 0; */
+/* 	border: 0; */
+/* 	color: black; */
+/* 	font: inherit; */
+/* 	word-break: normal; */
+/* 	word-wrap: normal; */
+/* } */
 
-*:not(button) {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	color: black;
-	font: inherit;
-	word-break: normal;
-	word-wrap: normal
+body {
+	z-index:0;
+	background: #FFFFFF 40px -6px url("../images/SA-logo.png") no-repeat;
+	margin:10px 0 0 0;
+	font-family: Verdana,"Arial CE",Arial,"Helvetica CE",sans-serif;
+	line-height: 18px;
+	width:100%;
+	min-width: 1200px;
+}
+
+
+.page {
+	padding: 2px 40px 0px 40px;
+	border-top:  2px solid black;
+	margin: 40px 0 0 0;
+	background-color: #eeeae5;
+	min-height: 800px;
+
 }
 
 
@@ -54,25 +73,7 @@ textarea {
 	font-family: monospace;	
 }
 
-body {
-	z-index:0;
-	background: #FFFFFF 40px -6px url("../images/SA-logo.png") no-repeat;
-	margin:10px 0 0 0;
-	font-family: Verdana,"Arial CE",Arial,"Helvetica CE",sans-serif;
-	line-height: 18px;
-	width:100%;
-	min-width: 1200px;
-}
 
-
-.page {
-	padding: 2px 40px 0px 40px;
-	border-top:  2px solid black;
-	margin: 40px 0 0 0;
-	background-color: #eeeae5;
-	min-height: 800px;
-
-}
 
 label {
 	font-weight: bold;
@@ -195,7 +196,7 @@ label {
 }
 
 
-select, textarea, checkbox {
+select, textarea {
 	font-family: inherit;
 	font-size: 12px;
 	border-style:solid;
@@ -206,7 +207,7 @@ select, textarea, checkbox {
 	vertical-align: middle;
 }
 
-input {
+input.submit {
 	font-family: inherit;
 	font-size: 11px;
 	width:140px;
@@ -223,11 +224,17 @@ input {
        
 input.kalendar {
 	font-family: inherit;
+	font-size: 13px;
+	font-weight:bold;
 	background:#DFD9D1 url("../images/ico_calendar_20x20.png") no-repeat 118px 3px;
 	padding-left:20px;
 	color: black;
 	width:140px;
+	height:25px;
 	padding: 0px;
+	border:0px;
+	text-align:left;
+	border-radius: 3px;
 }
 
 input.textovePole {
@@ -235,6 +242,10 @@ input.textovePole {
 	background:white;
 	color: black;
 	width:250px;
+	height:25px;
+	border:0px;
+	text-align:left;
+	border-radius: 3px;
 }
 
 input.textovePole850 {
@@ -242,9 +253,22 @@ input.textovePole850 {
 	background:white;
 	color: black;
 	width:850px;
+	height:25px;
+	border:0px;
+	text-align:left;
+	border-radius: 3px;
 }
 
-input:hover
+input.radiobutton {
+	font-family: inherit;
+}
+
+input.checkbox {
+	font-family: inherit;
+}
+
+
+input.submit:hover
 {
 background-color:#2b2b2b;
 }
@@ -291,7 +315,7 @@ tr.form input {
 
 .pageHeader .langSwitch {
 	font-size: 11px;
-	color: #DDDDDD; /* C1 */
+	color: #DDDDDD;
 	text-align: center;
 	width: 240px;
 	position: absolute;
@@ -302,7 +326,7 @@ tr.form input {
 }
 
 .langSwitch a {
-	color: #DDDDDD; /* C1 */
+	color: #DDDDDD; 
 	text-decoration: none;
 	font-weight: bold;
 }
@@ -321,18 +345,11 @@ tr.form input {
 }
 
 .message_1 {
-	/* error */
 	color: red;
-	
 }
 
 .bindError {
-	 /* bind errors */
 	 color:red;
-}
-
-.message_2 {
-	 /* info */
 }
 
 .filterArea {

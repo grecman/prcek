@@ -41,7 +41,7 @@ public class PrPodminkaService {
 	
 	@Transactional
  	public void addPrPodminka(PrPodminka newPrPodminka) {
-		log.trace("###\t\t addPrPodminka("+newPrPodminka+")");
+		log.trace("###\t\t addPrPodminka("+newPrPodminka.getPr()+")");
 		entityManager.persist(newPrPodminka);		
 	}
  	

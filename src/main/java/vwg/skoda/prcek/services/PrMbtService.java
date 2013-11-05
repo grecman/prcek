@@ -36,5 +36,4 @@ public class PrMbtService {
 		return entityManager.createQuery("SELECT u FROM PrMbt u WHERE u.pkz=:prod", PrMbt.class).setParameter("prod", produkt).getResultList();
 	}
 
-
 }

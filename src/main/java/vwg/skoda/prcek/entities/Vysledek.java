@@ -83,8 +83,6 @@ public class Vysledek implements Serializable {
 		this.uuser = uuser;
 	}
 
-
-
 	public PrPodminka getSk30tPrPodminka() {
 		return sk30tPrPodminka;
 	}

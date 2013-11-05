@@ -21,9 +21,6 @@ public class PrPodminka implements Serializable {
 	@Column(unique=true, nullable=false, precision=22)
 	private long id;
 
-	@Column(length=40)
-	private String nazev;
-
 	@Column(precision=22)
 	private BigDecimal poradi;
 
@@ -63,14 +60,6 @@ public class PrPodminka implements Serializable {
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public String getNazev() {
-		return this.nazev;
-	}
-
-	public void setNazev(String nazev) {
-		this.nazev = nazev;
 	}
 
 	public BigDecimal getPoradi() {

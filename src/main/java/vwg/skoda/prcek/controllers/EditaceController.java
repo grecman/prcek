@@ -11,10 +11,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import cz.skoda.mbt.MBT;
 import cz.skoda.mbt.PRCondition;
+import cz.skoda.mbt.PRConditionException;
 import vwg.skoda.prcek.entities.Mt;
 import vwg.skoda.prcek.entities.MtSeznam;
+import vwg.skoda.prcek.entities.OfflineJob;
 import vwg.skoda.prcek.entities.PrMbt;
 import vwg.skoda.prcek.entities.PrPodminka;
 import vwg.skoda.prcek.entities.Protokol;
@@ -23,6 +26,7 @@ import vwg.skoda.prcek.entities.User;
 import vwg.skoda.prcek.objects.FormObj;
 import vwg.skoda.prcek.services.MtService;
 import vwg.skoda.prcek.services.MtSeznamService;
+import vwg.skoda.prcek.services.OfflineJobService;
 import vwg.skoda.prcek.services.PrMbtService;
 import vwg.skoda.prcek.services.PrPodminkaService;
 import vwg.skoda.prcek.services.ProtokolService;
@@ -56,7 +60,9 @@ public class EditaceController {
 	@Autowired
 	private PrMbtService servicePrMbt;
 
-	
+	@Autowired
+	private OfflineJobService serviceOfflineJob;
+
 	@RequestMapping
 	public String editaceStart(User netusername, Mt mt, Sada sada, Model model, HttpServletRequest req) {
 		log.debug("###\t editaceStart()");
@@ -72,7 +78,7 @@ public class EditaceController {
 	@RequestMapping(value = "/vyberMt")
 	public String vyberMt(User netusername, Mt mt, Sada sada, Model model) {
 		log.debug("###\t vyberMt(" + netusername.getNetusername() + ")");
-		
+
 		User u = serviceUser.getUser(netusername.getNetusername());
 		model.addAttribute("vybranyUzivatel", u);
 
@@ -81,11 +87,11 @@ public class EditaceController {
 		return "/editace";
 	}
 
-	// controller je zde kvuli funkci primeho odkazu na nazev MT, aby uzivatel mohl znovu vybrat jinou MT s jiz zvolenym userem	
+	// controller je zde kvuli funkci primeho odkazu na nazev MT, aby uzivatel mohl znovu vybrat jinou MT s jiz zvolenym userem
 	@RequestMapping(value = "/vyberMt/{vybranyUzivatel}")
 	public String vyberMt(@PathVariable String vybranyUzivatel, User netusername, Mt mt, Sada sada, Model model) {
 		log.debug("###\t vyberMt(" + vybranyUzivatel + ")");
- 
+
 		User u = serviceUser.getUser(vybranyUzivatel);
 		vyberMt(u, mt, sada, model);
 		return "/editace";
@@ -105,8 +111,8 @@ public class EditaceController {
 
 		return "/editace";
 	}
-	
-	// controller je zde kvuli funkci primeho odkazu na nazev sady, aby uzivatel mohl znovu vybrat jinou sadu s jiz zvolenym userem a mt	
+
+	// controller je zde kvuli funkci primeho odkazu na nazev sady, aby uzivatel mohl znovu vybrat jinou sadu s jiz zvolenym userem a mt
 	@RequestMapping(value = "/vyberSadu/{vybranyUzivatel}/{vybranaMt}")
 	public String vyberSadu(@PathVariable String vybranyUzivatel, @PathVariable String vybranaMt, User netusername, Mt mt, Sada sada, Model model) {
 		log.debug("###\t vyberSadu(" + vybranyUzivatel + ", " + vybranaMt + ")");
@@ -120,9 +126,10 @@ public class EditaceController {
 
 	@RequestMapping(value = "/zobrazPr/{vybranyUzivatel}/{vybranaMt}")
 	public String zobrazPr(@PathVariable String vybranyUzivatel, @PathVariable String vybranaMt, User netusername, Mt mt, Sada sada, Model model, HttpServletRequest req) {
-	//public String zobrazPr(@PathVariable String vybranyUzivatel, @PathVariable String vybranaMt, @RequestParam(required = false) String sadada, User netusername, Mt mt, Sada sada, Model model, HttpServletRequest req) {
-		//if(sadada != null)	sada.setNazev(sadada);
-		
+		// public String zobrazPr(@PathVariable String vybranyUzivatel, @PathVariable String vybranaMt, @RequestParam(required = false) String sadada,
+		// User netusername, Mt mt, Sada sada, Model model, HttpServletRequest req) {
+		// if(sadada != null) sada.setNazev(sadada);
+
 		log.debug("###\t zobrazPr(" + vybranyUzivatel + ", " + vybranaMt + ", " + sada.getNazev() + ")");
 
 		User u = serviceUser.getUser(vybranyUzivatel);
@@ -139,7 +146,7 @@ public class EditaceController {
 
 		List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminka(s);
 		model.addAttribute("prPodminkaList", prPodminkaList);
-		
+
 		Long prCount = servicePrPodminka.getPrPodminkaCount(s);
 		model.addAttribute("prCount", prCount);
 
@@ -149,11 +156,10 @@ public class EditaceController {
 
 		return "/editace";
 	}
-	
+
 	@RequestMapping(value = "/zobrazPr/{vybranyUzivatel}/{vybranaMt}/{vybranaSada}")
-	public String zobrazPr(@PathVariable String vybranyUzivatel, @PathVariable String vybranaMt, @PathVariable long vybranaSada, User netusername, Mt mt, Sada sada, Model model,
-			HttpServletRequest req) {
-		log.debug("###\t zobrazPr(" + vybranyUzivatel + ", " + vybranaMt + ", " + vybranaSada+ ")");
+	public String zobrazPr(@PathVariable String vybranyUzivatel, @PathVariable String vybranaMt, @PathVariable long vybranaSada, User netusername, Mt mt, Sada sada, Model model, HttpServletRequest req) {
+		log.debug("###\t zobrazPr(" + vybranyUzivatel + ", " + vybranaMt + ", " + vybranaSada + ")");
 
 		User u = serviceUser.getUser(vybranyUzivatel);
 		Mt m = serviceMt.getMtOne(u.getId(), vybranaMt);
@@ -169,7 +175,7 @@ public class EditaceController {
 
 		List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminka(s);
 		model.addAttribute("prPodminkaList", prPodminkaList);
-		
+
 		Long prCount = servicePrPodminka.getPrPodminkaCount(s);
 		model.addAttribute("prCount", prCount);
 
@@ -179,11 +185,11 @@ public class EditaceController {
 
 		return "/editace";
 	}
-	
+
 	@RequestMapping(value = "/zobrazPrOrderByTest/{vybranyUzivatel}/{vybranaMt}/{vybranaSada}")
 	public String zobrazPrOrderByTest(@PathVariable String vybranyUzivatel, @PathVariable String vybranaMt, @PathVariable long vybranaSada, User netusername, Mt mt, Sada sada, Model model,
 			HttpServletRequest req) {
-		log.debug("###\t zobrazPrOrderByTest(" + vybranyUzivatel + ", " + vybranaMt + ", " + vybranaSada+ ")");
+		log.debug("###\t zobrazPrOrderByTest(" + vybranyUzivatel + ", " + vybranaMt + ", " + vybranaSada + ")");
 
 		User u = serviceUser.getUser(vybranyUzivatel);
 		Mt m = serviceMt.getMtOne(u.getId(), vybranaMt);
@@ -199,7 +205,7 @@ public class EditaceController {
 
 		List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminkaOrderByTest(s);
 		model.addAttribute("prPodminkaList", prPodminkaList);
-		
+
 		Long prCount = servicePrPodminka.getPrPodminkaCount(s);
 		model.addAttribute("prCount", prCount);
 
@@ -211,12 +217,11 @@ public class EditaceController {
 	}
 
 	@RequestMapping(value = "/smazatSadu/{vybranyUziv}/{vybranaMt}/{vybranaSada}")
-	public String smazatSadu(@PathVariable String vybranyUziv, @PathVariable String vybranaMt, @PathVariable long vybranaSada, User netusername,
-			Sada sada, Mt mt, Model model, HttpServletRequest req) {
+	public String smazatSadu(@PathVariable String vybranyUziv, @PathVariable String vybranaMt, @PathVariable long vybranaSada, User netusername, Sada sada, Mt mt, Model model, HttpServletRequest req) {
 		log.debug("###\t smazatSadu(" + vybranyUziv + ", " + vybranaMt + ", " + vybranaSada + ")");
 
-		//User u = serviceUser.getUser(vybranyUziv);
-		//Mt modTr = serviceMt.getMtOne(u.getId(), vybranaMt);
+		// User u = serviceUser.getUser(vybranyUziv);
+		// Mt modTr = serviceMt.getMtOne(u.getId(), vybranaMt);
 		Sada s = serviceSada.getSadaOne(vybranaSada);
 
 		try {
@@ -234,7 +239,7 @@ public class EditaceController {
 			serviceProtokol.addProtokol(newProtokol);
 		}
 
-		return "redirect:/srv/editace/vyberSadu/"+s.getSk30tMt().getSk30tUser().getNetusername()+"/"+s.getSk30tMt().getMt();
+		return "redirect:/srv/editace/vyberSadu/" + s.getSk30tMt().getSk30tUser().getNetusername() + "/" + s.getSk30tMt().getMt();
 	}
 
 	@RequestMapping(value = "/novaSada")
@@ -278,16 +283,16 @@ public class EditaceController {
 		Mt mt = serviceMt.getMtOne(u.getId(), mts.getMt());
 		Sada s = serviceSada.getSadaOne(mt, f.getSada().trim());
 
-		//return "redirect:/srv/editace/zobrazPr/"+u.getNetusername()+"/"+s.getSk30tMt().getMt()+"?sada="+s.getNazev();
-		return "redirect:/srv/editace/zobrazPr/"+u.getNetusername()+"/"+s.getSk30tMt().getMt()+"/"+s.getId();
+		// return "redirect:/srv/editace/zobrazPr/"+u.getNetusername()+"/"+s.getSk30tMt().getMt()+"?sada="+s.getNazev();
+		return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
 	}
 
 	@RequestMapping(value = "/prejmenovatSadu/{vybranaSada}")
 	public String prejmenovatSadu(@PathVariable long vybranaSada, FormObj f, Model model, HttpServletRequest req) {
 		log.debug("###\t prejmenovatSadu(" + vybranaSada + ")");
 		Sada s = serviceSada.getSadaOne(vybranaSada);
-		model.addAttribute("prihlasenyUzivatel", s.getSk30tMt().getSk30tUser().getPrijmeni() + " " + s.getSk30tMt().getSk30tUser().getJmeno() + ", "
-				+ s.getSk30tMt().getSk30tUser().getOddeleni() + " (" + s.getSk30tMt().getSk30tUser().getNetusername() + ")");
+		model.addAttribute("prihlasenyUzivatel", s.getSk30tMt().getSk30tUser().getPrijmeni() + " " + s.getSk30tMt().getSk30tUser().getJmeno() + ", " + s.getSk30tMt().getSk30tUser().getOddeleni()
+				+ " (" + s.getSk30tMt().getSk30tUser().getNetusername() + ")");
 		model.addAttribute("vybranaMt", s.getSk30tMt());
 		model.addAttribute("vybranaSada", s);
 		f.setSada(s.getNazev());
@@ -305,8 +310,87 @@ public class EditaceController {
 		s.setUuser(u.getNetusername());
 		s.setUtime(new Date());
 		serviceSada.setSada(s);
-		
-		return "redirect:/srv/editace/zobrazPr/"+u.getNetusername()+"/"+s.getSk30tMt().getMt()+"/"+s.getId();
+
+		return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
+	}
+
+	@RequestMapping(value = "/duplikovatSadu/{vybranaSada}")
+	public String duplikovatSadu(@PathVariable long vybranaSada, FormObj f, Model model, HttpServletRequest req) {
+		log.debug("###\t duplikovatSadu(" + vybranaSada + ")");
+
+		Sada s = serviceSada.getSadaOne(vybranaSada);
+		model.addAttribute("prihlasenyUzivatel", s.getSk30tMt().getSk30tUser().getPrijmeni() + " " + s.getSk30tMt().getSk30tUser().getJmeno() + ", " + s.getSk30tMt().getSk30tUser().getOddeleni()
+				+ " (" + s.getSk30tMt().getSk30tUser().getNetusername() + ")");
+
+		model.addAttribute("vybranaSada", s);
+
+		List<MtSeznam> mt = serviceMtSeznam.getMt();
+		model.addAttribute("seznamMt", mt);
+
+		f.setSada(s.getNazev());
+		return "/sadaDuplikovat";
+	}
+
+	@RequestMapping(value = "/duplikovatSaduTed/{vybranaSada}")
+	public String duplikovatSaduTed(@PathVariable long vybranaSada, User user, Sada sada, FormObj f, Model model, HttpServletRequest req) {
+		log.debug("###\t duplikovatSaduTed(" + req.getUserPrincipal().getName() + ", " + f.getMt() + ", '" + f.getSada() + "', " + vybranaSada + ")");
+
+		User u = serviceUser.getUser(req.getUserPrincipal().getName());
+		MtSeznam mts = serviceMtSeznam.getMtSeznamOne(f.getMt());
+		Sada sPuv = serviceSada.getSadaOne(vybranaSada);
+
+		if (!serviceMt.existMt(u.getNetusername(), f.getMt())) {
+			Mt newMt = new Mt();
+			newMt.setMt(f.getMt());
+			newMt.setProdukt(mts.getProdukt());
+			newMt.setUuser(u.getNetusername());
+			newMt.setUtime(new Date());
+			newMt.setSk30tUser(u);
+			serviceMt.addMt(newMt);
+		}
+
+		Mt mt = serviceMt.getMtOne(u.getId(), mts.getMt());
+
+		Sada newSada = new Sada();
+		newSada.setNazev(f.getSada().trim());
+		newSada.setUuser(u.getNetusername());
+		newSada.setUtime(new Date());
+		newSada.setSk30tMt(serviceMt.getMtOne(u.getId(), f.getMt()));
+		serviceSada.addSada(newSada);
+
+		Sada sNew = serviceSada.getSadaOne(mt, f.getSada().trim());
+
+		List<PrPodminka> pr = servicePrPodminka.getPrPodminka(sPuv);
+		for (PrPodminka p : pr) {
+			PrPodminka newPr = new PrPodminka();
+			newPr.setPoradi(p.getPoradi());
+			newPr.setPoznamka(p.getPoznamka());
+			newPr.setPr(p.getPr());
+			newPr.setSk30tSada(sNew);
+			newPr.setTest(p.getTest());
+			newPr.setUtime(new Date());
+			newPr.setUuser(u.getNetusername());
+
+			// TODO: tady delat kontrolu kvuli tomu, ze duplikace se provede do jine MT kde by nejaka PR nemusela byt platna! Prolem je, ze by se to
+			// melo delat asi async :(
+
+			// MBT kontrola
+			// try {
+			// List<PrMbt> prMbt = servicePrMbt.getPr(mt.getProdukt());
+			// MBT mbt = new MBT();
+			// mbt.setMBTSource(prMbt);
+			// mbt.getPRCondition(p.getPr());
+			// newPr.setErrMbt(null);
+			// } catch (Exception e) {
+			// // log.error("###\t Chyba pri obsahove kontrole PR podminky (import TXT): " + e);
+			// newPr.setErrMbt(e.getMessage());
+			// }
+
+			servicePrPodminka.addPrPodminka(newPr);
+		}
+
+		// return "redirect:/srv/editace/zobrazPr/"+u.getNetusername()+"/"+s.getSk30tMt().getMt()+"?sada="+s.getNazev();
+		return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + sNew.getSk30tMt().getMt() + "/" + sNew.getId();
 	}
 
 	@RequestMapping(value = "/novaPrPodminka/{vybranaSada}")
@@ -314,8 +398,8 @@ public class EditaceController {
 		log.debug("###\t novaPrPodminka(" + vybranaSada + ")");
 
 		Sada s = serviceSada.getSadaOne(vybranaSada);
-		model.addAttribute("prihlasenyUzivatel", s.getSk30tMt().getSk30tUser().getPrijmeni() + " " + s.getSk30tMt().getSk30tUser().getJmeno() + ", "
-				+ s.getSk30tMt().getSk30tUser().getOddeleni() + " (" + s.getSk30tMt().getSk30tUser().getNetusername() + ")");
+		model.addAttribute("prihlasenyUzivatel", s.getSk30tMt().getSk30tUser().getPrijmeni() + " " + s.getSk30tMt().getSk30tUser().getJmeno() + ", " + s.getSk30tMt().getSk30tUser().getOddeleni()
+				+ " (" + s.getSk30tMt().getSk30tUser().getNetusername() + ")");
 		model.addAttribute("vybranaMt", s.getSk30tMt());
 		model.addAttribute("vybranaSada", s);
 		return "/prPodminkaNova";
@@ -335,41 +419,41 @@ public class EditaceController {
 		prp.setUuser(u.getNetusername());
 		prp.setUtime(new Date());
 		prp.setSk30tSada(s);
-		
+
 		// MBT kontrola
 		try {
 			Mt mt = serviceMt.getMtOne(s.getSk30tMt().getId());
-			List<PrMbt> pr =  servicePrMbt.getPr(mt.getProdukt());
+			List<PrMbt> pr = servicePrMbt.getPr(mt.getProdukt());
 			MBT mbt = new MBT();
 			mbt.setMBTSource(pr);
 			PRCondition prCond = mbt.getPRCondition(f.getPrPodminka().toUpperCase());
 			prp.setErrMbt(null);
-			log.debug("###\t Kontrola PR podminky MBT (rucni zadani) "+prCond.toString()+" ... OK");
+			log.debug("###\t Kontrola PR podminky MBT (rucni zadani) " + prCond.toString() + " ... OK");
 		} catch (Exception e) {
 			log.error("###\t Chyba pri obsahove kontrole PR podminky (rucni zadani): " + e);
 			prp.setErrMbt(e.getMessage());
 		}
-		
+
 		servicePrPodminka.addPrPodminka(prp);
 
-		return "redirect:/srv/editace/zobrazPr/"+u.getNetusername()+"/"+s.getSk30tMt().getMt()+"/"+s.getId();
+		return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
 	}
-	
+
 	@RequestMapping(value = "/editovatPr/{idPr}")
 	public String editovatPr(@PathVariable long idPr, FormObj f, Model model, HttpServletRequest req) {
 		log.debug("###\t editovatPr(" + idPr + ")");
 
-		PrPodminka pr = servicePrPodminka.getPrPodminkaOne(idPr);		
+		PrPodminka pr = servicePrPodminka.getPrPodminkaOne(idPr);
 		Sada s = serviceSada.getSadaOne(pr.getSk30tSada().getId());
-		model.addAttribute("prihlasenyUzivatel", s.getSk30tMt().getSk30tUser().getPrijmeni() + " " + s.getSk30tMt().getSk30tUser().getJmeno() + ", "
-				+ s.getSk30tMt().getSk30tUser().getOddeleni() + " (" + s.getSk30tMt().getSk30tUser().getNetusername() + ")");
+		model.addAttribute("prihlasenyUzivatel", s.getSk30tMt().getSk30tUser().getPrijmeni() + " " + s.getSk30tMt().getSk30tUser().getJmeno() + ", " + s.getSk30tMt().getSk30tUser().getOddeleni()
+				+ " (" + s.getSk30tMt().getSk30tUser().getNetusername() + ")");
 		model.addAttribute("vybranaMt", s.getSk30tMt());
 		model.addAttribute("vybranaSada", s);
 		model.addAttribute("vybranaPrPodminka", pr);
 		f.setPoradi(pr.getPoradi());
 		f.setPrPodminka(pr.getPr());
 		f.setPoznamka(pr.getPoznamka());
-		
+
 		return "/prPodminkaEditovat";
 	}
 
@@ -380,7 +464,7 @@ public class EditaceController {
 		User u = serviceUser.getUser(req.getUserPrincipal().getName());
 		PrPodminka prp = servicePrPodminka.getPrPodminkaOne(vybranaPrPodminka);
 		Sada s = serviceSada.getSadaOne(prp.getSk30tSada().getId());
-		
+
 		prp.setPr(f.getPrPodminka().toUpperCase());
 		prp.setPoradi(f.getPoradi());
 		prp.setPoznamka(f.getPoznamka());
@@ -389,20 +473,20 @@ public class EditaceController {
 
 		try {
 			Mt mt = serviceMt.getMtOne(s.getSk30tMt().getId());
-			List<PrMbt> pr =  servicePrMbt.getPr(mt.getProdukt());
+			List<PrMbt> pr = servicePrMbt.getPr(mt.getProdukt());
 			MBT mbt = new MBT();
 			mbt.setMBTSource(pr);
 			PRCondition prCond = mbt.getPRCondition(f.getPrPodminka().toUpperCase());
 			prp.setErrMbt(null);
-			log.debug("###\t Kontrola PR podminky (MBT) "+prCond.toString()+" ... OK");
+			log.debug("###\t Kontrola PR podminky (MBT) " + prCond.toString() + " ... OK");
 		} catch (Exception e) {
 			log.error("###\t Chyba pri obsahove kontrole PR podminky: " + e);
 			prp.setErrMbt(e.getMessage());
 		}
-		
+
 		servicePrPodminka.setPrPodminka(prp);
 
-		return "redirect:/srv/editace/zobrazPr/"+u.getNetusername()+"/"+s.getSk30tMt().getMt()+"/"+s.getId();
+		return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
 	}
 
 	@RequestMapping(value = "/smazatVsechnyPr/{vybranaSada}")
@@ -415,57 +499,45 @@ public class EditaceController {
 		List<PrPodminka> pr = servicePrPodminka.getPrPodminka(s);
 		int pocetSmazanychPr = pr.size();
 		servicePrPodminka.removeAllPrPodminka(s);
-		
-//		for (PrPodminka p : pr) {
-//			try {
-//				servicePrPodminka.removePrPodminka(p.getId());
-//			} catch (Exception e) {
-//				log.debug("ERROR - smazatVsechnyPr(" + u.getNetusername() + ", " + s.getSk30tMt().getMt() + ", " + s.getNazev() + ", " + p.getPr()
-//						+ ") ...: " + e);
-//			} 
-//		}
+
 		Protokol newProtokol = new Protokol();
 		newProtokol.setNetusername(req.getUserPrincipal().getName().toUpperCase());
 		newProtokol.setAction("Smazani vsech PR podminek");
-		newProtokol.setInfo(s.getSk30tMt().getMt() + " - " + s.getNazev() + " ("+ pocetSmazanychPr +")   ###   " + req.getSession().getServletContext().getServerInfo());
-		//newProtokol.setInfo(s.getSk30tMt().getMt() + " - " + s.getNazev() +"   ###   " + req.getSession().getServletContext().getServerInfo());
+		newProtokol.setInfo(s.getSk30tMt().getMt() + " - " + s.getNazev() + " (" + pocetSmazanychPr + ")   ###   " + req.getSession().getServletContext().getServerInfo());
 		newProtokol.setTime(new Date());
 		newProtokol.setSessionid(req.getSession().getId());
 		serviceProtokol.addProtokol(newProtokol);
-		
-		return "redirect:/srv/editace/zobrazPr/"+u.getNetusername()+"/"+s.getSk30tMt().getMt()+"/"+s.getId();
+
+		return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
 	}
-	
+
 	@RequestMapping(value = "/smazatPrPodminku/{idPr}")
 	public String smazatPrPodminku(@PathVariable long idPr, User netusername, Sada sada, Mt mt, Model model, HttpServletRequest req) {
 		log.debug("###\t smazatPrPodminku(" + idPr + ")");
-		
+
 		PrPodminka pr = servicePrPodminka.getPrPodminkaOne(idPr);
 		User u = serviceUser.getUser(pr.getSk30tSada().getSk30tMt().getSk30tUser().getNetusername());
 
 		servicePrPodminka.removePrPodminka(idPr);
-		
+
 		Protokol newProtokol = new Protokol();
 		newProtokol.setNetusername(req.getUserPrincipal().getName().toUpperCase());
 		newProtokol.setAction("Smazani PR podminky");
-		newProtokol.setInfo(pr.getSk30tSada().getSk30tMt().getMt() + " - " + pr.getSk30tSada().getNazev() + " ("+ pr.getNazev() +")   ###   " + req.getSession().getServletContext().getServerInfo());
+		newProtokol.setInfo(pr.getSk30tSada().getSk30tMt().getMt() + " - " + pr.getSk30tSada().getNazev() + ")   ###   " + req.getSession().getServletContext().getServerInfo());
 		newProtokol.setTime(new Date());
 		newProtokol.setSessionid(req.getSession().getId());
 		serviceProtokol.addProtokol(newProtokol);
-		
-		return "redirect:/srv/editace/zobrazPr/"+u.getNetusername()+"/"+pr.getSk30tSada().getSk30tMt().getMt()+"/"+pr.getSk30tSada().getId();
-	}
-/*	
-	@RequestMapping(value = "/importTxt/{vybranaSada}")
-	public String importTxt(@PathVariable long vybranaSada, User netusername, Sada sada, Mt mt, Model model, HttpServletRequest req) {
-		log.debug("###\t importTxt(" + vybranaSada + ")");
 
-		Sada s = serviceSada.getSadaOne(vybranaSada);
-		User u = serviceUser.getUser(s.getSk30tMt().getSk30tUser().getNetusername());
-
-		
-		return "redirect:/srv/editace/zobrazPr/"+u.getNetusername()+"/"+s.getSk30tMt().getMt()+"/"+s.getId();
+		return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + pr.getSk30tSada().getSk30tMt().getMt() + "/" + pr.getSk30tSada().getId();
 	}
-*/
-	
+	/*
+	 * @RequestMapping(value = "/importTxt/{vybranaSada}") public String importTxt(@PathVariable long vybranaSada, User netusername, Sada sada, Mt mt,
+	 * Model model, HttpServletRequest req) { log.debug("###\t importTxt(" + vybranaSada + ")");
+	 * 
+	 * Sada s = serviceSada.getSadaOne(vybranaSada); User u = serviceUser.getUser(s.getSk30tMt().getSk30tUser().getNetusername());
+	 * 
+	 * 
+	 * return "redirect:/srv/editace/zobrazPr/"+u.getNetusername()+"/"+s.getSk30tMt().getMt()+"/"+s.getId(); }
+	 */
+
 }

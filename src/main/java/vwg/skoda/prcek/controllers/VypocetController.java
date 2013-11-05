@@ -180,12 +180,12 @@ public class VypocetController {
 			log.debug("###\t\t ... zakazky na evidencnim bodu: " + e.getKbodKod() + " - " + e.getKbodWk() + " - " + e.getKbodEvid() + " - " + e.getFisNaze());
 
 			// vypisy parametru a nastaveni datumu
+			platnost = platnost.replace(".", "").trim();
 			String datumOd = null;
 			String datumDo = null;
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
 			Date platnostOd;
 			Date platnostDo;
-			platnost = platnost.replace(".", "").trim();
 			if (platnost.indexOf('-') > 0) {
 				datumOd = platnost.substring(0, platnost.indexOf('-'));
 				datumDo = platnost.substring(platnost.indexOf('-') + 1, platnost.length());
@@ -193,20 +193,31 @@ public class VypocetController {
 				platnostDo = formatter.parse(datumDo);
 			} else {
 				datumOd = platnost + "01";
-				datumDo = platnost + "31";
 				platnostOd = formatter.parse(datumOd);
+				
+				// ziskani posledniho dne v ZADANEM mesici
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMM");
+				Date prac = dateFormat.parse(platnost);
+				Calendar c = Calendar.getInstance();
+				c.setTime(prac);
+				c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+
+				datumDo = platnost + c.getActualMaximum(Calendar.DAY_OF_MONTH);
+
 				platnostDo = formatter.parse(datumDo);
+
 			}
 			log.debug("###\t\t ... rozsah obdobi: " + platnostOd + " - " + platnostDo);
 			log.debug("###\t\t ... vystup " + f.getAgregaceVystup() + " agregace/i");
 			log.debug("###\t\t ... vystup serazen dle: " + f.getTriditDleVystup());
 			log.debug("###\t\t ... vystup vcetne detailu zakazek: " + f.getZakazkyVystup());
 			log.debug("###\t\t ... vystup vcetne storno vet: " + f.getStornoVetyVystup());
+			int pocetSad = 1;
 			for (int i = 0; i < f.getIdcka().length; i++) {
-				log.debug("###\t\t ... vybrane sady pro agregaci (id): " + f.getIdcka()[i]);
+				log.debug("###\t\t ... vybrane sady (IDcka) pro agregaci: " + pocetSad++ + ". " + f.getIdcka()[i]);
 			}
 
-			// nastaveni parametru AGREGACE
+			// nastaveni parametru ZPRACOVANI
 			Long lastAgr = serviceOfflineJob.getLastAgregace(u);
 
 			for (int i = 0; i < f.getIdcka().length; i++) {
@@ -220,15 +231,20 @@ public class VypocetController {
 				off.setSk30tSada(s);
 				off.setCasSpusteni(new Date());
 				// off.setStorno((f.getStornoVetyVystup()) ? "ano" : "ne");
-				off.setStorno(f.getStornoVetyVystup());
+				off.setStornoZakazky(f.getStornoVetyVystup());
 				off.setPocetZakazek(new BigDecimal(zakCount));
+				if (zakCount < 1) {
+					off.setProces("Nebude zpracováno");
+				}
 				off.setPlatnostOd(platnostOd);
 				off.setPlatnostDo(platnostDo);
 				off.setVystupRazeni(f.getTriditDleVystup());
-				off.setVystupZakazky(f.getZakazkyVystup());
-				off.setAgregace((f.getIdcka().length <= 1) ? null : (lastAgr + 1));
 				off.setUtime(new Date());
 				off.setUuser(u.getNetusername());
+				off.setZakazkyVystup(f.getZakazkyVystup());
+				if ("s".startsWith(f.getAgregaceVystup())) {
+					off.setAgregace((f.getIdcka().length <= 1) ? null : (lastAgr + 1));
+				}
 				serviceOfflineJob.addOfflineJob(off);
 			}
 			return "redirect:/srv/offline/startJob";

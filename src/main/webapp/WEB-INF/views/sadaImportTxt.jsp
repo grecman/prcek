@@ -56,7 +56,7 @@
 					<TD></TD>
 					<TD><input
 						onclick="return check('kontrola', {'sada' : /^[a-zA-Z0-9áäéëěíóöôúůüýčďňřšťžĺľĚŠČŘŽÝÁÍÉ]{1}[/,-.a-zA-Z0-9áäéëěíóöôúůüýčďňřšťžĺľĚŠČŘŽÝÁÍÉ\u0020]{0,35}$/});"
-						type="submit" value="ok" /></TD>
+						type="submit" value="ok" class="submit"/></TD>
 					<!-- <td><button onclick="return check('loc', {'partNumber' : /^[a-zA-Z0-9\u0020]{1}[a-zA-Z0-9\u0020]{0,14}$/, 'partDescription' : /^[a-zA-Z0-9]{1}[/,-.a-zA-Z0-9\u0020]{0,35}$/,'quantity' : /^([,.0-9])+$/, 'uom' : /^[1-5]{1}$/});">Add</button></td>-->
 				</TR>
 				<TR height="300px;"></TR>
@@ -71,7 +71,7 @@
 				</c:set>
 				<form:form commandName="sada"
 					action="${pageContext.servletContext.contextPath}/srv/editace">
-					<input type="submit" value="${zpetPopisek}" />
+					<input type="submit" value="${zpetPopisek}" class="submit"/>
 				</form:form>
 			</div>
 		</div>
