@@ -72,7 +72,8 @@ public class OfflineController {
 		log.debug("###\t startJob ()");
 		User u = serviceUser.getUser(req.getUserPrincipal().getName());
 
-		serviceOfflineJob.removeOldOfflineJob(u);
+		// mazani jobu starsich jak 92 dnu
+		serviceOfflineJob.removeOldOfflineJob();
 
 		List<OfflineJob> off = serviceOfflineJob.getOfflineJobKeZpracovani(u);
 		log.debug("###\t\t ... nacteno jobu ke zpracovani: " + off.size());
@@ -229,7 +230,7 @@ public class OfflineController {
 		List<Vysledek> vys = serviceVysledek.getVysledek(seznamAgregaci);
 
 
-		List<Zakazky> zak = null;		
+//		List<Zakazky> zak = null;		
 //		if (off.getZakazkyVystup()) {
 //			SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
 //			String datumOd = DATE_FORMAT.format(off.getPlatnostOd());
@@ -239,7 +240,8 @@ public class OfflineController {
 //		}
 		
 		ExportXls exp = new ExportXls();
-		exp.vysledekSAgregaci(vys, zak, offAgregace, res);
+		//exp.vysledekSAgregaci(vys, zak, offAgregace, res);
+		exp.vysledekSAgregaci(vys, offAgregace, res);
 
 	}
 

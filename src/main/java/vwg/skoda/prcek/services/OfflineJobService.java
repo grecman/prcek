@@ -46,9 +46,9 @@ public class OfflineJobService {
 	}
 	
 	@Transactional
-	public void removeOldOfflineJob(User user) {
-		log.trace("###\t\t removeOldOfflineJob("+user.getNetusername()+");\t ... joby starsi jak 3 mesice budou smazany");
-		entityManager.createQuery("DELETE OfflineJob WHERE sysdate-90 > casSpusteni ").executeUpdate();
+	public void removeOldOfflineJob() {
+		log.trace("###\t\t removeOldOfflineJob();\t ... mazu joby starsi jak 92 dnu");
+		entityManager.createQuery("DELETE OfflineJob WHERE sysdate-92 > casSpusteni ").executeUpdate();
 	}
  	
 	public List<OfflineJob> getOfflineJob(User user) {

@@ -201,7 +201,7 @@
 								href="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${vybranaSada.sk30tMt.sk30tUser.netusername}/${vybranaSada.sk30tMt.mt}/${vybranaSada.id}">Modelová
 									třída</a></th>
 							<th>Název sady</th>
-							<th title="... pouze validní PR podmínky">Počet PR</th>
+							<th>Počet PR</th>
 							<th>Zpracování</th>
 						</tr>
 					</thead>
@@ -209,12 +209,13 @@
 						<c:forEach var="i" items="${vybraneSady}" varStatus="iterator">
 							<tr
 								class="${ (iterator.index mod 2) == 0 ? 'rowOdd' : 'rowEven' }">
-								<td align="center">${i.mt}</td>
+								<td align="center">${i.sk30tMt.mt}</td>
 								<td>${i.nazev}</td>
-								<td align="right" title="Nevalidní PR: ${i.pocetNevalidnichPr}">${i.pocetValidnichPr}</td>
-								<td align="center"><c:if test="${not(empty(evidBod)) and (i.pocetValidnichPr > 0)}">
+								<!-- <td align="right" title="Nevalidní PR: ${i.pocetNevalidnichPr}">${i.pocetValidnichPr}</td> -->
+								<td align="right">${i.pocet}</td>
+								<td align="center"><c:if test="${not(empty(evidBod)) and (i.pocet > 0)}">
 										<form:checkbox path="idcka" style="width: 0px;"
-											value="${i.idSada}" />
+											value="${i.id}" />
 									</c:if></td>
 							</tr>
 						</c:forEach>

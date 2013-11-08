@@ -70,10 +70,11 @@
 						type="submit" value="ok" class="submit"/></TD>
 					<TD></TD>
 				</TR>
-				<TR height="100px;"></TR>
 			</TABLE>
 		</form:form>
 
+		<DIV style="height: 250px;">&#160;</DIV>
+		
 		<div class="zonaTlacitek">
 			<div class="tlacitka">
 

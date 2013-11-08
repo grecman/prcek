@@ -48,7 +48,7 @@ public class UserService {
 			log.trace("\t\t   ... User nalezen ("+neco+")");
 			return true;
 		} catch (Exception e) {
-			log.error("\t\t   ... User neexistuje :",e);
+			log.error("\t\t   ... User neexistuje (vypis chyby):",e);
 			return false;
 		}
 

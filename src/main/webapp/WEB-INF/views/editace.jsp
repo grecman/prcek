@@ -122,7 +122,8 @@
 					</c:set>
 					<form:form commandName="sada"
 						action="${pageContext.servletContext.contextPath}/srv/editace/duplikovatSadu/${vybranaSada.id}">
-						<input type="submit" value="${duplikovatSaduPopisek}"  class="submit"/>
+						<input type="submit" value="${duplikovatSaduPopisek}"
+							class="submit" />
 					</form:form>
 
 					<c:if test="${moznoEditovatSadu}">
@@ -132,7 +133,7 @@
 						<form:form commandName="sada"
 							action="${pageContext.servletContext.contextPath}/srv/editace/smazatSadu/${vybranyUzivatel.netusername}/${vybranaMt.mt}/${vybranaSada.id}">
 							<input onClick="return confirm('Opravdu?!')" type="submit"
-								value="${smazatSaduPopisek}"  class="submit"/>
+								value="${smazatSaduPopisek}" class="submit" />
 						</form:form>
 
 						<c:set var="prejmenovatSaduPopisek">
@@ -140,7 +141,8 @@
 						</c:set>
 						<form:form commandName="sada"
 							action="${pageContext.servletContext.contextPath}/srv/editace/prejmenovatSadu/${vybranaSada.id}">
-							<input type="submit" value="${prejmenovatSaduPopisek}"  class="submit"/>
+							<input type="submit" value="${prejmenovatSaduPopisek}"
+								class="submit" />
 						</form:form>
 					</c:if>
 				</c:if>
@@ -162,8 +164,15 @@
 					<thead>
 						<tr>
 							<th style="color: #4BA82E;" title="Seřadit"><a
-								href="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${vybranaSada.sk30tMt.sk30tUser.netusername}/${vybranaSada.sk30tMt.mt}/${vybranaSada.id}">Pořadí</a></th>							
-							<th title="Počet zobrazených PR podmínek">PR - ${prCount}</th>
+								href="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${vybranaSada.sk30tMt.sk30tUser.netusername}/${vybranaSada.sk30tMt.mt}/${vybranaSada.id}">Pořadí</a></th>
+							<c:choose>
+								<c:when test="${prCount==vybranaSada.pocet}">
+								<th title="Počet zobrazených PR podmínek" style="color: black;">PR - ${prCount} /	${vybranaSada.pocet}</th>
+								</c:when>
+								<c:otherwise>
+								<th title="Počet zobrazených PR podmínek" style="color: red;">PR - ${prCount} /	${vybranaSada.pocet}</th>
+								</c:otherwise>
+							</c:choose>
 							<th>Poznámka</th>
 							<th style="color: #4BA82E;" title="Seřadit"><a
 								href="${pageContext.servletContext.contextPath}/srv/editace/zobrazPrOrderByTest/${vybranaSada.sk30tMt.sk30tUser.netusername}/${vybranaSada.sk30tMt.mt}/${vybranaSada.id}">MBT</a></th>
@@ -219,7 +228,7 @@
 					</c:set>
 					<form:form commandName="prPodminka"
 						action="${pageContext.servletContext.contextPath}/srv/editace/novaPrPodminka/${vybranaSada.id}">
-						<input type="submit" value="${pridatRadekPopisek}"  class="submit"/>
+						<input type="submit" value="${pridatRadekPopisek}" class="submit" />
 					</form:form>
 
 					<c:if test="${not(empty(prPodminkaList))}">
@@ -229,7 +238,7 @@
 						<form:form commandName="sada"
 							action="${pageContext.servletContext.contextPath}/srv/editace/smazatVsechnyPr/${vybranaSada.id}">
 							<input onClick="return confirm('Opravdu?!')" type="submit"
-								value="${smazatVsePopisek}"  class="submit"/>
+								value="${smazatVsePopisek}" class="submit" />
 						</form:form>
 					</c:if>
 
@@ -238,8 +247,15 @@
 					</c:set>
 					<form:form commandName="sada"
 						action="${pageContext.servletContext.contextPath}/srv/fileUpload/importTxt/${vybranaSada.id}">
-						<input type="submit" value="${importTxt}"  class="submit"/>
+						<input type="submit" value="${importTxt}" class="submit" />
 					</form:form>
+					
+					<c:if test="${not(empty(prPodminkaList))}">
+						<form:form
+							action="${pageContext.servletContext.contextPath}/srv/editace/exportXlsPr/${vybranaSada.id}">
+							<input type="submit" value="Export do XLS"  class="submit"/>
+						</form:form>
+					</c:if>
 
 				</c:if>
 			</div>

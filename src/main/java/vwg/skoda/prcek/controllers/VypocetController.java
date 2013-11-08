@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import vwg.skoda.prcek.entities.EvidencniBody;
 import vwg.skoda.prcek.entities.OfflineJob;
 import vwg.skoda.prcek.entities.Sada;
-import vwg.skoda.prcek.entities.SadyPrehled;
 import vwg.skoda.prcek.entities.User;
 import vwg.skoda.prcek.objects.FormObj;
 import vwg.skoda.prcek.services.EvidencniBodyService;
@@ -30,7 +29,6 @@ import vwg.skoda.prcek.services.OfflineJobService;
 import vwg.skoda.prcek.services.PrPodminkaService;
 import vwg.skoda.prcek.services.ProtokolService;
 import vwg.skoda.prcek.services.SadaService;
-import vwg.skoda.prcek.services.SadyPrehledService;
 import vwg.skoda.prcek.services.UserService;
 import vwg.skoda.prcek.services.VysledekService;
 import vwg.skoda.prcek.services.ZakazkyService;
@@ -50,8 +48,8 @@ public class VypocetController {
 	@Autowired
 	private SadaService serviceSada;
 
-	@Autowired
-	private SadyPrehledService serviceSady;
+//	@Autowired
+//	private SadyPrehledService serviceSady;
 
 	@Autowired
 	private PrPodminkaService servicePrPodminka;
@@ -76,7 +74,8 @@ public class VypocetController {
 		log.debug("###\t vypocet()");
 
 		User u = serviceUser.getUser(req.getUserPrincipal().getName());
-		List<SadyPrehled> s = serviceSady.getSady(u);
+		//List<SadyPrehled> s = serviceSady.getSady(u);
+		List<Sada> s = serviceSada.getSady(u);
 
 		// priprava obsahu combo boxu
 		List<String> rokMesic = new ArrayList<String>();
@@ -88,6 +87,7 @@ public class VypocetController {
 			// System.out.println(date);
 			rokMesic.add(date);
 		}
+		
 
 		model.addAttribute("vybraneSady", s);
 		model.addAttribute("rokMesicList", rokMesic);
@@ -112,7 +112,8 @@ public class VypocetController {
 		log.debug("###\t vypocet(" + platnost + ")");
 
 		User u = serviceUser.getUser(req.getUserPrincipal().getName());
-		List<SadyPrehled> s = serviceSady.getSady(u);
+		//List<SadyPrehled> s = serviceSady.getSady(u);
+		List<Sada> s = serviceSada.getSady(u);
 
 		List<String> zavody = serviceEvidencniBody.getEvidencniBodySeznamWk();
 
@@ -128,7 +129,8 @@ public class VypocetController {
 		log.debug("###\t vybranyZavod(" + f.getZavod() + ", " + platnost + ")");
 
 		User u = serviceUser.getUser(req.getUserPrincipal().getName());
-		List<SadyPrehled> s = serviceSady.getSady(u);
+		//List<SadyPrehled> s = serviceSady.getSady(u);
+		List<Sada> s = serviceSada.getSady(u);
 
 		List<EvidencniBody> e = serviceEvidencniBody.getEvidencniBody(f.getZavod());
 
@@ -145,7 +147,8 @@ public class VypocetController {
 		log.debug("###\t vybranyBod(" + eb.getId() + ", " + platnost + ")");
 
 		User u = serviceUser.getUser(req.getUserPrincipal().getName());
-		List<SadyPrehled> s = serviceSady.getSady(u);
+		//List<SadyPrehled> s = serviceSady.getSady(u);
+		List<Sada> s = serviceSada.getSady(u);
 		EvidencniBody e = serviceEvidencniBody.getEvidencniBodyOne(eb.getId());
 
 		model.addAttribute("zavod", e.getKbodWk());
@@ -166,7 +169,8 @@ public class VypocetController {
 		if (f.getIdcka().length < 1) {
 			log.debug("###\t\t  ... nebyla vybrana ani jedna sada ke zpracovani !!!");
 
-			List<SadyPrehled> s = serviceSady.getSady(u);
+			//List<SadyPrehled> s = serviceSady.getSady(u);
+			List<Sada> s = serviceSada.getSady(u);
 			EvidencniBody e = serviceEvidencniBody.getEvidencniBodyOne(idEvidBod);
 
 			model.addAttribute("zavod", e.getKbodWk());
@@ -224,7 +228,7 @@ public class VypocetController {
 				Sada s = serviceSada.getSadaOne(f.getIdcka()[i]);
 
 				Long zakCount = serviceZakazky.getZakazkyCount(s.getSk30tMt().getMt(), e.getKbodKod(), e.getKbodWk(), e.getKbodEvid(), datumOd, datumDo, f.getStornoVetyVystup());
-				log.debug("\t\t ... nacteno zakazek COUNT: " + zakCount);
+				log.debug("###\t\t Nacteno zakazek COUNT: " + zakCount);
 
 				OfflineJob off = new OfflineJob();
 				off.setSk30tEvidencniBody(e);

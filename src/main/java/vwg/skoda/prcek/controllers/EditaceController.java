@@ -1,9 +1,12 @@
 package vwg.skoda.prcek.controllers;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +26,10 @@ import vwg.skoda.prcek.entities.PrPodminka;
 import vwg.skoda.prcek.entities.Protokol;
 import vwg.skoda.prcek.entities.Sada;
 import vwg.skoda.prcek.entities.User;
+import vwg.skoda.prcek.entities.Vysledek;
+import vwg.skoda.prcek.entities.Zakazky;
 import vwg.skoda.prcek.objects.FormObj;
+import vwg.skoda.prcek.outputs.ExportXls;
 import vwg.skoda.prcek.services.MtService;
 import vwg.skoda.prcek.services.MtSeznamService;
 import vwg.skoda.prcek.services.OfflineJobService;
@@ -354,6 +360,7 @@ public class EditaceController {
 		Sada newSada = new Sada();
 		newSada.setNazev(f.getSada().trim());
 		newSada.setUuser(u.getNetusername());
+		newSada.setPocet(sPuv.getPocet());
 		newSada.setUtime(new Date());
 		newSada.setSk30tMt(serviceMt.getMtOne(u.getId(), f.getMt()));
 		serviceSada.addSada(newSada);
@@ -419,7 +426,7 @@ public class EditaceController {
 		prp.setUuser(u.getNetusername());
 		prp.setUtime(new Date());
 		prp.setSk30tSada(s);
-
+		
 		// MBT kontrola
 		try {
 			Mt mt = serviceMt.getMtOne(s.getSk30tMt().getId());
@@ -435,6 +442,9 @@ public class EditaceController {
 		}
 
 		servicePrPodminka.addPrPodminka(prp);
+		
+		s.setPocet(s.getPocet()==null ? 1 : s.getPocet()+1);
+		serviceSada.setSada(s);
 
 		return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
 	}
@@ -499,6 +509,9 @@ public class EditaceController {
 		List<PrPodminka> pr = servicePrPodminka.getPrPodminka(s);
 		int pocetSmazanychPr = pr.size();
 		servicePrPodminka.removeAllPrPodminka(s);
+		
+		s.setPocet(0);
+		serviceSada.setSada(s);
 
 		Protokol newProtokol = new Protokol();
 		newProtokol.setNetusername(req.getUserPrincipal().getName().toUpperCase());
@@ -517,8 +530,11 @@ public class EditaceController {
 
 		PrPodminka pr = servicePrPodminka.getPrPodminkaOne(idPr);
 		User u = serviceUser.getUser(pr.getSk30tSada().getSk30tMt().getSk30tUser().getNetusername());
-
 		servicePrPodminka.removePrPodminka(idPr);
+		
+		Sada s = pr.getSk30tSada();
+		s.setPocet(s.getPocet()-1);
+		serviceSada.setSada(s);
 
 		Protokol newProtokol = new Protokol();
 		newProtokol.setNetusername(req.getUserPrincipal().getName().toUpperCase());
@@ -530,14 +546,16 @@ public class EditaceController {
 
 		return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + pr.getSk30tSada().getSk30tMt().getMt() + "/" + pr.getSk30tSada().getId();
 	}
-	/*
-	 * @RequestMapping(value = "/importTxt/{vybranaSada}") public String importTxt(@PathVariable long vybranaSada, User netusername, Sada sada, Mt mt,
-	 * Model model, HttpServletRequest req) { log.debug("###\t importTxt(" + vybranaSada + ")");
-	 * 
-	 * Sada s = serviceSada.getSadaOne(vybranaSada); User u = serviceUser.getUser(s.getSk30tMt().getSk30tUser().getNetusername());
-	 * 
-	 * 
-	 * return "redirect:/srv/editace/zobrazPr/"+u.getNetusername()+"/"+s.getSk30tMt().getMt()+"/"+s.getId(); }
-	 */
+
+	@RequestMapping(value = "/exportXlsPr/{idSady}")
+	public void exportXlsPr(@PathVariable long idSady, Model model, HttpServletRequest req, HttpServletResponse res) throws IOException {
+		log.debug("###\t exportXlsPr(" + idSady + ")");
+		
+		List<PrPodminka> prP = servicePrPodminka.getPrPodminka(serviceSada.getSadaOne(idSady));
+
+		ExportXls exp = new ExportXls();
+		exp.prPodminkySady(prP, res);
+
+	}
 
 }

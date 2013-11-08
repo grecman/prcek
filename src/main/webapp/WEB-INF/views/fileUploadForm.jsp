@@ -39,16 +39,7 @@
 				</TR>
 				<TR>
 					<TD></TD>
-					<TD width="650px"><SPAN
-						style="color: gray; font-size: smaller;">POZOR: tato akce
-							může trvat i desítky minut! Záleží na počtu importovaných PR
-							podmínek. Pokud se import nestihne do 90 sekund, tak se aplikace
-							vrátí zpět na obrazovku "Seznam PR podmínek sady" a import bude
-							dobíhat na pozadí. Dle porovnání celkového počtu vámi
-							importovaných PR podmínek (počet PR v souboru) s počtem již
-							naimportovaných PR podmínek, které jsou vidět v záhlaví sloupce
-							PR (aktualizace pomocí klavesy F5) zjistíte zda-li již máte
-							naimportovány všechny PR podmínky.</SPAN></TD>
+
 				</TR>
 				<TR height="100px">
 					<TD />

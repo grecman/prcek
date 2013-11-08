@@ -72,7 +72,7 @@
 						<th>Počet zakázek</th>
 						<th>K.bod</th>
 						<th>Platnost</th>
-						<th>Čas spuštění</th>
+						<th title="Zpracování starší jak 3 měsíce bude automaticky smazáno">Čas spuštění</th>
 						<th>Čas ukončení</th>
 						<th colspan="2">Export s agregací</th>
 						<th>Export</th>
@@ -117,7 +117,7 @@
 								<c:if test="${not(empty(i.casUkonceni)) and not(empty(i.agregace))}">
 									<a
 										href="${pageContext.servletContext.contextPath}/srv/offline/vysledekSAgregaci/${i.id}"><img
-										title="Editovat" style="border: 0px; padding-top: 3px;"
+										style="border: 0px; padding-top: 3px;"
 										src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a>
 								</c:if>
 							</td>
@@ -125,7 +125,7 @@
 								<c:if test="${not(empty(i.casUkonceni))}">
 									<a
 										href="${pageContext.servletContext.contextPath}/srv/offline/vysledek/${i.id}"><img
-										title="Editovat" style="border: 0px; padding-top: 3px;"
+										style="border: 0px; padding-top: 3px;"
 										src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a>
 								</c:if></td>
 						</tr>
@@ -134,21 +134,21 @@
 			</TABLE>
 		</DIV>
 
+		<p align="left" style="color: gray; font-size: xx-small;">
+			Další Off-line výpočet bude automaticky spuštěn za: <span id="spnSeconds">119</span> sekund.
+		</p>
 		<div class="zonaTlacitek">
 
 			<div class="tlacitka">
 
 				<form:form
 					action="${pageContext.servletContext.contextPath}/srv/offline/startJob">
-					<input type="submit" value="Start"  class="submit"/>
+					<input type="submit" value="Ruční start"  class="submit"/>
 				</form:form>
 			</div>
 
 		</div>
 
-		<p align="right" style="color: gray; font-size: xx-small;">
-			Další Off-line výpočet bude spuštěn za: <span id="spnSeconds">119</span> sekund.
-		</p>
 
 		<jsp:include page="footer.jsp" />
 	</div>

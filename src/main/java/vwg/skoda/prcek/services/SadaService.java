@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import vwg.skoda.prcek.entities.Mt;
 import vwg.skoda.prcek.entities.Sada;
+import vwg.skoda.prcek.entities.User;
 
 @Service
 public class SadaService {
@@ -69,9 +70,13 @@ public class SadaService {
 			return false;
 		}
 	}
-
-	public void setEntityManager(EntityManager entityManager) {
-		this.entityManager = entityManager;
+	
+	public List<Sada> getSady(User u) {
+		log.trace("###\t\t getSada(" + u.getNetusername() + "));");
+		return entityManager
+				.createQuery("SELECT s FROM Sada s WHERE s.sk30tMt.sk30tUser.netusername=:user ORDER BY s.sk30tMt.mt, s.nazev",
+						Sada.class).setParameter("user", u.getNetusername()).getResultList();
 	}
+	
 	
 }
