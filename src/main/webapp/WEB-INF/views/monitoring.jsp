@@ -25,6 +25,61 @@
 			<jsp:include page="header.jsp" />
 		</div>
 
+		<H3>Test databáze</H3>
+		<TABLE>
+			<col width="300px" />
+			<col width="150px" />
+			<col width="30px" />
+			<col width="200px" />
+			<THEAD>
+				<TH>Databáze</TH>
+				<TH>Schéma</TH>
+				<TH></TH>
+				<TH title="Aktuální čas ze serveru">Stav</TH>
+			</THEAD>
+			<TBODY>
+				<TR>
+					<TD></TD>
+					<TD class="rowOdd">PRCEK</TD>
+					<TD align="center"><a
+						href="${pageContext.servletContext.contextPath}/srv/monitoring"><img
+							style="border: 0px; padding-top: 3px;"
+							src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a></TD>
+					<TD align="center"><B>${prcekDate}</B></TD>
+				</TR>
+				<TR>
+					<TD align="center"><B>${db}</B></TD>
+					<TD class="rowOdd">MBT_P</TD>
+					<TD align="center"><a
+						href="${pageContext.servletContext.contextPath}/srv/monitoring"><img
+							style="border: 0px; padding-top: 3px;"
+							src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a></TD>
+					<TD align="center"><B>${mbtDate}</B></TD>
+				</TR>
+				<TR>
+					<TD></TD>
+					<TD class="rowOdd">KOMUNIKACE</TD>
+					<TD align="center"><a
+						href="${pageContext.servletContext.contextPath}/srv/monitoring"><img
+							style="border: 0px; padding-top: 3px;"
+							src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a></TD>
+					<TD align="center"><B>${komunikaceDate}</B></TD>
+				</TR>
+			</TBODY>
+		</TABLE>
+		<BR />
+		<BR />
+		<H3>Informace o uživateli</H3>
+		<DIV style="padding-left: 20px; font-size: 14px;"> ${aktualUser.prijmeni}
+			${aktualUser.jmeno} (${aktualUser.netusername}) -
+			${aktualUser.oddeleni}<BR />
+		</DIV> <BR />
+		<H3>Informace o serveru</H3>
+		<DIV style="padding-left: 20px; font-size: 14px;">
+			Server: ${server}<BR /> IP: ${ip}
+		</DIV>
+
+		<DIV style="height: 250px;">&#160;</DIV>
 		<jsp:include page="footer.jsp" />
 	</div>
 </body>

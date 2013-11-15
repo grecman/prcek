@@ -1,5 +1,6 @@
 package vwg.skoda.prcek.services;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -53,7 +54,17 @@ public class UserService {
 		}
 
 	}
-	
+ 	
+ 	public String getDbName(){
+ 		log.trace("###\t\t getDbName()");
+ 		Object globalName = entityManager.createNativeQuery("SELECT GLOBAL_NAME FROM GLOBAL_NAME ").getSingleResult();
+ 		return globalName.toString();
+ 	}
+ 	
+	public Date getDbTime() {
+		log.trace("###\t\t getDbTime();");
+		return entityManager.createQuery("SELECT current_timestamp() FROM User  WHERE rownum=1", Date.class).getSingleResult();
+	}
 	
 
 }

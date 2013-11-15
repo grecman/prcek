@@ -45,7 +45,7 @@
 <body>
 	<div class="page">
 		<div class="headerNazevStranky">
-			<f:message key="offlineZpracovani" />
+			<f:message key="vysledkyZpracovani" />
 		</div>
 
 		<div class="pageHeader">
@@ -72,7 +72,9 @@
 						<th>Počet zakázek</th>
 						<th>K.bod</th>
 						<th>Platnost</th>
-						<th title="Zpracování starší jak 3 měsíce bude automaticky smazáno">Čas spuštění</th>
+						<th
+							title="Zpracování starší jak 3 měsíce bude automaticky smazáno">Čas
+							spuštění</th>
 						<th>Čas ukončení</th>
 						<th colspan="2">Export s agregací</th>
 						<th>Export</th>
@@ -111,18 +113,16 @@
 											value="${i.casUkonceni}" />
 									</c:otherwise>
 								</c:choose></td>
-							
+
 							<td align="center">${i.agregace}</td>
-							<td align="center">
-								<c:if test="${not(empty(i.casUkonceni)) and not(empty(i.agregace))}">
+							<td align="center"><c:if
+									test="${not(empty(i.casUkonceni)) and not(empty(i.agregace))}">
 									<a
 										href="${pageContext.servletContext.contextPath}/srv/offline/vysledekSAgregaci/${i.id}"><img
 										style="border: 0px; padding-top: 3px;"
 										src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a>
-								</c:if>
-							</td>
-							<td align="center">
-								<c:if test="${not(empty(i.casUkonceni))}">
+								</c:if></td>
+							<td align="center"><c:if test="${not(empty(i.casUkonceni))}">
 									<a
 										href="${pageContext.servletContext.contextPath}/srv/offline/vysledek/${i.id}"><img
 										style="border: 0px; padding-top: 3px;"
@@ -135,20 +135,19 @@
 		</DIV>
 
 		<p align="left" style="color: gray; font-size: xx-small;">
-			Další Off-line výpočet bude automaticky spuštěn za: <span id="spnSeconds">119</span> sekund.
+			Další Off-line výpočet bude automaticky spuštěn za: <span
+				id="spnSeconds">119</span> sekund.
 		</p>
+<!-- 
 		<div class="zonaTlacitek">
-
 			<div class="tlacitka">
-
-				<form:form
-					action="${pageContext.servletContext.contextPath}/srv/offline/startJob">
-					<input type="submit" value="Ruční start"  class="submit"/>
-				</form:form>
+				<form:form 
+	 					action="${pageContext.servletContext.contextPath}/srv/offline/startJob"> -
+	 					<input type="submit" value="Ruční start"  class="submit"/> 
+ 				</form:form> 
 			</div>
-
 		</div>
-
+-->
 
 		<jsp:include page="footer.jsp" />
 	</div>

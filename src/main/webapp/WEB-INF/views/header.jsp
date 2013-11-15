@@ -21,7 +21,7 @@
 			<div class="headerLinks">
 			 	&#160;|&#160;<a href="${pageContext.servletContext.contextPath}/srv/editace"><f:message key="editace"/></a>
 				&#160;|&#160;<a href="${pageContext.servletContext.contextPath}/srv/vypocet"><f:message key="vypocet"/></a>
-				&#160;|&#160;<a href="${pageContext.servletContext.contextPath}/srv/offline"><f:message key="offlineZpracovani"/></a>
+				&#160;|&#160;<a href="${pageContext.servletContext.contextPath}/srv/offline"><f:message key="vysledkyZpracovani"/></a>
 				&#160;|&#160;<a href="${pageContext.servletContext.contextPath}/srv/monitoring"><f:message key="monitoring"/></a>
 				&#160;|&#160;<a href="${pageContext.servletContext.contextPath}/srv/napoveda"><f:message key="napoveda"/></a>
 			</div>

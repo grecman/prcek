@@ -48,9 +48,6 @@ public class VypocetController {
 	@Autowired
 	private SadaService serviceSada;
 
-//	@Autowired
-//	private SadyPrehledService serviceSady;
-
 	@Autowired
 	private PrPodminkaService servicePrPodminka;
 

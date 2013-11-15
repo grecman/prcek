@@ -1,5 +1,6 @@
 package vwg.skoda.prcek.services;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -41,6 +42,11 @@ public class ZakazkyService {
 						"SELECT s FROM Zakazky s WHERE s.modelTr=:modt AND s.kbodKod=:kkod AND s.kbodWk=:kwk AND s.kbodEvid=:kevid AND s.datSkut>=:plOd AND s.datSkut<=:plDo AND s.kbodOpak LIKE :stv ",
 						Zakazky.class).setParameter("modt", mt).setParameter("kkod", kbodkod).setParameter("kwk", wk).setParameter("kevid", evid)
 				.setParameter("plOd", platOd).setParameter("plDo", platDo).setParameter("stv", sv).getResultList();
+	}
+	
+	public Date getDbTime() {
+		log.trace("###\t\t getDbTime();");
+		return entityManager.createQuery("SELECT current_timestamp() FROM Zakazky WHERE rownum=1", Date.class).getSingleResult();
 	}
 
 }
