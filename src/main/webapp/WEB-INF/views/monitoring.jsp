@@ -34,17 +34,14 @@
 			<THEAD>
 				<TH>Databáze</TH>
 				<TH>Schéma</TH>
-				<TH></TH>
+				<TH>Test</TH>
 				<TH title="Aktuální čas ze serveru">Stav</TH>
 			</THEAD>
 			<TBODY>
 				<TR>
 					<TD></TD>
 					<TD class="rowOdd">PRCEK</TD>
-					<TD align="center"><a
-						href="${pageContext.servletContext.contextPath}/srv/monitoring"><img
-							style="border: 0px; padding-top: 3px;"
-							src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a></TD>
+					<TD></TD>
 					<TD align="center"><B>${prcekDate}</B></TD>
 				</TR>
 				<TR>
@@ -59,10 +56,7 @@
 				<TR>
 					<TD></TD>
 					<TD class="rowOdd">KOMUNIKACE</TD>
-					<TD align="center"><a
-						href="${pageContext.servletContext.contextPath}/srv/monitoring"><img
-							style="border: 0px; padding-top: 3px;"
-							src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a></TD>
+					<TD></TD>
 					<TD align="center"><B>${komunikaceDate}</B></TD>
 				</TR>
 			</TBODY>
@@ -73,6 +67,7 @@
 		<DIV style="padding-left: 20px; font-size: 14px;"> ${aktualUser.prijmeni}
 			${aktualUser.jmeno} (${aktualUser.netusername}) -
 			${aktualUser.oddeleni}<BR />
+			Role: ${userRole} <BR />
 		</DIV> <BR />
 		<H3>Informace o serveru</H3>
 		<DIV style="padding-left: 20px; font-size: 14px;">

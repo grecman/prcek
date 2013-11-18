@@ -3,10 +3,10 @@ package vwg.skoda.prcek.controllers;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class MonitoringController {
 	private PrMbtService servicePrMbt;
 	
 	@RequestMapping
-	public String monitoringUvodniZobrazeni(Model model, HttpServletRequest req, HttpServletResponse res) throws UnknownHostException {
+	public String monitoringUvodniZobrazeni(Model model, HttpServletRequest req, HttpServletResponse res, HttpSession session) throws UnknownHostException {
 		log.debug("###\t monitoring()");
 		
 		User aktualUser = serviceUser.getUser(req.getUserPrincipal().getName());
@@ -56,6 +56,17 @@ public class MonitoringController {
 				
 		String komunikaceDate = DATE_FORMAT.format(serviceZakazky.getDbTime());
 		model.addAttribute("komunikaceDate",komunikaceDate);
+		
+		String role = null;
+		
+		if(req.isUserInRole("USERS")){
+			role = "USERS";
+		} else if(req.isUserInRole("SERVICEDESK")){
+			role = "SERVICEDESK";
+		} else if(req.isUserInRole("EXPORT")){
+			role = "EXPORT";
+		}
+		session.setAttribute("userRole", role);
 				
 		
 		return "/monitoring";

@@ -167,10 +167,12 @@
 								href="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${vybranaSada.sk30tMt.sk30tUser.netusername}/${vybranaSada.sk30tMt.mt}/${vybranaSada.id}">Pořadí</a></th>
 							<c:choose>
 								<c:when test="${prCount==vybranaSada.pocet}">
-								<th title="Počet zobrazených PR podmínek" style="color: black;">PR - ${prCount} /	${vybranaSada.pocet}</th>
+									<th title="Počet zobrazených PR podmínek" style="color: black;">PR
+										- ${prCount} / ${vybranaSada.pocet}</th>
 								</c:when>
 								<c:otherwise>
-								<th title="Počet zobrazených PR podmínek" style="color: red;">PR - ${prCount} /	${vybranaSada.pocet}</th>
+									<th title="Počet zobrazených PR podmínek" style="color: red;">PR
+										- ${prCount} / ${vybranaSada.pocet}</th>
 								</c:otherwise>
 							</c:choose>
 							<th>Poznámka</th>
@@ -249,13 +251,19 @@
 						action="${pageContext.servletContext.contextPath}/srv/fileUpload/importTxt/${vybranaSada.id}">
 						<input type="submit" value="${importTxt}" class="submit" />
 					</form:form>
-					
+
 					<c:if test="${not(empty(prPodminkaList))}">
 						<form:form
 							action="${pageContext.servletContext.contextPath}/srv/editace/exportXlsPr/${vybranaSada.id}">
-							<input type="submit" value="Export do XLS"  class="submit"/>
+							<input type="submit" value="Export do XLS" class="submit" />
 						</form:form>
 					</c:if>
+                     &#160;
+                   <form:form
+						action="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${vybranaMt.sk30tUser.netusername}/${vybranaMt.mt}/${vybranaSada.id}">
+						<input type="submit" value="Aktualizovat" class="submit" />
+					</form:form>
+
 
 				</c:if>
 			</div>

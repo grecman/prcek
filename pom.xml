@@ -6,7 +6,7 @@
 	<artifactId>Prcek</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>prcek Maven Webapp</name>
+	<name>prcek Webapp</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -136,7 +136,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>Prcek</finalName>
+		<finalName>prcek</finalName>
 		<plugins>
 
 			<!-- Facilitates downloading source and javadoc in Eclipse -->

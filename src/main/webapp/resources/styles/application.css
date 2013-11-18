@@ -259,6 +259,17 @@ input.textovePole850 {
 	border-radius: 3px;
 }
 
+input.textovePole150 {
+	font-family: inherit;
+	background:white;
+	color: black;
+	width:150px;
+	height:25px;
+	border:0px;
+	text-align:left;
+	border-radius: 3px;
+}
+
 input.radiobutton {
 	font-family: inherit;
 }
@@ -291,7 +302,14 @@ input.textovePole850:hover
 background-color:#ffd200;
 color: black;
 width:850px;
-} 
+}
+
+input.textovePole150:hover
+{
+background-color:#ffd200;
+color: black;
+width:150px;
+}  
 
 textarea {
 	word-wrap: normal;
