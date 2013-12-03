@@ -31,33 +31,44 @@
 			<col width="150px" />
 			<col width="30px" />
 			<col width="200px" />
+			<col width="100px" />
 			<THEAD>
 				<TH>Databáze</TH>
 				<TH>Schéma</TH>
 				<TH>Test</TH>
 				<TH title="Aktuální čas ze serveru">Stav</TH>
+				<TH title="... v milisekundách">Latence</TH>
 			</THEAD>
 			<TBODY>
 				<TR>
 					<TD></TD>
 					<TD class="rowOdd">PRCEK</TD>
-					<TD></TD>
+					<TD align="center"><a
+						href="${pageContext.servletContext.contextPath}/srv/monitoring/testDbPrcek"><img
+							style="border: 0px; padding-top: 3px;"
+							src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a></TD>
 					<TD align="center"><B>${prcekDate}</B></TD>
+					<TD align="center"><B>${prcekLatence}</B></TD>
 				</TR>
 				<TR>
 					<TD align="center"><B>${db}</B></TD>
 					<TD class="rowOdd">MBT_P</TD>
 					<TD align="center"><a
-						href="${pageContext.servletContext.contextPath}/srv/monitoring"><img
+						href="${pageContext.servletContext.contextPath}/srv/monitoring/testDbMbt"><img
 							style="border: 0px; padding-top: 3px;"
 							src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a></TD>
 					<TD align="center"><B>${mbtDate}</B></TD>
+					<TD align="center"><B>${mbtLatence}</B></TD>
 				</TR>
 				<TR>
 					<TD></TD>
 					<TD class="rowOdd">KOMUNIKACE</TD>
-					<TD></TD>
+					<TD align="center"><a
+						href="${pageContext.servletContext.contextPath}/srv/monitoring/testDbKomunikace"><img
+							style="border: 0px; padding-top: 3px;"
+							src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a></TD>
 					<TD align="center"><B>${komunikaceDate}</B></TD>
+					<TD align="center"><B>${komunikaceLatence}</B></TD>
 				</TR>
 			</TBODY>
 		</TABLE>

@@ -22,55 +22,150 @@ import vwg.skoda.prcek.services.ZakazkyService;
 @Controller
 @RequestMapping("/monitoring")
 public class MonitoringController {
-	
+
 	static Logger log = Logger.getLogger(MonitoringController.class);
-	
+
 	@Autowired
 	private UserService serviceUser;
-	
+
 	@Autowired
 	private ZakazkyService serviceZakazky;
-	
+
 	@Autowired
 	private PrMbtService servicePrMbt;
-	
+
 	@RequestMapping
 	public String monitoringUvodniZobrazeni(Model model, HttpServletRequest req, HttpServletResponse res, HttpSession session) throws UnknownHostException {
 		log.debug("###\t monitoring()");
-		
+
 		User aktualUser = serviceUser.getUser(req.getUserPrincipal().getName());
 		model.addAttribute("aktualUser", aktualUser);
 
 		model.addAttribute("server", InetAddress.getLocalHost().getCanonicalHostName());
 		model.addAttribute("ip", InetAddress.getLocalHost().getHostAddress());
-	
-		model.addAttribute("db",serviceUser.getDbName());
-		
-		SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		String prcekDate = DATE_FORMAT.format(serviceUser.getDbTime());
-		model.addAttribute("prcekDate",prcekDate);
-		
-				
-		String mbtDate = DATE_FORMAT.format(servicePrMbt.getDbTime());
-		model.addAttribute("mbtDate",mbtDate);
-				
-		String komunikaceDate = DATE_FORMAT.format(serviceZakazky.getDbTime());
-		model.addAttribute("komunikaceDate",komunikaceDate);
-		
+
+		model.addAttribute("db", serviceUser.getDbName());
+
 		String role = null;
-		
-		if(req.isUserInRole("USERS")){
+
+		if (req.isUserInRole("USERS")) {
 			role = "USERS";
-		} else if(req.isUserInRole("SERVICEDESK")){
+		} else if (req.isUserInRole("SERVICEDESK")) {
 			role = "SERVICEDESK";
-		} else if(req.isUserInRole("EXPORT")){
+		} else if (req.isUserInRole("EXPORT")) {
 			role = "EXPORT";
 		}
 		session.setAttribute("userRole", role);
-				
-		
-		return "/monitoring";
 
+		return "/monitoring";
+	}
+
+	@RequestMapping(value = "/testDbPrcek")
+	public String testDbPrcek(Model model, HttpServletRequest req, HttpServletResponse res, HttpSession session) throws UnknownHostException {
+		log.debug("###\t testDbPrcek()");
+
+		long start = System.currentTimeMillis();
+		SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		String prcekDate = DATE_FORMAT.format(serviceUser.getDbTime());
+		
+		long end = System.currentTimeMillis();
+		long diff = end - start;
+		model.addAttribute("prcekLatence", diff);
+
+		model.addAttribute("prcekDate", prcekDate);
+
+		User aktualUser = serviceUser.getUser(req.getUserPrincipal().getName());
+		model.addAttribute("aktualUser", aktualUser);
+
+		model.addAttribute("server", InetAddress.getLocalHost().getCanonicalHostName());
+		model.addAttribute("ip", InetAddress.getLocalHost().getHostAddress());
+
+		model.addAttribute("db", serviceUser.getDbName());
+
+		String role = null;
+
+		if (req.isUserInRole("USERS")) {
+			role = "USERS";
+		} else if (req.isUserInRole("SERVICEDESK")) {
+			role = "SERVICEDESK";
+		} else if (req.isUserInRole("EXPORT")) {
+			role = "EXPORT";
+		}
+		session.setAttribute("userRole", role);
+
+		return "/monitoring";
+	}
+
+	@RequestMapping(value = "/testDbMbt")
+	public String testDbMbt(Model model, HttpServletRequest req, HttpServletResponse res, HttpSession session) throws UnknownHostException {
+		log.debug("###\t testDbMbt()");
+
+		long start = System.currentTimeMillis();
+		SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		String mbtDate = DATE_FORMAT.format(servicePrMbt.getDbTime());
+		
+		long end = System.currentTimeMillis();
+		long diff = end - start;
+		model.addAttribute("mbtLatence", diff);
+		
+		model.addAttribute("mbtDate", mbtDate);
+
+		User aktualUser = serviceUser.getUser(req.getUserPrincipal().getName());
+		model.addAttribute("aktualUser", aktualUser);
+
+		model.addAttribute("server", InetAddress.getLocalHost().getCanonicalHostName());
+		model.addAttribute("ip", InetAddress.getLocalHost().getHostAddress());
+
+		model.addAttribute("db", serviceUser.getDbName());
+
+		String role = null;
+
+		if (req.isUserInRole("USERS")) {
+			role = "USERS";
+		} else if (req.isUserInRole("SERVICEDESK")) {
+			role = "SERVICEDESK";
+		} else if (req.isUserInRole("EXPORT")) {
+			role = "EXPORT";
+		}
+		session.setAttribute("userRole", role);
+
+		return "/monitoring";
+	}
+
+	@RequestMapping(value = "/testDbKomunikace")
+	public String testDbKomunikace(Model model, HttpServletRequest req, HttpServletResponse res, HttpSession session) throws UnknownHostException {
+		log.debug("###\t testDbKomunikace()");
+
+		long start = System.currentTimeMillis();
+
+		SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		String komunikaceDate = DATE_FORMAT.format(serviceZakazky.getDbTime());
+
+		long end = System.currentTimeMillis();
+		long diff = end - start;
+		model.addAttribute("komunikaceLatence", diff);
+		model.addAttribute("komunikaceDate", komunikaceDate);
+
+		User aktualUser = serviceUser.getUser(req.getUserPrincipal().getName());
+		model.addAttribute("aktualUser", aktualUser);
+
+		model.addAttribute("server", InetAddress.getLocalHost().getCanonicalHostName());
+		model.addAttribute("ip", InetAddress.getLocalHost().getHostAddress());
+
+		model.addAttribute("db", serviceUser.getDbName());
+
+		String role = null;
+
+		if (req.isUserInRole("USERS")) {
+			role = "USERS";
+		} else if (req.isUserInRole("SERVICEDESK")) {
+			role = "SERVICEDESK";
+		} else if (req.isUserInRole("EXPORT")) {
+			role = "EXPORT";
+		}
+		session.setAttribute("userRole", role);
+
+		return "/monitoring";
 	}
 
 }

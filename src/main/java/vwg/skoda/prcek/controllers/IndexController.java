@@ -85,7 +85,7 @@ public class IndexController {
 		}
 
 		/*
-		 * TODO: - v pripade role SERVICEDESK presmerovat na MONITORING (ale toto asi bude reseno filtrem na cele session�) nebo na kazde hlavni
+		 * TODO: - v pripade role SERVICEDESK presmerovat na MONITORING (ale toto asi bude reseno filtrem na cele session) nebo na kazde hlavni
 		 * obrazovce (edicate/vypocet/offline) ... napovedu bych jim nechal.
 		 */
 

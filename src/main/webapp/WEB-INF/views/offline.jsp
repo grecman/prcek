@@ -136,7 +136,7 @@
 
 		<p align="left" style="color: gray; font-size: xx-small;">
 			Další Off-line výpočet bude automaticky spuštěn za: <span
-				id="spnSeconds">119</span> sekund.
+				id="spnSeconds">59</span> sekund.
 		</p>
 <!-- 
 		<div class="zonaTlacitek">

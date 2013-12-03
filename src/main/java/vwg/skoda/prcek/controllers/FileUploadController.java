@@ -96,6 +96,8 @@ public class FileUploadController {
 						LineNumberReader row = new LineNumberReader(new InputStreamReader(multipartFile.getInputStream()));
 						
 						String prpod;
+						
+						// taky to prochazim jen kvuli tomu, abych zjistil (a ulozil) celkovy pocet nacitanych radku
 						List<String> prPodminky = new ArrayList<String>(); 
 						while ((prpod = row.readLine()) != null) {
 							prPodminky.add(prpod.toUpperCase());
@@ -134,6 +136,7 @@ public class FileUploadController {
 					
 					}
 				}
+				//return new RedirectView("redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId());
 				return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
 			};
 		};
@@ -141,7 +144,7 @@ public class FileUploadController {
 		// nastavi casovy limit pro vyse uvedeny proces
 		// tento WebAsyncTask jede vlastne soubezne s tim Callable a po uplynulem casovem limitu ji opusti a vrati "return" ktery je v tom
 		// ".onTimeout"
-		WebAsyncTask<String> w = new WebAsyncTask<String>(1, c); // 1000 = 1s; 60000 = 1min
+		WebAsyncTask<String> w = new WebAsyncTask<String>(6000, c); // 1000 = 1s; 60000 = 1min
 
 		// pokud je limit prekrocenm, tak implementovana metoda call() okamzite vrati
 		w.onTimeout(new Callable<String>() {
@@ -149,8 +152,8 @@ public class FileUploadController {
 			@Override
 			public String call() throws Exception {
 				log.debug("###ASYNC###\t call ... onTimeOut (" + Thread.currentThread() + ")");
-				//return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
 				return "redirect:/srv/fileUpload/fileUploadProces/"+s.getId();
+				//return new RedirectView("/srv/fileUpload/fileUploadProces/"+s.getId(), true);
 			}
 
 		});

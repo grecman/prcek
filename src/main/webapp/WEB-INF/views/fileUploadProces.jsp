@@ -70,7 +70,7 @@
 
 		<DIV style="height: 50px;">&#160;</DIV>
 		<p align="right" style="color: gray; font-size: xx-small;">
-			Další refresh za: <span id="spnSeconds">5</span> sekund.
+			Další refresh za: <span id="spnSeconds">2</span> sekund.
 		</p>
 
 		<div class="zonaTlacitek">
