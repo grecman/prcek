@@ -29,7 +29,8 @@
 													"#spnSeconds").html();
 											iTimeRemaining = eval(iTimeRemaining);
 											if (iTimeRemaining == 0) {
-												window.location.href = "${pageContext.servletContext.contextPath}/srv/fileUpload/fileUploadProces/"+${vybranaSada.id};
+												//window.location.href = "${pageContext.servletContext.contextPath}/srv/fileUpload/fileUploadProces/"+${vybranaSada.id};
+												window.location.href = "./"+${vybranaSada.id};
 											} else {
 												$("#spnSeconds").html(
 														iTimeRemaining - 1);

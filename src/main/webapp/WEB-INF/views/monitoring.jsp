@@ -72,17 +72,18 @@
 				</TR>
 			</TBODY>
 		</TABLE>
-		<BR />
-		<BR />
+		<BR /> <BR />
 		<H3>Informace o uživateli</H3>
-		<DIV style="padding-left: 20px; font-size: 14px;"> ${aktualUser.prijmeni}
-			${aktualUser.jmeno} (${aktualUser.netusername}) -
-			${aktualUser.oddeleni}<BR />
-			Role: ${userRole} <BR />
-		</DIV> <BR />
+		<DIV style="padding-left: 20px; font-size: 14px;">
+			${aktualUser.prijmeni} ${aktualUser.jmeno}
+			(${aktualUser.netusername}) - ${aktualUser.oddeleni}<BR /> Role:
+			${userRole} <BR />
+		</DIV>
+		<BR />
 		<H3>Informace o serveru</H3>
 		<DIV style="padding-left: 20px; font-size: 14px;">
-			Server: ${server}<BR /> IP: ${ip}
+			Server: ${server}<BR /> IP: ${ip} <BR /> Root aplikace:
+			${pageContext.servletContext.contextPath}
 		</DIV>
 
 		<DIV style="height: 250px;">&#160;</DIV>

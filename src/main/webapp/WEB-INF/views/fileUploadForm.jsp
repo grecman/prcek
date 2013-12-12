@@ -24,6 +24,11 @@
 			<jsp:include page="header.jsp" />
 		</div>
 		<BR />
+		<DIV>
+			Import PR podmínek pro sadu: <B>${vybranaSada.sk30tMt.mt} -
+				${vybranaSada.nazev}</B>
+		</DIV>
+		<BR /> <BR />
 		<form:form method="post"
 			action="${pageContext.servletContext.contextPath}/srv/fileUpload/saveFileAsync/${vybranaSada.id}"
 			modelAttribute="uploadForm" enctype="multipart/form-data">
@@ -31,7 +36,7 @@
 			<table id="fileTable">
 				<TR>
 					<TD><input name="filePrcek" type="file"
-						style="background: none; width: 300px; color: red; padding-left: 0px;" /></TD>
+						style="background: none; width: 300px; color: red; padding-left: 0px; font-weight: bold;" /></TD>
 					<TD><c:set var="nahratSouborPopisek">
 							<f:message>nahratSoubor</f:message>
 						</c:set> <input type="submit" value="${nahratSouborPopisek}"
@@ -61,6 +66,7 @@
 		</form:form>
 		<DIV style="height: 100px;">&#160;</DIV>
 
+		<!--  
 		<div class="zonaTlacitek">
 			<div class="tlacitka">
 
@@ -74,6 +80,7 @@
 
 			</div>
 		</div>
+		-->
 		<jsp:include page="footer.jsp" />
 	</div>
 </body>

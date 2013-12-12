@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Color;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
@@ -68,6 +69,9 @@ public class ExportXls {
 		smallFont.setFontHeightInPoints((short) 7);
 		XSSFCellStyle smallFontStyle = wb.createCellStyle();
 		smallFontStyle.setFont(smallFont);
+		
+		Cell cell = null;
+		Row row = null;
 
 		XSSFCellStyle alignCenter = wb.createCellStyle();
 		alignCenter.setAlignment(HorizontalAlignment.CENTER);
@@ -75,11 +79,9 @@ public class ExportXls {
 		String nazevSady = vysledek.get(0).getSk30tPrPodminka().getSk30tSada().getNazev();
 		Sheet sheet = wb.createSheet(nazevSady);
 
-		Cell cell = null;
-		Row row = null;
+		
 		int radka = 0;
 		int bunka = 0;
-
 		radka = 0;
 		bunka = 0;
 

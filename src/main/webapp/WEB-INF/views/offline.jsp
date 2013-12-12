@@ -32,6 +32,7 @@
 											iTimeRemaining = eval(iTimeRemaining);
 											if (iTimeRemaining == 0) {
 												window.location.href = "${pageContext.servletContext.contextPath}/srv/offline/startJob";
+												//window.location.href = ".";
 											} else {
 												$("#spnSeconds").html(
 														iTimeRemaining - 1);

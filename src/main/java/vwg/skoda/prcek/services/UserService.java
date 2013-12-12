@@ -52,7 +52,6 @@ public class UserService {
 			log.error("\t\t   ... User neexistuje (vypis chyby):",e);
 			return false;
 		}
-
 	}
  	
  	public String getDbName(){

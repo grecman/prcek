@@ -102,7 +102,7 @@
 							<TD>do</TD>
 							<TD><form:input path="platnostDo" id="datepickerDo"
 									class="kalendar"></form:input></TD>
-							<TD><input type="submit" value="ok"  class="submit"/></TD>
+							<TD><input type="submit" value="ok" class="submit" /></TD>
 						</form:form>
 					</TR>
 				</c:when>
@@ -197,9 +197,7 @@
 					<col width="100px" />
 					<thead>
 						<tr>
-							<th><a
-								href="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${vybranaSada.sk30tMt.sk30tUser.netusername}/${vybranaSada.sk30tMt.mt}/${vybranaSada.id}">Modelová
-									třída</a></th>
+							<th>Modelová třída</th>
 							<th>Název sady</th>
 							<th>Počet PR</th>
 							<th>Zpracování</th>
@@ -210,10 +208,14 @@
 							<tr
 								class="${ (iterator.index mod 2) == 0 ? 'rowOdd' : 'rowEven' }">
 								<td align="center">${i.sk30tMt.mt}</td>
-								<td>${i.nazev}</td>
+								<td><a
+									href="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${i.sk30tMt.sk30tUser.netusername}/${i.sk30tMt.mt}/${i.id}">
+										<span style="color: #4BA82E; font-weight: bold;">${i.nazev}</span>
+								</a></td>
 								<!-- <td align="right" title="Nevalidní PR: ${i.pocetNevalidnichPr}">${i.pocetValidnichPr}</td> -->
 								<td align="right">${i.pocet}</td>
-								<td align="center"><c:if test="${not(empty(evidBod)) and (i.pocet > 0)}">
+								<td align="center"><c:if
+										test="${not(empty(evidBod)) and (i.pocet > 0)}">
 										<form:checkbox path="idcka" style="width: 0px;"
 											value="${i.id}" />
 									</c:if></td>
@@ -269,7 +271,7 @@
 			<div class="zonaTlacitek">
 				<div class="tlacitka">
 					<c:if test="${not(empty(evidBod))}">
-						<input type="submit" value="Spustit výpočet"  class="submit"/>
+						<input type="submit" value="Spustit výpočet" class="submit" />
 						<SPAN style="color: red; font-weight: bold;">&#160;${info}</SPAN>
 					</c:if>
 				</div>

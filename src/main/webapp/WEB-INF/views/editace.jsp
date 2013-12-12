@@ -117,6 +117,7 @@
 				</form:form>
 
 				<c:if test="${not(empty(vybranaSada))}">
+					<!-- ZATIM ZAKOMENTOVANO, PROTOZE PRI DUPLIKACI Z JEDNE MT DO DRUHE NEPROBEHNE KONTROLA MBT (MUSELO BY TO JET ASI ASYNC) ALE DA SE TO OBEJIT EXP-IMP 
 					<c:set var="duplikovatSaduPopisek">
 						<f:message>duplikovatSadu</f:message>
 					</c:set>
@@ -125,7 +126,7 @@
 						<input type="submit" value="${duplikovatSaduPopisek}"
 							class="submit" />
 					</form:form>
-
+					 -->
 					<c:if test="${moznoEditovatSadu}">
 						<c:set var="smazatSaduPopisek">
 							<f:message>smazatSadu</f:message>
@@ -218,39 +219,41 @@
 
 
 
-		<!-- <BR />.${vybranyUzivatel.prijmeni}..${vybranaMt.mt}..${vybranaSada.nazev}..${moznoEditovatSadu}.<BR /> -->
 
 		<div class="zonaTlacitek">
 
 			<div class="tlacitka">
 
 				<c:if test="${not(empty(vybranaSada))}">
-					<c:set var="pridatRadekPopisek">
-						<f:message>pridatRadek</f:message>
-					</c:set>
-					<form:form commandName="prPodminka"
-						action="${pageContext.servletContext.contextPath}/srv/editace/novaPrPodminka/${vybranaSada.id}">
-						<input type="submit" value="${pridatRadekPopisek}" class="submit" />
-					</form:form>
+					<c:if test="${moznoEditovatSadu}">
+						<c:set var="pridatRadekPopisek">
+							<f:message>pridatRadek</f:message>
+						</c:set>
+						<form:form commandName="prPodminka"
+							action="${pageContext.servletContext.contextPath}/srv/editace/novaPrPodminka/${vybranaSada.id}">
+							<input type="submit" value="${pridatRadekPopisek}" class="submit" />
+						</form:form>
 
-					<c:if test="${not(empty(prPodminkaList))}">
-						<c:set var="smazatVsePopisek">
-							<f:message>smazatVse</f:message>
+						<c:if test="${not(empty(prPodminkaList))}">
+							<c:set var="smazatVsePopisek">
+								<f:message>smazatVse</f:message>
+							</c:set>
+							<form:form commandName="sada"
+								action="${pageContext.servletContext.contextPath}/srv/editace/smazatVsechnyPr/${vybranaSada.id}">
+								<input onClick="return confirm('Opravdu?!')" type="submit"
+									value="${smazatVsePopisek}" class="submit" />
+							</form:form>
+						</c:if>
+
+						<c:set var="importTxt">
+							<f:message>importTxt</f:message>
 						</c:set>
 						<form:form commandName="sada"
-							action="${pageContext.servletContext.contextPath}/srv/editace/smazatVsechnyPr/${vybranaSada.id}">
-							<input onClick="return confirm('Opravdu?!')" type="submit"
-								value="${smazatVsePopisek}" class="submit" />
+							action="${pageContext.servletContext.contextPath}/srv/fileUpload/importTxt/${vybranaSada.id}">
+							<input type="submit" value="${importTxt}" class="submit" />
 						</form:form>
-					</c:if>
 
-					<c:set var="importTxt">
-						<f:message>importTxt</f:message>
-					</c:set>
-					<form:form commandName="sada"
-						action="${pageContext.servletContext.contextPath}/srv/fileUpload/importTxt/${vybranaSada.id}">
-						<input type="submit" value="${importTxt}" class="submit" />
-					</form:form>
+					</c:if>
 
 					<c:if test="${not(empty(prPodminkaList))}">
 						<form:form
@@ -258,7 +261,7 @@
 							<input type="submit" value="Export do XLS" class="submit" />
 						</form:form>
 					</c:if>
-                     &#160;
+                     &#160;&#160;
                    <form:form
 						action="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${vybranaMt.sk30tUser.netusername}/${vybranaMt.mt}/${vybranaSada.id}">
 						<input type="submit" value="Aktualizovat" class="submit" />

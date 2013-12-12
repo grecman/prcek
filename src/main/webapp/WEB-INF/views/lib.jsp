@@ -7,7 +7,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<link href="${pageContext.servletContext.contextPath}/resources/styles/application.css" rel="stylesheet" type="text/css" />
 	<link href="${pageContext.servletContext.contextPath}/resources/styles/jquery-ui.css" rel="stylesheet" type="text/css" media="all" />
-	<link href="${pageContext.servletContext.contextPath}/resources/styles/jquery-ui.theme.css" rel="stylesheet" type="text/css" media="all" />
+	<link href="${pageContext.servletContext.contextPath}/resources/styles/jquery.ui.theme.css" rel="stylesheet" type="text/css" media="all" />
 	
 	<script src="${pageContext.servletContext.contextPath}/resources/js/jquery-1.9.1.js" type="text/javascript">/* na hovno */</script>
 	<script src="${pageContext.servletContext.contextPath}/resources/js/jquery-ui-1.9.1.js" type="text/javascript">/* ale musi to byt */</script>
