@@ -135,7 +135,19 @@ label {
 }
 
 .headerLinks a:HOVER {
-	color: #000000;
+	color: grey;;
+}
+
+.headerLinks a.active {
+       color: black;
+}
+
+.pageFooter {
+	margin-top: 5px;
+	font-size: 10px;
+	color: gray;
+	z-index: 10;
+	border-top: 2px solid gray;
 }
 
 .zonaFiltru {
@@ -309,7 +321,11 @@ input.textovePole150:hover
 background-color:#ffd200;
 color: black;
 width:150px;
-}  
+} 
+
+input.uppercase {
+	text-transform:uppercase;
+}
 
 textarea {
 	word-wrap: normal;
@@ -426,13 +442,7 @@ a.ibt:hover .ipop {
 	line-height:12px;
 }
 
-.pageFooter {
-	margin-top: 5px;
-	font-size: 10px;
-	color: gray;
-	z-index: 10;
-	border-top: 2px solid gray;
-}
+
 
 /* ---------------------------------
 	TABLE

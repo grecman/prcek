@@ -14,6 +14,34 @@
 
 <jsp:include page="lib.jsp" />
 <title>P R C E K</title>
+
+
+<script type="text/javascript">
+	function testDbPrcekAjax() {
+		var checkUrl = "/prcek/monitoring/testDbPrcekAjax.json";
+		var datum = null;
+		$.ajax({
+			url : checkUrl,
+			async : false, // default je true, pokud není false, tak následný if(result) proběhne dříve než se vrátí objekt z ajaxu !!!
+			cache : false
+		}).done(function(data) {
+
+			//alert(data.prcekDate);
+			$("#gre").append(data.prcekDate);
+
+		});
+	}
+
+	$(document).ready(function() {
+		$("#greTla").click(function() {
+			testDbPrcekAjax();
+
+		});
+	});
+</script>
+
+
+
 </head>
 
 <body>
@@ -21,15 +49,15 @@
 		<div class="headerNazevStranky">
 			<f:message key="monitoring" />
 		</div>
-		<div class="pageHeader">
-			<jsp:include page="header.jsp" />
-		</div>
+		
+		<c:set scope="request" var="actual" value="monitoring" />
+		<jsp:include page="header.jsp" />
 
 		<H3>Test databáze</H3>
 		<TABLE>
 			<col width="300px" />
 			<col width="150px" />
-			<col width="30px" />
+			<col width="130px" />
 			<col width="200px" />
 			<col width="100px" />
 			<THEAD>
@@ -43,12 +71,13 @@
 				<TR>
 					<TD></TD>
 					<TD class="rowOdd">PRCEK</TD>
-					<TD align="center"><a
-						href="${pageContext.servletContext.contextPath}/srv/monitoring/testDbPrcek"><img
-							style="border: 0px; padding-top: 3px;"
-							src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a></TD>
-					<TD align="center"><B>${prcekDate}</B></TD>
-					<TD align="center"><B>${prcekLatence}</B></TD>
+					<TD align="center"></TD>
+						<INPUT id="greTla" type="button" style="background: transparent url(${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png) no-repeat center;" ></INPUT>
+						<!--<a href="${pageContext.servletContext.contextPath}/srv/monitoring/testDbPrcek"><img	style="border: 0px; padding-top: 3px;" src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a></TD>-->
+						<!--<TD align="center"><B>${prcekDate}</B></TD> -->
+						<TD align="center" id="gre"></TD>
+						<TD align="center"><B>${prcekLatence}</B></TD>
+					
 				</TR>
 				<TR>
 					<TD align="center"><B>${db}</B></TD>
@@ -85,6 +114,24 @@
 			Server: ${server}<BR /> IP: ${ip} <BR /> Root aplikace:
 			${pageContext.servletContext.contextPath}
 		</DIV>
+
+		<!-- 
+		<script>
+			document.write("<BR />Jméno prohlížeče: ");
+			document.write(navigator.appName);
+			document.write(navigator.userAgent); 
+
+			document.write("<BR />Číslo verze: ");
+			document.write(navigator.appVersion);
+
+			document.write("<BR />Jednoduché číslo verze: ");
+			document.write(parseInt(navigator.appVersion));
+
+			document.write("<BR />Kódové jméno aplikace: ");
+			document.write(navigator.appCodeName);
+			alert(window.navigator.appName); 
+		</script>
+ -->
 
 		<DIV style="height: 250px;">&#160;</DIV>
 		<jsp:include page="footer.jsp" />

@@ -60,6 +60,7 @@ public class OfflineController {
 
 		List<OfflineJob> off = serviceOfflineJob.getOfflineJob(u);
 		model.addAttribute("offList", off);
+		model.addAttribute("aktualUser", u);
 
 		return "/offline";
 	}
@@ -96,6 +97,7 @@ public class OfflineController {
 
 				OfflineJob off = serviceOfflineJob.getOfflineJobOne(idOfflineJob);
 				off.setProces("v procesu");
+				off.setCasSpusteni(new Date());
 				serviceOfflineJob.setOfflineJob(off);
 
 				List<PrPodminka> pr = servicePrPodminka.getPrPodminka(off.getSk30tSada());

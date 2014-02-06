@@ -59,7 +59,9 @@
 			<f:message key="zadaniVypoctu" />
 		</div>
 
+		<c:set scope="request" var="actual" value="vypocet" />
 		<jsp:include page="header.jsp" />
+		
 		<BR />
 		<!-- OBDOBI -->
 		<TABLE>
@@ -97,7 +99,7 @@
 							<TD></TD>
 							<TD>Denní zpracování</TD>
 							<TD>od</TD>
-							<TD><form:input path="platnostOd" id="datepickerOd"
+							<TD><form:input path="platnostOd" id="datepickerOd" 
 									class="kalendar"></form:input></TD>
 							<TD>do</TD>
 							<TD><form:input path="platnostDo" id="datepickerDo"
@@ -216,8 +218,7 @@
 								<td align="right">${i.pocet}</td>
 								<td align="center"><c:if
 										test="${not(empty(evidBod)) and (i.pocet > 0)}">
-										<form:checkbox path="idcka" style="width: 0px;"
-											value="${i.id}" />
+										<form:checkbox path="idcka" value="${i.id}" />
 									</c:if></td>
 							</tr>
 						</c:forEach>

@@ -21,9 +21,9 @@
 		<div class="headerNazevStranky">
 			<f:message key="napoveda" />
 		</div>
-		<div class="pageHeader">
-			<jsp:include page="header.jsp" />
-		</div>
+		
+		<c:set scope="request" var="actual" value="napoveda" />
+		<jsp:include page="header.jsp" />
 
 		<H3>Informace o aplikaci</H3>
 		<DIV style="padding-left: 20px; font-size: 14px;">

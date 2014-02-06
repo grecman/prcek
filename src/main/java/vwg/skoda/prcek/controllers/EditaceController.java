@@ -32,6 +32,7 @@ import vwg.skoda.prcek.services.ProtokolService;
 import vwg.skoda.prcek.services.SadaService;
 import vwg.skoda.prcek.services.UserService;
 import cz.skoda.mbt.MBT;
+import cz.skoda.mbt.MBTException;
 import cz.skoda.mbt.PRCondition;
 
 @Controller
@@ -204,7 +205,7 @@ public class EditaceController {
 			model.addAttribute("moznoEditovatSadu", false);
 		}
 
-		List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminkaOrderByTest(s);
+		List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminkaOrderByErrMbt(s);
 		model.addAttribute("prPodminkaList", prPodminkaList);
 
 		Long prCount = servicePrPodminka.getPrPodminkaCount(s);
@@ -382,7 +383,7 @@ public class EditaceController {
 			// MBT mbt = new MBT();
 			// mbt.setMBTSource(prMbt);
 			// mbt.getPRCondition(p.getPr());
-			// newPr.setErrMbt(null);
+			// newPr.setErrMbt("zzz");
 			// } catch (Exception e) {
 			// // log.error("###\t Chyba pri obsahove kontrole PR podminky (import TXT): " + e);
 			// newPr.setErrMbt(e.getMessage());
@@ -429,11 +430,12 @@ public class EditaceController {
 			MBT mbt = new MBT();
 			mbt.setMBTSource(pr);
 			PRCondition prCond = mbt.getPRCondition(f.getPrPodminka().toUpperCase());
-			prp.setErrMbt(null);
+			prp.setErrMbt("zzz");
 			log.debug("###\t Kontrola PR podminky MBT (rucni zadani) " + prCond.toString() + " ... OK");
-		} catch (Exception e) {
-			log.error("###\t Chyba pri obsahove kontrole PR podminky (rucni zadani): " + e);
-			prp.setErrMbt(e.getMessage());
+		} catch (MBTException e) {
+			log.info("###\t Chyba pri obsahove kontrole PR podminky (rucni zadani):\t"+ e);
+			//System.out.println(e.getID());
+			prp.setErrMbt(e.getLocalizedMessage());
 		}
 
 		servicePrPodminka.addPrPodminka(prp);
@@ -482,10 +484,10 @@ public class EditaceController {
 			MBT mbt = new MBT();
 			mbt.setMBTSource(pr);
 			PRCondition prCond = mbt.getPRCondition(f.getPrPodminka().toUpperCase());
-			prp.setErrMbt(null);
+			prp.setErrMbt("zzz");
 			log.debug("###\t Kontrola PR podminky (MBT) " + prCond.toString() + " ... OK");
 		} catch (Exception e) {
-			log.error("###\t Chyba pri obsahove kontrole PR podminky: " + e);
+			log.info("###\t Chyba pri obsahove kontrole PR podminky: " + e);
 			prp.setErrMbt(e.getMessage());
 		}
 

@@ -11,6 +11,7 @@
 		contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" />
 	<html xmlns="http://www.w3.org/1999/xhtml">
 
+
 <head>
 <title>P R C E K</title>
 <jsp:include page="lib.jsp" />
@@ -22,6 +23,8 @@
 		<div class="headerNazevStranky" title="${userRole}">
 			<f:message key="seznamPrPodminekSady" />
 		</div>
+
+		<c:set scope="request" var="actual" value="editace" />
 		<jsp:include page="header.jsp" />
 
 		<div class="zonaFiltru">
@@ -117,7 +120,7 @@
 				</form:form>
 
 				<c:if test="${not(empty(vybranaSada))}">
-					<!-- ZATIM ZAKOMENTOVANO, PROTOZE PRI DUPLIKACI Z JEDNE MT DO DRUHE NEPROBEHNE KONTROLA MBT (MUSELO BY TO JET ASI ASYNC) ALE DA SE TO OBEJIT EXP-IMP 
+					<!-- PRI DUPLIKACI Z JEDNE SADY DO DRUHE NEPROBEHNE (zatim) KONTROLA MBT (MUSELO BY TO JET ASI ASYNC) ALE DA SE TO OBEJIT EXP-IMP  -->
 					<c:set var="duplikovatSaduPopisek">
 						<f:message>duplikovatSadu</f:message>
 					</c:set>
@@ -126,7 +129,7 @@
 						<input type="submit" value="${duplikovatSaduPopisek}"
 							class="submit" />
 					</form:form>
-					 -->
+					
 					<c:if test="${moznoEditovatSadu}">
 						<c:set var="smazatSaduPopisek">
 							<f:message>smazatSadu</f:message>
@@ -190,13 +193,19 @@
 								<td>${i.pr}</td>
 								<td>${i.poznamka}</td>
 								<td align="center"><c:choose>
-										<c:when test="${empty(i.errMbt)}">
-											<img
-												src="${pageContext.servletContext.contextPath}/resources/ico/ok.png" />
+										<c:when test="${not(empty(i.errMbt))	}">
+											<c:choose>
+												<c:when test="${i.errMbt=='zzz'}">
+													<img  src="${pageContext.servletContext.contextPath}/resources/ico/ok.png" />
+												</c:when>
+												<c:otherwise>
+													<img  title="${i.errMbt}"
+														src="${pageContext.servletContext.contextPath}/resources/ico/zrusit.png" />
+												</c:otherwise>
+											</c:choose>
 										</c:when>
 										<c:otherwise>
-											<img title="${i.errMbt}"
-												src="${pageContext.servletContext.contextPath}/resources/ico/zrusit.png" />
+											<img  title="Neprověřená PR podmínka" src="${pageContext.servletContext.contextPath}/resources/ico/159.png" />
 										</c:otherwise>
 									</c:choose></td>
 								<td align="center"><c:if test="${moznoEditovatSadu}">
@@ -204,7 +213,9 @@
 											href="${pageContext.servletContext.contextPath}/srv/editace/editovatPr/${i.id}"><img
 											title="Editovat" style="border: 0px;"
 											src="${pageContext.servletContext.contextPath}/resources/ico/edit.png" /></a>
-										<a onClick="return confirm('Really?')"
+
+										<a
+											onClick="return confirm('Opravdu smazat PR podmínku: ${i.pr} ???')"
 											href="${pageContext.servletContext.contextPath}/srv/editace/smazatPrPodminku/${i.id}"><img
 											title="Smazat" style="border: 0px;"
 											src="${pageContext.servletContext.contextPath}/resources/ico/smazat.png" /></a>
@@ -216,9 +227,6 @@
 				</TABLE>
 			</DIV>
 		</c:if>
-
-
-
 
 		<div class="zonaTlacitek">
 
@@ -240,7 +248,7 @@
 							</c:set>
 							<form:form commandName="sada"
 								action="${pageContext.servletContext.contextPath}/srv/editace/smazatVsechnyPr/${vybranaSada.id}">
-								<input onClick="return confirm('Opravdu?!')" type="submit"
+								<input onClick="return confirm('Opravdu chcete smazat všechny PR podmínky v zobrazené sadě ?!')" type="submit"
 									value="${smazatVsePopisek}" class="submit" />
 							</form:form>
 						</c:if>

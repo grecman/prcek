@@ -30,6 +30,7 @@
   <servlet-mapping>
     <servlet-name>dispatcher</servlet-name>
     <url-pattern>*.html</url-pattern>
+    <url-pattern>*.json</url-pattern>
     <url-pattern>/srv/*</url-pattern>
   </servlet-mapping>
   <servlet>

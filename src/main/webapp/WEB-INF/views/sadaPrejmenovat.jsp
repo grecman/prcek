@@ -22,7 +22,10 @@
 		<div class="headerNazevStranky">
 			<f:message key="prejmenovatSadu" />
 		</div>
+		
+		<c:set scope="request" var="actual" value="editace" />
 		<jsp:include page="header.jsp" />
+		
 		<BR />
 
 		<form:form commandName="formObj" name="kontrola"

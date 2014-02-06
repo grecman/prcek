@@ -45,9 +45,10 @@
 		<div class="headerNazevStranky">
 			<f:message key="importTxt" />
 		</div>
-		<div class="pageHeader">
-			<jsp:include page="header.jsp" />
-		</div>
+		
+		<c:set scope="request" var="actual" value="editace" />
+		<jsp:include page="header.jsp" />
+		
 		<BR />
 		<H2>Nahráno ${prCount} / ${vybranaSada.pocet}</H2>
 		<BR />
@@ -60,7 +61,7 @@
 			se všechny PR podmínky importují. To zjistíte pohledem na záhlaví
 			sloupce PR, kde je uveden aktuální počet PR podmínek / celkový počet
 			PR podmínek. Aktualizace aktuálního počtu PR podmínek provedete
-			pomocí klavesy F5.
+			pomocí tlačítka "Aktualizovat".
 		</DIV>
 		<BR />
 		<BR />
@@ -71,7 +72,7 @@
 
 		<DIV style="height: 50px;">&#160;</DIV>
 		<p align="right" style="color: gray; font-size: xx-small;">
-			Další refresh za: <span id="spnSeconds">2</span> sekund.
+			Další refresh za: <span id="spnSeconds">4</span> sekund.
 		</p>
 
 		<div class="zonaTlacitek">

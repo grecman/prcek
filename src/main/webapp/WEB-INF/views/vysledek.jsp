@@ -23,9 +23,8 @@
 			<f:message key="vysledekZpracovani" />
 		</div>
 
-		<div class="pageHeader">
-			<jsp:include page="header.jsp" />
-		</div>
+		<c:set scope="request" var="actual" value="offline" />
+		<jsp:include page="header.jsp" />
 
 		<BR />
 		<DIV class="scroll" style="height: 500px; overflow: auto;">

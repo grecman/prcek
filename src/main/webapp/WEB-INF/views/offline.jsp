@@ -31,8 +31,8 @@
 													"#spnSeconds").html();
 											iTimeRemaining = eval(iTimeRemaining);
 											if (iTimeRemaining == 0) {
-												window.location.href = "${pageContext.servletContext.contextPath}/srv/offline/startJob";
-												//window.location.href = ".";
+												//window.location.href = "${pageContext.servletContext.contextPath}/srv/offline/startJob";
+												window.location.href = "./offline/startJob";
 											} else {
 												$("#spnSeconds").html(
 														iTimeRemaining - 1);
@@ -46,18 +46,18 @@
 <body>
 	<div class="page">
 		<div class="headerNazevStranky">
-			<f:message key="vysledkyZpracovani" />
+			<f:message key="prehledVysledkuZpracovani" />
 		</div>
 
-		<div class="pageHeader">
-			<jsp:include page="header.jsp" />
-		</div>
+		<c:set scope="request" var="actual" value="offline" />
+		<jsp:include page="header.jsp" />
 
 		<BR />
 		<DIV class="scroll" style="height: 500px; overflow: auto;">
 			<TABLE id="tab1" width="100%" style="table-layout: fixed;">
 				<col width="30px" />
 				<col width="*" />
+				<col width="45px" />
 				<col width="55px" />
 				<col width="100px" />
 				<col width="175px" />
@@ -65,11 +65,12 @@
 				<col width="135px" />
 				<col width="40px" />
 				<col width="30px" />
-				<col width="45px" />
+				<col width="45px" /> 
 				<thead>
 					<tr>
 						<th>MT</th>
 						<th>Název sady</th>
+						<th>Počet PR</th>
 						<th>Počet zakázek</th>
 						<th>K.bod</th>
 						<th>Platnost</th>
@@ -83,13 +84,14 @@
 				</thead>
 				<tbody>
 					<c:forEach var="i" items="${offList}" varStatus="iterator">
-						<tr height="25px"
+						<tr style="height: 30px;"
 							class="${ (iterator.index mod 2) == 0 ? 'rowOdd' : 'rowEven' }">
 							<td align="center">${i.sk30tSada.sk30tMt.mt}</td>
 							<td><a
 								href="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${i.sk30tSada.sk30tMt.sk30tUser.netusername}/${i.sk30tSada.sk30tMt.mt}/${i.sk30tSada.id}">
 									<span style="color: #4BA82E; font-weight: bold;">${i.sk30tSada.nazev}</span>
 							</a></td>
+							<td align="right">${i.sk30tSada.pocet}</td>
 							<c:choose>
 								<c:when test="${i.stornoZakazky}">
 									<c:set var="stornoVety">Včetně storno vět</c:set>
@@ -104,31 +106,37 @@
 									value="${i.platnostOd}" /> - <f:formatDate
 									pattern="yyyy-MM-dd" value="${i.platnostDo}" /></td>
 							<td><f:formatDate pattern="yyyy-MM-dd HH:mm"
-									value="${i.casSpusteni}" /></td>
+									value="${i.casSpusteni}" />
+							</td>
+						 
 							<td><c:choose>
 									<c:when test="${(empty(i.casUkonceni))}">
-										<P style="color: red;">${i.proces}</P>
+										<SPAN style="color: red; height: 5px;"> ${i.proces}</SPAN>
 									</c:when>
 									<c:otherwise>
 										<f:formatDate pattern="yyyy-MM-dd HH:mm"
 											value="${i.casUkonceni}" />
 									</c:otherwise>
 								</c:choose></td>
-
+	
 							<td align="center">${i.agregace}</td>
-							<td align="center"><c:if
+							<td align="center">
+								<c:if
 									test="${not(empty(i.casUkonceni)) and not(empty(i.agregace))}">
 									<a
 										href="${pageContext.servletContext.contextPath}/srv/offline/vysledekSAgregaci/${i.id}"><img
 										style="border: 0px; padding-top: 3px;"
 										src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a>
-								</c:if></td>
-							<td align="center"><c:if test="${not(empty(i.casUkonceni))}">
+								</c:if>
+							</td>
+							<td align="center">
+								<c:if test="${not(empty(i.casUkonceni))}">
 									<a
 										href="${pageContext.servletContext.contextPath}/srv/offline/vysledek/${i.id}"><img
 										style="border: 0px; padding-top: 3px;"
 										src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a>
-								</c:if></td>
+								</c:if>
+							</td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -139,16 +147,18 @@
 			Další Off-line výpočet bude automaticky spuštěn za: <span
 				id="spnSeconds">59</span> sekund.
 		</p>
-<!-- 
+ 
+ 		<c:if
+			test="${(aktualUser.netusername=='DZC0ZEL') or (aktualUser.netusername=='DZC0GRP')}">
 		<div class="zonaTlacitek">
 			<div class="tlacitka">
 				<form:form 
-	 					action="${pageContext.servletContext.contextPath}/srv/offline/startJob"> -
+	 					action="${pageContext.servletContext.contextPath}/srv/offline/startJob"> 
 	 					<input type="submit" value="Ruční start"  class="submit"/> 
  				</form:form> 
 			</div>
 		</div>
--->
+		</c:if>
 
 		<jsp:include page="footer.jsp" />
 	</div>

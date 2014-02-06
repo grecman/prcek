@@ -13,6 +13,22 @@
 <head>
 <jsp:include page="lib.jsp" />
 <title>P R C E K</title>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#buttonNahratSoubor").click(function() {
+			if ($("#inputFilePrcek").val().length==0) {
+ 				alert("Nevybrán žádný soubor k nahrání");
+// 				$("#buttonNahratSoubor").submit(function(){
+// 	 	 				return false;
+// 	 	 				});		
+			} else {
+				$("#buttonNahratSoubor").prop('disabled', true);
+			}
+		});
+	});
+</script>
+
 </head>
 
 <body>
@@ -20,9 +36,10 @@
 		<div class="headerNazevStranky">
 			<f:message key="importTxt" />
 		</div>
-		<div class="pageHeader">
-			<jsp:include page="header.jsp" />
-		</div>
+
+		<c:set scope="request" var="actual" value="editace" />
+		<jsp:include page="header.jsp" />
+
 		<BR />
 		<DIV>
 			Import PR podmínek pro sadu: <B>${vybranaSada.sk30tMt.mt} -
@@ -35,12 +52,12 @@
 
 			<table id="fileTable">
 				<TR>
-					<TD><input name="filePrcek" type="file"
+					<TD><input name="filePrcek" type="file" id="inputFilePrcek"
 						style="background: none; width: 300px; color: red; padding-left: 0px; font-weight: bold;" /></TD>
 					<TD><c:set var="nahratSouborPopisek">
 							<f:message>nahratSoubor</f:message>
 						</c:set> <input type="submit" value="${nahratSouborPopisek}"
-						class="submit" /></TD>
+						id="buttonNahratSoubor" class="submit" /></TD>
 				</TR>
 				<TR>
 					<TD></TD>

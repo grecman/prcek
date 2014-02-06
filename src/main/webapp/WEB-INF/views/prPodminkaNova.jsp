@@ -18,7 +18,10 @@
 		<div class="headerNazevStranky">
 			<f:message key="novaPrPodminka" />
 		</div>
+		
+		<c:set scope="request" var="actual" value="editace" />
 		<jsp:include page="header.jsp" />
+		
 		<BR />
 
 		<form:form  acceptCharset="UTF-8"  commandName="formObj" name="kontrola" action="${pageContext.servletContext.contextPath}/srv/editace/novaPrPodminkaTed/${vybranaSada.id}">
@@ -54,7 +57,7 @@
 				<TR height="15px;"></TR>
 				<TR>
 					<TD ><f:message>prPodminka</f:message></TD>
-					<TD colspan="2" bgcolor="white"><form:input class="textovePole850" path="prPodminka" title="Vzor: +L0L+A8G+3FE/3FA"></form:input></TD>
+					<TD colspan="2" bgcolor="white"><form:input class="textovePole850 uppercase" path="prPodminka" title="Vzor: +L0L+A8G+3FE/3FA"></form:input></TD>
 				</TR>
 				<TR height="15px;"></TR>
 				<TR>

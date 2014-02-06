@@ -12,6 +12,9 @@
     <!-- annotation-config - is used to activate annotations in beans already registered in the application context (no matter if they were defined with XML or by package scanning).	--> 
 	<context:annotation-config />
 
+	<!-- asi jen pro validace (treba JSR-303) -->
+	<mvc:annotation-driven />
+
 	<!-- Automaticke oskenovani anotaci aspektu -->
 	<!-- component-scan can also do what annotation-config does but component-scan also scans packages to find and register beans within the application context. -->
  	<!-- GRE: bacha!!! pokud oskenuji vsechno, tedy: "vwg.skoda.prcek" ... nebudou pak fungovat transakce !!!! -->
@@ -27,8 +30,6 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 
-	<!-- asi jen pro validace (treba JSR-303) -->
-	<mvc:annotation-driven />
 
 </beans>
 
