@@ -26,6 +26,7 @@
 
 
 			<!-- Jen pro MAIN -->
+			<!-- Problem: v tomto pripade je nutne zakomentovat <non-jta-data-source>, pac jinak se to pere, ale pak je zase problem s deloyem aplikace -->
 			<!-- <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@lskifa.skoda-db"/> -->
 			<!-- <property name="javax.persistence.jdbc.user" value="prcek"/> -->
 			<!-- <property name="javax.persistence.jdbc.password" value="OBR_1_acene"/> -->

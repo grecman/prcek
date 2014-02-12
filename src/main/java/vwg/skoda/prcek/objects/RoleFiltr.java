@@ -46,7 +46,7 @@ public class RoleFiltr implements Filter {
 			em.persist(p);
 			t.commit();
 */			
-			s.setAttribute(USER_ATTRIBUTE, req.getUserPrincipal().getName());
+			s.setAttribute(USER_ATTRIBUTE, req.getUserPrincipal().getName().toUpperCase());
 		}
 		
 		/*

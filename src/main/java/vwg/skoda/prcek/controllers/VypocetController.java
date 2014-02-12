@@ -70,7 +70,11 @@ public class VypocetController {
 	public String vypocet(FormObj f, EvidencniBody eb, Model model, HttpServletRequest req) {
 		log.debug("###\t vypocet()");
 
-		User u = serviceUser.getUser(req.getUserPrincipal().getName());
+		if(req.isUserInRole("SERVICEDESK")){
+			return "redirect:/srv/monitoring";
+		}
+
+		User u = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		//List<SadyPrehled> s = serviceSady.getSady(u);
 		List<Sada> s = serviceSada.getSady(u);
 
@@ -108,7 +112,7 @@ public class VypocetController {
 	public String vypocet(@PathVariable String platnost, FormObj f, EvidencniBody eb, Model model, HttpServletRequest req) {
 		log.debug("###\t vypocet(" + platnost + ")");
 
-		User u = serviceUser.getUser(req.getUserPrincipal().getName());
+		User u = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		//List<SadyPrehled> s = serviceSady.getSady(u);
 		List<Sada> s = serviceSada.getSady(u);
 
@@ -125,7 +129,7 @@ public class VypocetController {
 	public String vybranyZavod(@PathVariable String platnost, FormObj f, EvidencniBody eb, Model model, HttpServletRequest req) {
 		log.debug("###\t vybranyZavod(" + f.getZavod() + ", " + platnost + ")");
 
-		User u = serviceUser.getUser(req.getUserPrincipal().getName());
+		User u = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		//List<SadyPrehled> s = serviceSady.getSady(u);
 		List<Sada> s = serviceSada.getSady(u);
 
@@ -143,7 +147,7 @@ public class VypocetController {
 	public String vybranyBod(@PathVariable String platnost, FormObj f, EvidencniBody eb, Model model, HttpServletRequest req) {
 		log.debug("###\t vybranyBod(" + eb.getId() + ", " + platnost + ")");
 
-		User u = serviceUser.getUser(req.getUserPrincipal().getName());
+		User u = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		//List<SadyPrehled> s = serviceSady.getSady(u);
 		List<Sada> s = serviceSada.getSady(u);
 		EvidencniBody e = serviceEvidencniBody.getEvidencniBodyOne(eb.getId());
@@ -160,7 +164,7 @@ public class VypocetController {
 	public String zafrontovani(@PathVariable String platnost, @PathVariable long idEvidBod, FormObj f, EvidencniBody eb, Model model, HttpServletRequest req) throws ParseException {
 		log.debug("###\t zafrontovani(" + platnost + ", " + idEvidBod + ")");
 
-		User u = serviceUser.getUser(req.getUserPrincipal().getName());
+		User u = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 
 		// pokud neni na obrazovce zaskrtnuta zadna sada, tak nema smysl pokracovat
 		if (f.getIdcka().length < 1) {

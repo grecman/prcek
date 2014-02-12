@@ -57,13 +57,17 @@ public class IndexController {
 		session.setAttribute("userRole", role);
 		log.debug("###\t ... for user:" + req.getUserPrincipal().getName().toUpperCase()+" ("+role+")");
 		
+		if(req.isUserInRole("SERVICEDESK")){
+			return "redirect:/srv/monitoring";
+		}
+		
 		// zalozeni noveho uzivatele pokud jeste neexistuje v entite USER !!!
 		if (!serviceUser.existUser(req.getUserPrincipal().getName().toUpperCase())) {
 			log.debug("###\t Uzivatel " + req.getUserPrincipal().getName().toUpperCase() + " neexistuje v entite USER ... zakladam!!!");
 
 			UserZentaAdm userZentaAdm = serviceUserZentaAdm.getUserZentaAdm(req.getUserPrincipal().getName().toUpperCase());
 			if (userZentaAdm == null || userZentaAdm.getNetUsername().isEmpty()) {
-				log.error("P�ihl�en� u�ivatel " + req.getUserPrincipal().getName().toUpperCase() + " nenalezen v db ZentaAdm");
+				log.error("###\t Prihlaseny uzivatel " + req.getUserPrincipal().getName().toUpperCase() + " nenalezen v db ZentaAdm");
 			}
 
 			User newUser = new User();
@@ -83,6 +87,15 @@ public class IndexController {
 			newProtokol.setSessionid(req.getSession().getId());
 			serviceProtokol.addProtokol(newProtokol);
 		}
+		
+		Protokol newProtokol = new Protokol();
+		newProtokol.setNetusername(req.getUserPrincipal().getName().toUpperCase());
+		newProtokol.setAction("Login");
+		newProtokol.setInfo("Prihlaseni uzivatele do aplikace   ###   " + req.getSession().getServletContext().getServerInfo());
+		newProtokol.setTime(new Date());
+		newProtokol.setSessionid(req.getSession().getId());
+		serviceProtokol.addProtokol(newProtokol);
+		
 
 		/*
 		 * TODO: - v pripade role SERVICEDESK presmerovat na MONITORING (ale toto asi bude reseno filtrem na cele session) nebo na kazde hlavni

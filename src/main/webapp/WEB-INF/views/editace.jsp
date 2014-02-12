@@ -136,7 +136,7 @@
 						</c:set>
 						<form:form commandName="sada"
 							action="${pageContext.servletContext.contextPath}/srv/editace/smazatSadu/${vybranyUzivatel.netusername}/${vybranaMt.mt}/${vybranaSada.id}">
-							<input onClick="return confirm('Opravdu?!')" type="submit"
+							<input onClick="return confirm('Opravdu smazat vybranou sadu?!')" type="submit"
 								value="${smazatSaduPopisek}" class="submit" />
 						</form:form>
 

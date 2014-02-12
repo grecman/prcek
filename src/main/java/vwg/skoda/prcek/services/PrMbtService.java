@@ -38,7 +38,7 @@ public class PrMbtService {
 	}
 
 	public Date getDbTime() {
-		log.trace("###\t\t getDbTime();");
+		log.debug("###\t\t getDbTime();");
 		return entityManager.createQuery("SELECT current_timestamp() FROM PrMbt  WHERE rownum=1", Date.class).getSingleResult();
 	}
 }

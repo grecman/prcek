@@ -73,7 +73,7 @@ public class FileUploadController {
 	public WebAsyncTask<String> saveFileAsync(@PathVariable final long vybranaSada, Model model, final MultipartHttpServletRequest req) throws IOException {
 		log.debug("###ASYNC###\t saveFile(" + vybranaSada + ",\t " + Thread.currentThread() + ")");
 
-		final User u = serviceUser.getUser(req.getUserPrincipal().getName());
+		final User u = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		final Sada s = serviceSada.getSadaOne(vybranaSada);
 
 		// V tomto bloku v implementovane metode call() se pousti asynchrone nejaky "dlouhy" proces (export/import/rozpad...)
@@ -167,7 +167,7 @@ public class FileUploadController {
 	public String fileUploadProces(@PathVariable long vybranaSada, Model model, HttpServletRequest req) {
 		log.debug("###\t fileUploadProces(" + vybranaSada + ")");
 
-		User u = serviceUser.getUser(req.getUserPrincipal().getName());
+		User u = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		Sada s = serviceSada.getSadaOne(vybranaSada);
 		// ty co tam uz jsou + ty co tam chci
 		int celkovyPocerPR = s.getPocet();

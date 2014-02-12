@@ -17,6 +17,24 @@
 
 
 <script type="text/javascript">
+	$(document).ready(function() {
+		$("#ButtonPrcekDate").click(function() {
+			testDbPrcekAjax();
+		});
+	});
+
+	$(document).ready(function() {
+		$("#ButtonMbtDate").click(function() {
+			testDbMbtAjax();
+		});
+	});
+
+	$(document).ready(function() {
+		$("#ButtonKomunikaceDate").click(function() {
+			testDbKomunikaceAjax();
+		});
+	});
+
 	function testDbPrcekAjax() {
 		var checkUrl = "/prcek/monitoring/testDbPrcekAjax.json";
 		var datum = null;
@@ -25,19 +43,37 @@
 			async : false, // default je true, pokud není false, tak následný if(result) proběhne dříve než se vrátí objekt z ajaxu !!!
 			cache : false
 		}).done(function(data) {
-
-			//alert(data.prcekDate);
-			$("#gre").append(data.prcekDate);
-
+			$("#datumPrcek").html(data.prcekDate);
+			$("#latencePrcek").html(data.prcekLatence);
+			//alert(data.prcekDate+ " - "+data.prcekLatence); 
 		});
 	}
 
-	$(document).ready(function() {
-		$("#greTla").click(function() {
-			testDbPrcekAjax();
-
+	function testDbMbtAjax() {
+		var checkUrl = "/prcek/monitoring/testDbMbtAjax.json";
+		var datum = null;
+		$.ajax({
+			url : checkUrl,
+			async : false, // default je true, pokud není false, tak následný if(result) proběhne dříve než se vrátí objekt z ajaxu !!!
+			cache : false
+		}).done(function(data) {
+			$("#datumMbt").html(data.mbtDate);
+			$("#latenceMbt").html(data.mbtLatence);
 		});
-	});
+	}
+
+	function testDbKomunikaceAjax() {
+		var checkUrl = "/prcek/monitoring/testDbKomunikaceAjax.json";
+		var datum = null;
+		$.ajax({
+			url : checkUrl,
+			async : false, // default je true, pokud není false, tak následný if(result) proběhne dříve než se vrátí objekt z ajaxu !!!
+			cache : false
+		}).done(function(data) {
+			$("#datumKomunikace").html(data.komunikaceDate);
+			$("#latenceKomunikace").html(data.komunikaceLatence);
+		});
+	}
 </script>
 
 
@@ -49,7 +85,7 @@
 		<div class="headerNazevStranky">
 			<f:message key="monitoring" />
 		</div>
-		
+
 		<c:set scope="request" var="actual" value="monitoring" />
 		<jsp:include page="header.jsp" />
 
@@ -63,56 +99,58 @@
 			<THEAD>
 				<TH>Databáze</TH>
 				<TH>Schéma</TH>
-				<TH>Test</TH>
+				<TH title="AJAX!">Test</TH>
 				<TH title="Aktuální čas ze serveru">Stav</TH>
-				<TH title="... v milisekundách">Latence</TH>
+				<TH>Latence (ms)</TH>
 			</THEAD>
 			<TBODY>
 				<TR>
 					<TD></TD>
 					<TD class="rowOdd">PRCEK</TD>
-					<TD align="center"></TD>
-						<INPUT id="greTla" type="button" style="background: transparent url(${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png) no-repeat center;" ></INPUT>
-						<!--<a href="${pageContext.servletContext.contextPath}/srv/monitoring/testDbPrcek"><img	style="border: 0px; padding-top: 3px;" src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a></TD>-->
-						<!--<TD align="center"><B>${prcekDate}</B></TD> -->
-						<TD align="center" id="gre"></TD>
-						<TD align="center"><B>${prcekLatence}</B></TD>
-					
+					<TD align="center"><INPUT id="ButtonPrcekDate" type="button"
+						style="background: transparent url(${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png) no-repeat center;"></INPUT></TD>
+					<TD align="center" id="datumPrcek"></TD>
+					<TD align="center" id="latencePrcek"></TD>
 				</TR>
 				<TR>
 					<TD align="center"><B>${db}</B></TD>
 					<TD class="rowOdd">MBT_P</TD>
-					<TD align="center"><a
-						href="${pageContext.servletContext.contextPath}/srv/monitoring/testDbMbt"><img
-							style="border: 0px; padding-top: 3px;"
-							src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a></TD>
-					<TD align="center"><B>${mbtDate}</B></TD>
-					<TD align="center"><B>${mbtLatence}</B></TD>
+					<TD align="center"><INPUT id="ButtonMbtDate" type="button"
+						style="background: transparent url(${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png) no-repeat center;"></INPUT></TD>
+					<TD align="center" id="datumMbt"></TD>
+					<TD align="center" id="latenceMbt"></TD>
 				</TR>
 				<TR>
 					<TD></TD>
 					<TD class="rowOdd">KOMUNIKACE</TD>
-					<TD align="center"><a
-						href="${pageContext.servletContext.contextPath}/srv/monitoring/testDbKomunikace"><img
-							style="border: 0px; padding-top: 3px;"
-							src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a></TD>
-					<TD align="center"><B>${komunikaceDate}</B></TD>
-					<TD align="center"><B>${komunikaceLatence}</B></TD>
+					<TD align="center"><INPUT id="ButtonKomunikaceDate"
+						type="button"
+						style="background: transparent url(${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png) no-repeat center;"></INPUT></TD>
+					<TD align="center" id="datumKomunikace"></TD>
+					<TD align="center" id="latenceKomunikace"></TD>
 				</TR>
 			</TBODY>
 		</TABLE>
-		<BR /> <BR />
+		<BR /><HR />
 		<H3>Informace o uživateli</H3>
 		<DIV style="padding-left: 20px; font-size: 14px;">
-			${aktualUser.prijmeni} ${aktualUser.jmeno}
-			(${aktualUser.netusername}) - ${aktualUser.oddeleni}<BR /> Role:
-			${userRole} <BR />
+			Uživatelské jméno:<B>${userName}</B><BR />
+			Uživatel: <B>${aktualUser.prijmeni} ${aktualUser.jmeno} - ${aktualUser.oddeleni}</B><BR /> 
+			Role: <B>${userRole}</B>
 		</DIV>
-		<BR />
+		<BR /><HR />
 		<H3>Informace o serveru</H3>
 		<DIV style="padding-left: 20px; font-size: 14px;">
-			Server: ${server}<BR /> IP: ${ip} <BR /> Root aplikace:
-			${pageContext.servletContext.contextPath}
+			Server: <B>${server}</B><BR /> 
+			IP: <B>${ip}</B><BR /> 
+			Root aplikace: <B>${pageContext.servletContext.contextPath}</B>
+		</DIV>
+		<BR /><HR />
+		<H3>Návštěvní kniha</H3>
+		<DIV style="padding-left: 20px; font-size: 14px;">
+			Vaše poslední přihlášení: <B>${lastUserLogin}</B><BR /> 
+			Do aplikace jste se celkem přihlásíl: <B>${userLogin}</B><BR /> 
+			Do aplikace se přihlásilo celkem uživatelů: <B>${allUserLogin}</B>
 		</DIV>
 
 		<!-- 

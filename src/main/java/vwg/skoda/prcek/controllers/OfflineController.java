@@ -56,7 +56,11 @@ public class OfflineController {
 	public String offline(Model model, HttpServletRequest req) {
 		log.debug("###\t offline()");
 
-		User u = serviceUser.getUser(req.getUserPrincipal().getName());
+		if(req.isUserInRole("SERVICEDESK")){
+			return "redirect:/srv/monitoring";
+		}
+
+		User u = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 
 		List<OfflineJob> off = serviceOfflineJob.getOfflineJob(u);
 		model.addAttribute("offList", off);
@@ -68,7 +72,7 @@ public class OfflineController {
 	@RequestMapping(value = "/offline/startJob")
 	public String startJob(Model model, HttpServletRequest req) {
 		log.debug("###\t startJob ()");
-		User u = serviceUser.getUser(req.getUserPrincipal().getName());
+		User u = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 
 		// mazani jobu starsich jak 92 dnu
 		serviceOfflineJob.removeOldOfflineJob();
@@ -172,7 +176,7 @@ public class OfflineController {
 		log.debug("###\t vysledekSAgregaci(" + idOfflineJob + ")");
 
 		OfflineJob off = serviceOfflineJob.getOfflineJobOne(idOfflineJob);
-		User user = serviceUser.getUser(req.getUserPrincipal().getName());
+		User user = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		List<OfflineJob> offAgregace = serviceOfflineJob.getOfflineJob(user, off.getAgregace());
 		
 		List<Long> seznamAgregaci = new ArrayList<Long>();
@@ -216,7 +220,7 @@ public class OfflineController {
 		log.debug("###\t exportXlsSAgregaci(" + idOfflineJob + ")");
 
 		OfflineJob off = serviceOfflineJob.getOfflineJobOne(idOfflineJob);
-		User user = serviceUser.getUser(req.getUserPrincipal().getName());
+		User user = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		List<OfflineJob> offAgregace = serviceOfflineJob.getOfflineJob(user, off.getAgregace());
 		
 		List<Long> seznamAgregaci = new ArrayList<Long>();

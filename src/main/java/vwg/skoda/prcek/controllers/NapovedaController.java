@@ -33,7 +33,7 @@ public class NapovedaController {
 	public String napovedaUvodniZobrazeni(Napoveda napoveda, Model model, HttpServletRequest req) {
 		log.debug("###\t napovedaUvodniZobrazeni()");
 
-		User aktualUser = serviceUser.getUser(req.getUserPrincipal().getName());
+		User aktualUser = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		model.addAttribute("aktualUser", aktualUser);
 
 		List<Napoveda> n = serviceNapoveda.getNapoveda();
@@ -46,7 +46,7 @@ public class NapovedaController {
 	public String novaNapoveda(Napoveda napoveda, Model model, HttpServletRequest req) {
 		log.debug("###\t novaNapoveda(" + napoveda.getTema() + ")");
 
-		User aktualUser = serviceUser.getUser(req.getUserPrincipal().getName());
+		User aktualUser = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		model.addAttribute("aktualUser", aktualUser);
 
 		Napoveda newNap = new Napoveda();

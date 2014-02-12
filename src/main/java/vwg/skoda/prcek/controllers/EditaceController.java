@@ -68,10 +68,14 @@ public class EditaceController {
 	@RequestMapping
 	public String editaceStart(User netusername, Mt mt, Sada sada, Model model, HttpServletRequest req) {
 		log.debug("###\t editaceStart()");
-
-		User aktualUser = serviceUser.getUser(req.getUserPrincipal().getName());
+		
+		User aktualUser = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		model.addAttribute("aktualUser", aktualUser);
 
+		if(req.isUserInRole("SERVICEDESK")){
+			return "redirect:/srv/monitoring";
+		}
+		
 		List<User> uzivatelList = serviceUser.getUsers();
 		model.addAttribute("uzivatelList", uzivatelList);
 		return "/editace";
@@ -139,7 +143,7 @@ public class EditaceController {
 		Sada s = serviceSada.getSadaOne(m, sada.getNazev());
 
 		// zajistit aby se editacni tlacitka pro sadu objevilo jen uzivateli, ktery muze sadu editovat (mazat/prejmenovat)!
-		User uPrihlaseny = serviceUser.getUser(req.getUserPrincipal().getName());
+		User uPrihlaseny = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		if (uPrihlaseny.getId() == u.getId()) {
 			model.addAttribute("moznoEditovatSadu", true);
 		} else {
@@ -168,7 +172,7 @@ public class EditaceController {
 		Sada s = serviceSada.getSadaOne(vybranaSada);
 
 		// zajistit aby se editacni tlacitka pro sadu objevilo jen uzivateli, ktery muze sadu editovat (mazat/prejmenovat)!
-		User uPrihlaseny = serviceUser.getUser(req.getUserPrincipal().getName());
+		User uPrihlaseny = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		if (uPrihlaseny.getId() == u.getId()) {
 			model.addAttribute("moznoEditovatSadu", true);
 		} else {
@@ -198,7 +202,7 @@ public class EditaceController {
 		Sada s = serviceSada.getSadaOne(vybranaSada);
 
 		// zajistit aby se editacni tlacitka pro sadu objevilo jen uzivateli, ktery muze sadu editovat (mazat/prejmenovat)!
-		User uPrihlaseny = serviceUser.getUser(req.getUserPrincipal().getName());
+		User uPrihlaseny = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		if (uPrihlaseny.getId() == u.getId()) {
 			model.addAttribute("moznoEditovatSadu", true);
 		} else {
@@ -251,16 +255,16 @@ public class EditaceController {
 		List<MtSeznam> mt = serviceMtSeznam.getMt();
 		model.addAttribute("seznamMt", mt);
 
-		User u = serviceUser.getUser(req.getUserPrincipal().getName());
+		User u = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		model.addAttribute("prihlasenyUzivatel", u.getPrijmeni() + " " + u.getJmeno() + ", " + u.getOddeleni() + " (" + u.getNetusername() + ")");
 		return "/sadaNova";
 	}
 
 	@RequestMapping(value = "/novaSadaTed")
 	public String novaSadaTed(User user, Sada sada, FormObj f, Model model, HttpServletRequest req) {
-		log.debug("###\t novaSadaTed(" + req.getUserPrincipal().getName() + ", " + f.getMt() + ", '" + f.getSada() + "')");
+		log.debug("###\t novaSadaTed(" + req.getUserPrincipal().getName().toUpperCase() + ", " + f.getMt() + ", '" + f.getSada() + "')");
 
-		User u = serviceUser.getUser(req.getUserPrincipal().getName());
+		User u = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		MtSeznam mts = serviceMtSeznam.getMtSeznamOne(f.getMt());
 
 		if (!serviceMt.existMt(u.getNetusername(), f.getMt())) {
@@ -303,9 +307,9 @@ public class EditaceController {
 
 	@RequestMapping(value = "/prejmenovatSaduTed/{vybranaSada}")
 	public String prejmenovatSaduTed(@PathVariable long vybranaSada, User user, Sada sada, FormObj f, Model model, HttpServletRequest req) {
-		log.debug("###\t prejmenovatSaduTed(" + req.getUserPrincipal().getName() + ", " + f.getMt() + ", '" + f.getSada() + "', " + vybranaSada + ")");
+		log.debug("###\t prejmenovatSaduTed(" + req.getUserPrincipal().getName().toUpperCase() + ", " + f.getMt() + ", '" + f.getSada() + "', " + vybranaSada + ")");
 
-		User u = serviceUser.getUser(req.getUserPrincipal().getName());
+		User u = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		Sada s = serviceSada.getSadaOne(vybranaSada);
 
 		s.setNazev(f.getSada());
@@ -335,9 +339,9 @@ public class EditaceController {
 
 	@RequestMapping(value = "/duplikovatSaduTed/{vybranaSada}")
 	public String duplikovatSaduTed(@PathVariable long vybranaSada, User user, Sada sada, FormObj f, Model model, HttpServletRequest req) {
-		log.debug("###\t duplikovatSaduTed(" + req.getUserPrincipal().getName() + ", " + f.getMt() + ", '" + f.getSada() + "', " + vybranaSada + ")");
+		log.debug("###\t duplikovatSaduTed(" + req.getUserPrincipal().getName().toUpperCase() + ", " + f.getMt() + ", '" + f.getSada() + "', " + vybranaSada + ")");
 
-		User u = serviceUser.getUser(req.getUserPrincipal().getName());
+		User u = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		MtSeznam mts = serviceMtSeznam.getMtSeznamOne(f.getMt());
 		Sada sPuv = serviceSada.getSadaOne(vybranaSada);
 
@@ -412,7 +416,7 @@ public class EditaceController {
 	public String novaPrPodminkaTed(@PathVariable long vybranaSada, User user, Sada sada, FormObj f, Model model, HttpServletRequest req) {
 		log.debug("###\t novaPrPodminkaTed(" + f.getPoradi() + ", " + f.getPrPodminka() + ", " + f.getPoznamka() + ", " + vybranaSada + ")");
 
-		User u = serviceUser.getUser(req.getUserPrincipal().getName());
+		User u = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		Sada s = serviceSada.getSadaOne(vybranaSada);
 
 		PrPodminka prp = new PrPodminka();
@@ -468,7 +472,7 @@ public class EditaceController {
 	public String editovatPrTed(@PathVariable long vybranaPrPodminka, User user, Sada sada, FormObj f, Model model, HttpServletRequest req) {
 		log.debug("###\t editovatPrTed(" + f.getPoradi() + ", " + f.getPrPodminka() + ", " + f.getPoznamka() + ", " + vybranaPrPodminka + ")");
 
-		User u = serviceUser.getUser(req.getUserPrincipal().getName());
+		User u = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		PrPodminka prp = servicePrPodminka.getPrPodminkaOne(vybranaPrPodminka);
 		Sada s = serviceSada.getSadaOne(prp.getSk30tSada().getId());
 
