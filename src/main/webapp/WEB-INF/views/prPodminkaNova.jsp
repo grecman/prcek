@@ -7,10 +7,54 @@
 	<jsp:directive.page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" />
 	<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-
 <jsp:include page="lib.jsp" />
-
 <title>P R C E K</title>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+
+		//		// kontrola jeste pred tim, nez se provede submit
+		// 		$('form[name=kontrola]').submit(function() {
+		// 			if (testExistPrAjax()) {
+		// 				alert("Nelze provést uložení, PR číslo je duplicitní!");
+		// 				// z nejakeho divneho duvodu zde nefunguje ten rytern :(		
+		// 				return false;
+		// 			} 
+		// 		});
+
+		// kontrola PR duplicity v aktualni SADE pri kliknuti kamkoliv jinam ... 
+		// Pozor, funguje jen kdyz uz "nekdo" kliknul do pole na editaci PR podminky, proto pouzivam ten prvni focus, abych byl uz primo v te editaci daneho pole. 
+		// ... a cele to delam tak proto, pac nefunguje ten vyse uvedeny script!
+		$("#InputPrPodminka").focus();
+		$("#InputPrPodminka").focusout(function() {
+			//alert(testExistPrAjax());
+			if (testExistPrAjax()) {
+				alert("PR číslo je duplicitní!");
+				setTimeout(function() {
+					$("#InputPrPodminka").focus();
+				}, 1);
+			}
+		});
+	});
+
+	function testExistPrAjax() {
+		var checkUrl = "/prcek/editace/testExistPrAjax/${vybranaSada.id}/"+ $("#InputPrPodminka").val() + ".json";
+		var vysledek = false;
+		$.ajax({
+			url : checkUrl,
+			async : false, // default je true, pokud není false, tak následný if(result) proběhne dříve než se vrátí objekt z ajaxu !!!
+			cache : false
+		}).done(function(data) {
+			if (data) {
+				vysledek = true;
+			}
+		});
+		if (vysledek) {
+			return true;
+		}
+		return false;
+	}
+</script>
 </head>
 
 <body>
@@ -57,7 +101,7 @@
 				<TR height="15px;"></TR>
 				<TR>
 					<TD ><f:message>prPodminka</f:message></TD>
-					<TD colspan="2" bgcolor="white"><form:input class="textovePole850 uppercase" path="prPodminka" title="Vzor: +L0L+A8G+3FE/3FA"></form:input></TD>
+					<TD colspan="2" bgcolor="white"><form:input id="InputPrPodminka" class="textovePole850 uppercase" path="prPodminka" title="Vzor: +L0L+A8G+3FE/3FA"></form:input></TD>
 				</TR>
 				<TR height="15px;"></TR>
 				<TR>

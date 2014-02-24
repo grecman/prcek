@@ -21,7 +21,7 @@ public class OfflineJob implements Serializable {
 	private Long agregace;
 	
 	@Column(name="POCET_ZAKAZEK")
-	private BigDecimal pocetZakazek;
+	private Long pocetZakazek;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="CAS_SPUSTENI")
@@ -92,11 +92,11 @@ public class OfflineJob implements Serializable {
 		this.agregace = agregace;
 	}
 
-	public BigDecimal getPocetZakazek() {
+	public Long getPocetZakazek() {
 		return pocetZakazek;
 	}
 
-	public void setPocetZakazek(BigDecimal pocetZakazek) {
+	public void setPocetZakazek(Long pocetZakazek) {
 		this.pocetZakazek = pocetZakazek;
 	}
 

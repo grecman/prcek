@@ -3,8 +3,8 @@
 		<entity-name>vwg.skoda.prcek.entities.Protokol</entity-name>
 		<entity-width>120</entity-width>
 		<entity-height>188</entity-height>
-		<entity-X-Coordinate>660</entity-X-Coordinate>
-		<entity-Y-Coordinate>19</entity-Y-Coordinate>
+		<entity-X-Coordinate>800</entity-X-Coordinate>
+		<entity-Y-Coordinate>210</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>
 		<relation-collapsed>false</relation-collapsed>
 		<basic-collapsed>false</basic-collapsed>
@@ -16,6 +16,17 @@
 		<entity-height>226</entity-height>
 		<entity-X-Coordinate>20</entity-X-Coordinate>
 		<entity-Y-Coordinate>351</entity-Y-Coordinate>
+		<primary-collapsed>false</primary-collapsed>
+		<relation-collapsed>false</relation-collapsed>
+		<basic-collapsed>false</basic-collapsed>
+	</entity>
+
+	<entity>
+		<entity-name>vwg.skoda.prcek.entities.VystupSAgregaci</entity-name>
+		<entity-width>120</entity-width>
+		<entity-height>268</entity-height>
+		<entity-X-Coordinate>660</entity-X-Coordinate>
+		<entity-Y-Coordinate>21</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>
 		<relation-collapsed>false</relation-collapsed>
 		<basic-collapsed>false</basic-collapsed>

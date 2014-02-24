@@ -6,10 +6,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 
-/**
- * The persistent class for the SK30V_ZAKAZKY database table.
- * 
- */
 @Entity
 @Table(name="SK30V_ZAKAZKY", schema="prcek")
 public class Zakazky implements Serializable {

@@ -128,7 +128,7 @@ public class FileUploadController {
 								MBT mbt = new MBT();
 								mbt.setMBTSource(pr);
 								mbt.getPRCondition(p.toUpperCase());
-								prp.setErrMbt("zzz");
+								prp.setErrMbt("zzzKontrolovano");
 							} catch (Exception e) {
 								log.info("###\t Chyba pri obsahove kontrole PR podminky (import TXT): " + e);
 								prp.setErrMbt(e.getMessage());

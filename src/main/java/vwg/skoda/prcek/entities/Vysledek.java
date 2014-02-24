@@ -23,7 +23,7 @@ public class Vysledek implements Serializable {
 	@Column(name="ERR_LOG")
 	private String errLog;
 
-	private BigDecimal soucet;
+	private Long soucet;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date utime;
@@ -59,11 +59,11 @@ public class Vysledek implements Serializable {
 		this.errLog = errLog;
 	}
 
-	public BigDecimal getSoucet() {
+	public Long getSoucet() {
 		return this.soucet;
 	}
 
-	public void setSoucet(BigDecimal soucet) {
+	public void setSoucet(Long soucet) {
 		this.soucet = soucet;
 	}
 

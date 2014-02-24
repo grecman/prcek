@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import vwg.skoda.prcek.entities.Mt;
 import vwg.skoda.prcek.entities.MtSeznam;
@@ -78,6 +79,7 @@ public class EditaceController {
 		
 		List<User> uzivatelList = serviceUser.getUsers();
 		model.addAttribute("uzivatelList", uzivatelList);
+		
 		return "/editace";
 	}
 
@@ -387,7 +389,7 @@ public class EditaceController {
 			// MBT mbt = new MBT();
 			// mbt.setMBTSource(prMbt);
 			// mbt.getPRCondition(p.getPr());
-			// newPr.setErrMbt("zzz");
+			// newPr.setErrMbt("zzzKontrolovano");
 			// } catch (Exception e) {
 			// // log.error("###\t Chyba pri obsahove kontrole PR podminky (import TXT): " + e);
 			// newPr.setErrMbt(e.getMessage());
@@ -434,7 +436,7 @@ public class EditaceController {
 			MBT mbt = new MBT();
 			mbt.setMBTSource(pr);
 			PRCondition prCond = mbt.getPRCondition(f.getPrPodminka().toUpperCase());
-			prp.setErrMbt("zzz");
+			prp.setErrMbt("zzzKontrolovano");
 			log.debug("###\t Kontrola PR podminky MBT (rucni zadani) " + prCond.toString() + " ... OK");
 		} catch (MBTException e) {
 			log.info("###\t Chyba pri obsahove kontrole PR podminky (rucni zadani):\t"+ e);
@@ -488,7 +490,7 @@ public class EditaceController {
 			MBT mbt = new MBT();
 			mbt.setMBTSource(pr);
 			PRCondition prCond = mbt.getPRCondition(f.getPrPodminka().toUpperCase());
-			prp.setErrMbt("zzz");
+			prp.setErrMbt("zzzKontrolovano");
 			log.debug("###\t Kontrola PR podminky (MBT) " + prCond.toString() + " ... OK");
 		} catch (Exception e) {
 			log.info("###\t Chyba pri obsahove kontrole PR podminky: " + e);
@@ -496,6 +498,62 @@ public class EditaceController {
 		}
 
 		servicePrPodminka.setPrPodminka(prp);
+
+		return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
+	}
+	
+	@RequestMapping(value = "/duplikovatPr/{idPr}")
+	public String duplikovatPr(@PathVariable long idPr, FormObj f, Model model, HttpServletRequest req) {
+		log.debug("###\t duplikovatPr(" + idPr + ")");
+
+		PrPodminka pr = servicePrPodminka.getPrPodminkaOne(idPr);
+		Sada s = serviceSada.getSadaOne(pr.getSk30tSada().getId());
+		model.addAttribute("prihlasenyUzivatel", s.getSk30tMt().getSk30tUser().getPrijmeni() + " " + s.getSk30tMt().getSk30tUser().getJmeno() + ", " + s.getSk30tMt().getSk30tUser().getOddeleni()
+				+ " (" + s.getSk30tMt().getSk30tUser().getNetusername() + ")");
+		model.addAttribute("vybranaMt", s.getSk30tMt());
+		model.addAttribute("vybranaSada", s);
+		model.addAttribute("vybranaPrPodminka", pr);
+		f.setPoradi(pr.getPoradi());
+		f.setPrPodminka(pr.getPr());
+		f.setPoznamka(pr.getPoznamka());
+
+		return "/prPodminkaDuplikovat";
+	}
+	
+	@RequestMapping(value = "/duplikovatPrTed/{vybranaSada}")
+	public String duplikovatPrTed(@PathVariable long vybranaSada, User user, Sada sada, FormObj f, Model model, HttpServletRequest req) {
+		log.debug("###\t duplikovatPrTed(" + f.getPoradi() + ", " + f.getPrPodminka() + ", " + f.getPoznamka() + ", " + vybranaSada + ")");
+
+		User u = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
+		Sada s = serviceSada.getSadaOne(vybranaSada);
+
+		PrPodminka prp = new PrPodminka();
+		prp.setPr(f.getPrPodminka().toUpperCase());
+		prp.setPoradi(f.getPoradi());
+		prp.setPoznamka(f.getPoznamka());
+		prp.setUuser(u.getNetusername());
+		prp.setUtime(new Date());
+		prp.setSk30tSada(s);
+		
+		// MBT kontrola
+		try {
+			Mt mt = serviceMt.getMtOne(s.getSk30tMt().getId());
+			List<PrMbt> pr = servicePrMbt.getPr(mt.getProdukt());
+			MBT mbt = new MBT();
+			mbt.setMBTSource(pr);
+			PRCondition prCond = mbt.getPRCondition(f.getPrPodminka().toUpperCase());
+			prp.setErrMbt("zzzKontrolovano");
+			log.debug("###\t Kontrola PR podminky MBT (rucni zadani) " + prCond.toString() + " ... OK");
+		} catch (MBTException e) {
+			log.info("###\t Chyba pri obsahove kontrole PR podminky (rucni zadani):\t"+ e);
+			//System.out.println(e.getID());
+			prp.setErrMbt(e.getLocalizedMessage());
+		}
+
+		servicePrPodminka.addPrPodminka(prp);
+		
+		s.setPocet(s.getPocet()==null ? 1 : s.getPocet()+1);
+		serviceSada.setSada(s);
 
 		return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
 	}
@@ -556,7 +614,15 @@ public class EditaceController {
 
 		ExportXls exp = new ExportXls();
 		exp.prPodminkySady(prP, res);
-
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/testExistPrAjax/{idSady}/{prC}")
+	public Boolean testExistPrAjax(@PathVariable long idSady, @PathVariable String prC) {
+		log.debug("### testExistPrAjax("+idSady+"-"+prC.toUpperCase()+")");
+		//Boolean vysl = servicePrPodminka.existPr(prC.toUpperCase(), serviceSada.getSadaOne(idSady));
+		return servicePrPodminka.existPr(prC.toUpperCase(), serviceSada.getSadaOne(idSady));
+	}
+
 
 }

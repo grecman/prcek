@@ -1,10 +1,10 @@
 package vwg.skoda.prcek.controllers;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -24,11 +24,13 @@ import vwg.skoda.prcek.entities.PrPodminka;
 import vwg.skoda.prcek.entities.User;
 import vwg.skoda.prcek.entities.Vysledek;
 import vwg.skoda.prcek.entities.Zakazky;
+import vwg.skoda.prcek.objects.VysledekExpSAgregaci;
 import vwg.skoda.prcek.outputs.ExportXls;
 import vwg.skoda.prcek.services.OfflineJobService;
 import vwg.skoda.prcek.services.PrPodminkaService;
 import vwg.skoda.prcek.services.UserService;
 import vwg.skoda.prcek.services.VysledekService;
+import vwg.skoda.prcek.services.VystupSAgregaciService;
 import vwg.skoda.prcek.services.ZakazkyService;
 import cz.skoda.mbt.JobPRCondition;
 
@@ -52,11 +54,14 @@ public class OfflineController {
 	@Autowired
 	private VysledekService serviceVysledek;
 
+	@Autowired
+	private VystupSAgregaciService serviceVystupSAgregaci;
+
 	@RequestMapping(value = "/offline")
 	public String offline(Model model, HttpServletRequest req) {
 		log.debug("###\t offline()");
 
-		if(req.isUserInRole("SERVICEDESK")){
+		if (req.isUserInRole("SERVICEDESK")) {
 			return "redirect:/srv/monitoring";
 		}
 
@@ -87,6 +92,15 @@ public class OfflineController {
 		}
 	}
 
+	@RequestMapping(value = "/offline/smazatVysledek/{idOfflineJob}")
+	public String smazatVysledek(@PathVariable final long idOfflineJob, Model model, HttpServletRequest req) {
+		log.debug("###\t smazatVysledek (" + idOfflineJob + ")");
+
+		serviceOfflineJob.removeOfflineJob(idOfflineJob);
+
+		return "redirect:/srv/offline";
+	}
+
 	@RequestMapping(value = "/offline/rozpad/{idOfflineJob}")
 	public WebAsyncTask<String> rozpad(@PathVariable final long idOfflineJob, User u, Model model, final HttpServletRequest req) {
 		log.debug("### ASYNC ###\t rozpad(" + idOfflineJob + ",\t" + Thread.currentThread() + ")");
@@ -115,7 +129,7 @@ public class OfflineController {
 				try {
 
 					for (PrPodminka prPodminka : pr) {
-						int soucet = 0;
+						long soucet = 0;
 						for (Zakazky zakazka : zak) {
 							if (JobPRCondition.correspond(zakazka.getPrpoz(), prPodminka.getPr())) {
 								soucet++;
@@ -125,7 +139,7 @@ public class OfflineController {
 						Vysledek v = new Vysledek();
 						v.setSk30tOfflineJob(off);
 						v.setSk30tPrPodminka(prPodminka);
-						v.setSoucet(new BigDecimal(soucet));
+						v.setSoucet(soucet);
 						v.setUtime(new Date());
 						v.setUuser(off.getSk30tSada().getSk30tMt().getSk30tUser().getNetusername());
 						serviceVysledek.addVysledek(v);
@@ -178,16 +192,16 @@ public class OfflineController {
 		OfflineJob off = serviceOfflineJob.getOfflineJobOne(idOfflineJob);
 		User user = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		List<OfflineJob> offAgregace = serviceOfflineJob.getOfflineJob(user, off.getAgregace());
-		
+
 		List<Long> seznamAgregaci = new ArrayList<Long>();
-		
-		for (OfflineJob offAgr : offAgregace){
+
+		for (OfflineJob offAgr : offAgregace) {
 			seznamAgregaci.add(offAgr.getId());
 		}
-		log.debug("###\t  ... agregace cislo "+ off.getAgregace()+" pro ID: "+seznamAgregaci);
-		
+		log.debug("###\t  ... agregace cislo " + off.getAgregace() + " pro ID: " + seznamAgregaci);
+
 		List<Vysledek> vys = serviceVysledek.getVysledek(seznamAgregaci);
-		
+
 		model.addAttribute("vysledek", vys);
 		model.addAttribute("idOfflineJob", idOfflineJob);
 		model.addAttribute("idOfflineJobs", offAgregace);
@@ -222,30 +236,108 @@ public class OfflineController {
 		OfflineJob off = serviceOfflineJob.getOfflineJobOne(idOfflineJob);
 		User user = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		List<OfflineJob> offAgregace = serviceOfflineJob.getOfflineJob(user, off.getAgregace());
-		
+
 		List<Long> seznamAgregaci = new ArrayList<Long>();
-		
-		for (OfflineJob offAgr : offAgregace){
+
+		for (OfflineJob offAgr : offAgregace) {
 			seznamAgregaci.add(offAgr.getId());
 		}
-		log.debug("###\t  ... agregace cislo "+ off.getAgregace()+" pro ID: "+seznamAgregaci);
-		
-		List<Vysledek> vys = serviceVysledek.getVysledek(seznamAgregaci);
+		log.debug("###\t  ... agregace cislo " + off.getAgregace() + " pro ID: " + seznamAgregaci);
 
+		List<Vysledek> vysBezSumy = serviceVysledek.getVysledek(seznamAgregaci);
+		List<VysledekExpSAgregaci> vysJenSumy = serviceVysledek.getVysledekSumy(seznamAgregaci);
+		List<VysledekExpSAgregaci> kompletVysledekVcetneSumy = new ArrayList<VysledekExpSAgregaci>();
+		String predchoziPR = "XXX";
+		int cyklus = 1;
 
-//		List<Zakazky> zak = null;		
-//		if (off.getZakazkyVystup()) {
-//			SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
-//			String datumOd = DATE_FORMAT.format(off.getPlatnostOd());
-//			String datumDo = DATE_FORMAT.format(off.getPlatnostDo());
-//			zak = serviceZakazky.getZakazky(off.getSk30tSada().getSk30tMt().getMt(), off.getSk30tEvidencniBody().getKbodKod(), off.getSk30tEvidencniBody().getKbodWk(), off.getSk30tEvidencniBody()
-//					.getKbodEvid(), datumOd, datumDo, off.getStornoZakazky());
+//		Iterator<VysledekExpSAgregaci> it = kompletVysledekVcetneSumy.iterator();
+//		while(it.hasNext()) {
+//			VysledekExpSAgregaci v = it.next();
+//			if (! it.hasNext()) {
+//			}
 //		}
 		
-		ExportXls exp = new ExportXls();
-		//exp.vysledekSAgregaci(vys, zak, offAgregace, res);
-		exp.vysledekSAgregaci(vys, offAgregace, res);
+		Iterator<Vysledek> it = vysBezSumy.iterator();
+		while(it.hasNext()) {
+			Vysledek v = it.next();
+			
+			VysledekExpSAgregaci struk; 
+			// prvni cyklus preskakuji, protoze je nutne nejdrive zapsat prvni radek
+			// v pripade, ze aktualni PR neni stejna jako predchozi, tak zapisuji SUMArizacni radek
+			if (cyklus >= 2 && !v.getSk30tPrPodminka().getPr().equals(predchoziPR)) {
+				for (VysledekExpSAgregaci w : vysJenSumy) {
+					if(predchoziPR.equals(w.getPr())){
+						struk = new VysledekExpSAgregaci();
+						struk.setMt("Suma");
+						struk.setPr(predchoziPR);
+						struk.setCetnost(w.getCetnost());
+						struk.setPocZak(w.getPocZak());
+						struk.setPozn("");
+						struk.setPor(-1);
+						struk.setPorCelk(cyklus);
+						struk.setMbt("");
+						
+						kompletVysledekVcetneSumy.add(struk);
+						cyklus++;
+					}
+				}
+			}	
+			
+			struk = new VysledekExpSAgregaci();
+			struk.setMt(v.getSk30tPrPodminka().getSk30tSada().getSk30tMt().getMt());
+			struk.setPr(v.getSk30tPrPodminka().getPr());
+			struk.setCetnost(v.getSoucet());
+			struk.setPocZak(v.getSk30tOfflineJob().getPocetZakazek());
+			struk.setPozn(v.getSk30tPrPodminka().getPoznamka());
+			struk.setPor(v.getSk30tPrPodminka().getPoradi()==null ? -1 : v.getSk30tPrPodminka().getPoradi().longValue());
+			struk.setPorCelk(cyklus);
+			struk.setMbt((v.getSk30tPrPodminka().getErrMbt()==null || v.getSk30tPrPodminka().getErrMbt().startsWith("zzzKontrolovano")) ? "" : v.getSk30tPrPodminka().getErrMbt());
+			kompletVysledekVcetneSumy.add(struk);
+			
+			predchoziPR = v.getSk30tPrPodminka().getPr();
+			cyklus++;
 
+			// pridani posledniho SUMArizacniho radku, toto se provede, kdyz uz v iteratoru "stojime" na poslednim zaznamu
+			if (! it.hasNext()) {
+				Boolean maPosledniPrCisloSumu = false;
+				for (VysledekExpSAgregaci w : vysJenSumy) {
+					if(predchoziPR.equals(w.getPr())){
+						struk = new VysledekExpSAgregaci();
+						struk.setMt("Suma");
+						struk.setPr(predchoziPR);
+						struk.setCetnost(w.getCetnost());
+						struk.setPocZak(w.getPocZak());
+						struk.setPozn("");
+						struk.setPor(-1);
+						struk.setPorCelk(cyklus);
+						struk.setMbt("");
+						kompletVysledekVcetneSumy.add(struk);
+						maPosledniPrCisloSumu = true;
+					}
+				}
+				
+				if(!maPosledniPrCisloSumu){
+					struk = new VysledekExpSAgregaci();
+					struk.setMt("Suma");
+					struk.setPr(predchoziPR);
+					struk.setCetnost(v.getSoucet());
+					struk.setPocZak(v.getSk30tOfflineJob().getPocetZakazek());
+					struk.setPozn("");
+					struk.setPor(-1);
+					struk.setPorCelk(cyklus);
+					struk.setMbt("");
+					kompletVysledekVcetneSumy.add(struk);
+				}
+			}
+		}
+		
+	
+//		for (VysledekExpSAgregaci vv : kompletVysledekVcetneSumy) {
+//			System.out.println(vv.getMt()+"\t"+vv.getPr()+"\t"+vv.getCetnost()+"\t"+vv.getPocZak()+"\t"+vv.getPor()+"\t"+vv.getPorCelk());
+//		}
+
+		ExportXls exp = new ExportXls();
+		exp.vysledekSAgregaci(kompletVysledekVcetneSumy, offAgregace, res);
 	}
 
 }

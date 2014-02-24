@@ -164,7 +164,7 @@
 					<col width="*" />
 					<col width="200px" />
 					<col width="35px" />
-					<col width="45px" />
+					<col width="60px" />
 					<thead>
 						<tr>
 							<th style="color: #4BA82E;" title="Seřadit"><a
@@ -195,7 +195,7 @@
 								<td align="center"><c:choose>
 										<c:when test="${not(empty(i.errMbt))	}">
 											<c:choose>
-												<c:when test="${i.errMbt=='zzz'}">
+												<c:when test="${i.errMbt=='zzzKontrolovano'}">
 													<img  src="${pageContext.servletContext.contextPath}/resources/ico/ok.png" />
 												</c:when>
 												<c:otherwise>
@@ -213,6 +213,11 @@
 											href="${pageContext.servletContext.contextPath}/srv/editace/editovatPr/${i.id}"><img
 											title="Editovat" style="border: 0px;"
 											src="${pageContext.servletContext.contextPath}/resources/ico/edit.png" /></a>
+											
+										<a
+											href="${pageContext.servletContext.contextPath}/srv/editace/duplikovatPr/${i.id}"><img
+											title="Duplikace" style="border: 0px;"
+											src="${pageContext.servletContext.contextPath}/resources/ico/copy.png" /></a>											
 
 										<a
 											onClick="return confirm('Opravdu smazat PR podmínku: ${i.pr} ???')"

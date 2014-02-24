@@ -51,7 +51,6 @@ public class AjaxClass {
 		public void setMbtLatence(long mbtLatence) {
 			this.mbtLatence = mbtLatence;
 		}
-		
 
 	}
 
@@ -78,7 +77,6 @@ public class AjaxClass {
 		public void setKomunikaceLatence(long komunikaceLatence) {
 			this.komunikaceLatence = komunikaceLatence;
 		}
-		
 
 	}
 

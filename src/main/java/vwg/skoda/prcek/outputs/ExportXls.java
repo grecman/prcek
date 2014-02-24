@@ -6,7 +6,9 @@ import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -14,18 +16,22 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Color;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import vwg.skoda.prcek.entities.OfflineJob;
 import vwg.skoda.prcek.entities.PrPodminka;
 import vwg.skoda.prcek.entities.Vysledek;
+import vwg.skoda.prcek.entities.VystupSAgregaci;
 import vwg.skoda.prcek.entities.Zakazky;
+import vwg.skoda.prcek.objects.VysledekExpSAgregaci;
 
 public class ExportXls {
 
@@ -37,7 +43,7 @@ public class ExportXls {
 
 		log.debug("###\t vysledek(" + vysledek.size() + ", " + (zakazky == null ? null : zakazky.size()) + ")");
 		res.setContentType("application/ms-excel");
-		res.setHeader("Content-Disposition", "attachment; filename=\"PRCEK.xlsx\"");
+		res.setHeader("Content-Disposition", "attachment; filename=\"PRCEK_"+vysledek.get(0).getSk30tPrPodminka().getSk30tSada().getSk30tMt().getMt() + "_" + vysledek.get(0).getSk30tPrPodminka().getSk30tSada().getNazev()+".xlsx\"");
 		res.setHeader("Pragma", "public");
 		res.setHeader("Cache-Control", "max-age=0");
 
@@ -364,11 +370,11 @@ public class ExportXls {
 	// ###############################################################################################################################
 	// ###############################################################################################################################
 
-	public void vysledekSAgregaci(List<Vysledek> vysledek, List<OfflineJob> offlineJobs, HttpServletResponse res) throws IOException {
+	public void vysledekSAgregaci(List<VysledekExpSAgregaci> vysledek, List<OfflineJob> offlineJobs, HttpServletResponse res) throws IOException {
 
 		log.debug("###\t vysledekSAgregaci(" + vysledek.size() + ", " + offlineJobs.size() + ")");
 		res.setContentType("application/ms-excel");
-		res.setHeader("Content-Disposition", "attachment; filename=\"PRCEK.xlsx\"");
+		res.setHeader("Content-Disposition", "attachment; filename=\"PRCEK_"+offlineJobs.get(0).getAgregace()+".xlsx\"");
 		res.setHeader("Pragma", "public");
 		res.setHeader("Cache-Control", "max-age=0");
 
@@ -390,10 +396,16 @@ public class ExportXls {
 		XSSFCellStyle boldFontStyle = wb.createCellStyle();
 		boldFontStyle.setFont(boldFont);
 
-		XSSFFont greenFont = wb.createFont();
-		greenFont.setColor(IndexedColors.LIGHT_BLUE.getIndex());
-		XSSFCellStyle greenFontStyle = wb.createCellStyle();
-		greenFontStyle.setFont(greenFont);
+		XSSFFont blueFont = wb.createFont();
+		blueFont.setColor(IndexedColors.LIGHT_BLUE.getIndex());
+		XSSFCellStyle blueFontStyle = wb.createCellStyle();
+		blueFontStyle.setFont(blueFont);
+
+		
+		XSSFCellStyle aquaBackground = wb.createCellStyle();
+		aquaBackground.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+		aquaBackground.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
+
 
 		XSSFFont smallFont = wb.createFont();
 		smallFont.setFontHeightInPoints((short) 7);
@@ -439,14 +451,69 @@ public class ExportXls {
 		cell.setCellValue("MBT kontrola");
 		cell.setCellStyle(boldFontStyle);
 
-		String prPom = "zaciname";
-		int poradiCelkove = 0;
-		double predchoziSoucet = 0;
-		double pocZak = 0;
-		
-		for (Vysledek v : vysledek) {
-
+		for (VysledekExpSAgregaci v : vysledek) {
 			
+			// IF jen kvuli stylum :(
+			if(v.getMt().startsWith("Suma")){
+				bunka = 0;
+				row = sheet.createRow(radka++);
+				cell = row.createCell(bunka++);
+				cell.setCellValue("Suma");
+				cell.setCellStyle(aquaBackground);
+
+				cell = row.createCell(bunka++);
+				cell.setCellValue(v.getPr());
+				cell.setCellStyle(aquaBackground);
+
+				cell = row.createCell(bunka++);
+				cell.setCellValue(v.getCetnost());
+				cell.setCellStyle(aquaBackground);
+
+				cell = row.createCell(bunka++);
+				cell.setCellValue(v.getPocZak());
+				cell.setCellStyle(aquaBackground);
+				
+				cell = row.createCell(bunka++);
+				cell.setCellValue("");
+				cell.setCellStyle(aquaBackground);
+				
+				cell = row.createCell(bunka++);
+				cell.setCellValue("");
+				cell.setCellStyle(aquaBackground);
+				
+				cell = row.createCell(bunka++);
+				cell.setCellValue(v.getPorCelk());
+				cell.setCellStyle(aquaBackground);
+				
+				cell = row.createCell(bunka++);
+				cell.setCellValue("");
+				cell.setCellStyle(aquaBackground);
+				
+			} else {
+				bunka = 0;
+				row = sheet.createRow(radka++);
+				row.createCell(bunka++).setCellValue(v.getMt());
+				row.createCell(bunka++).setCellValue(v.getPr());
+				row.createCell(bunka++).setCellValue(v.getCetnost());
+				row.createCell(bunka++).setCellValue(v.getPocZak());
+				row.createCell(bunka++).setCellValue(v.getPozn());
+				if (v.getPor()<0) {
+					row.createCell(bunka++).setCellValue("");
+				} else {
+					row.createCell(bunka++).setCellValue(v.getPor());
+				}
+				row.createCell(bunka++).setCellValue(v.getPorCelk());
+				if (v.getMbt() == null){
+					row.createCell(bunka++).setCellValue("PR podmínka nebyla zkontrolována.");
+				} else {
+					row.createCell(bunka++).setCellValue(v.getMbt().startsWith("zzzKontrolovano") ? "" : v.getMbt());
+				}				
+			}
+			
+		}
+		
+/*		
+		for (Vysledek v : vysledek) {
 			// v prvnim cyklu se to vzdy nechytne, pac neni zadny predchozi vysledek k porovani ...
 			if (v.getSk30tPrPodminka().getPr().equals(prPom)) {
 				//System.out.println("PR 1:\t" + v.getSk30tPrPodminka().getPr() + "\t\t" + prPom);
@@ -515,34 +582,6 @@ public class ExportXls {
 				} else {
 					row.createCell(bunka++).setCellValue(v.getSk30tPrPodminka().getErrMbt().startsWith("zzz") ? "" : v.getSk30tPrPodminka().getErrMbt());
 				}
-				/*
-				poradiCelkove++;
-				bunka = 0;
-				predchoziSoucet = 0;
-				pocZak = 0;
-				row = sheet.createRow(radka++);
-				cell = row.createCell(bunka++);
-				cell.setCellValue("Suma 2");
-				cell.setCellStyle(greenFontStyle);
-
-				cell = row.createCell(bunka++);
-				cell.setCellValue(v.getSk30tPrPodminka().getPr());
-				cell.setCellStyle(greenFontStyle);
-
-				cell = row.createCell(bunka++);
-				cell.setCellValue(predchoziSoucet + v.getSoucet().doubleValue());
-				cell.setCellStyle(greenFontStyle);
-
-				cell = row.createCell(bunka++);
-				cell.setCellValue(pocZak + v.getSk30tOfflineJob().getPocetZakazek().doubleValue());
-				cell.setCellStyle(greenFontStyle);
-				
-				row.createCell(bunka++).setCellValue("");
-				row.createCell(bunka++).setCellValue("");
-				row.createCell(bunka++).setCellValue(poradiCelkove);
-				row.createCell(bunka++).setCellValue("");
-				*/
-				
 			}
 
 			prPom = v.getSk30tPrPodminka().getPr();
@@ -550,7 +589,7 @@ public class ExportXls {
 			pocZak = v.getSk30tOfflineJob().getPocetZakazek().doubleValue();
 
 		}
-
+*/
 		// popis exportu
 		sheet = wb.createSheet("Popis exportu");
 
@@ -562,10 +601,10 @@ public class ExportXls {
 		cell.setCellValue("Uživatel:");
 		cell.setCellStyle(boldFontStyle);
 		row.createCell(bunka++).setCellValue(
-				vysledek.get(0).getSk30tPrPodminka().getSk30tSada().getSk30tMt().getSk30tUser().getNetusername() + " - "
-						+ vysledek.get(0).getSk30tPrPodminka().getSk30tSada().getSk30tMt().getSk30tUser().getPrijmeni() + " "
-						+ vysledek.get(0).getSk30tPrPodminka().getSk30tSada().getSk30tMt().getSk30tUser().getJmeno() + ", "
-						+ vysledek.get(0).getSk30tPrPodminka().getSk30tSada().getSk30tMt().getSk30tUser().getOddeleni());
+				offlineJobs.get(0).getSk30tSada().getSk30tMt().getSk30tUser().getNetusername() + " - "
+						+ offlineJobs.get(0).getSk30tSada().getSk30tMt().getSk30tUser().getPrijmeni() + " "
+						+ offlineJobs.get(0).getSk30tSada().getSk30tMt().getSk30tUser().getJmeno() + ", "
+						+ offlineJobs.get(0).getSk30tSada().getSk30tMt().getSk30tUser().getOddeleni());
 
 		bunka = 0;
 		row = sheet.createRow(radka++);
@@ -583,7 +622,7 @@ public class ExportXls {
 		cell = row.createCell(bunka++);
 		cell.setCellValue("Závod:");
 		cell.setCellStyle(boldFontStyle);
-		row.createCell(bunka++).setCellValue(vysledek.get(0).getSk30tOfflineJob().getSk30tEvidencniBody().getKbodWk());
+		row.createCell(bunka++).setCellValue(offlineJobs.get(0).getSk30tEvidencniBody().getKbodWk());
 
 		bunka = 0;
 		row = sheet.createRow(radka++);
@@ -591,8 +630,8 @@ public class ExportXls {
 		cell.setCellValue("Kontrolní bod:");
 		cell.setCellStyle(boldFontStyle);
 		row.createCell(bunka++).setCellValue(
-				vysledek.get(0).getSk30tOfflineJob().getSk30tEvidencniBody().getKbodKod() + " / " + vysledek.get(0).getSk30tOfflineJob().getSk30tEvidencniBody().getKbodEvid() + " / "
-						+ vysledek.get(0).getSk30tOfflineJob().getSk30tEvidencniBody().getFisNaze().trim());
+				offlineJobs.get(0).getSk30tEvidencniBody().getKbodKod() + " / " + offlineJobs.get(0).getSk30tEvidencniBody().getKbodEvid() + " / "
+						+ offlineJobs.get(0).getSk30tEvidencniBody().getFisNaze().trim());
 
 		bunka = 0;
 		row = sheet.createRow(radka++);
@@ -600,7 +639,7 @@ public class ExportXls {
 		cell.setCellValue("Období od:");
 		cell.setCellStyle(boldFontStyle);
 		cell = row.createCell(bunka++);
-		cell.setCellValue(vysledek.get(0).getSk30tOfflineJob().getPlatnostOd());
+		cell.setCellValue(offlineJobs.get(0).getPlatnostOd());
 		cell.setCellStyle(dateFormat);
 
 		bunka = 0;
@@ -609,7 +648,7 @@ public class ExportXls {
 		cell.setCellValue("Období do:");
 		cell.setCellStyle(boldFontStyle);
 		cell = row.createCell(bunka++);
-		cell.setCellValue(vysledek.get(0).getSk30tOfflineJob().getPlatnostDo());
+		cell.setCellValue(offlineJobs.get(0).getPlatnostDo());
 		cell.setCellStyle(dateFormat);
 
 		for (OfflineJob j : offlineJobs) {
@@ -626,10 +665,10 @@ public class ExportXls {
 		cell = row.createCell(bunka++);
 		cell.setCellValue("Agregace:");
 		cell.setCellStyle(boldFontStyle);
-		if (vysledek.get(0).getSk30tOfflineJob().getAgregace() == null) {
+		if (offlineJobs.get(0).getAgregace() == null) {
 			row.createCell(bunka++).setCellValue("není");
 		} else {
-			row.createCell(bunka++).setCellValue(vysledek.get(0).getSk30tOfflineJob().getAgregace());
+			row.createCell(bunka++).setCellValue(offlineJobs.get(0).getAgregace());
 		}
 
 		OutputStream os = res.getOutputStream();
@@ -750,6 +789,7 @@ public class ExportXls {
 	}
 
 	// ###################################################################################################
+
 	// Kdyz bude float 0 nebo NULL, tak at je to String="" (prazdna bunka v xls)
 	Object n0(Float f) {
 		if (f == null || f == 0f)
@@ -793,5 +833,6 @@ public class ExportXls {
 		wb.write(outputStream);
 		outputStream.close();
 	}
+
 
 }

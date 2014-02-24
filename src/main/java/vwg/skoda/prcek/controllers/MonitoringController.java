@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -74,6 +76,12 @@ public class MonitoringController {
 
 			List<Protokol> allUserLogin = serviceProtokol.getAllLogin();
 			model.addAttribute("allUserLogin", allUserLogin.size());
+			
+			Set<String> netusernames = new TreeSet<String>();
+			for (Protokol p : allUserLogin) {
+				netusernames.add(p.getNetusername());
+			}
+			model.addAttribute("allUsers", netusernames.size());
 
 			model.addAttribute("db", serviceUser.getDbName());
 		} catch (Exception e) {

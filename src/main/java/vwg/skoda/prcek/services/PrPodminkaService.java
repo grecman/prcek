@@ -67,4 +67,17 @@ public class PrPodminkaService {
 		log.trace("###\t\t getPrPodminkaCount(" + sada.getSk30tMt().getMt() + " - " + sada.getNazev() + ")");
 		return entityManager.createQuery("SELECT count(*) FROM PrPodminka u WHERE u.sk30tSada=:sd", Long.class).setParameter("sd", sada).getSingleResult();
 	}
+	
+	public Boolean existPr(String pr,Sada sada) {
+		log.trace("###\t\t existPr(" + sada.getNazev()+" - "+pr.toUpperCase()+")");
+		try {
+			String neco = null;
+			neco =  entityManager.createQuery("SELECT p.pr FROM PrPodminka p WHERE pr=:pr AND p.sk30tSada.id=:idSady",	String.class).setParameter("pr", pr.toUpperCase()).setParameter("idSady", sada.getId()).getSingleResult();
+			log.trace("\t\t   ... PR cislo nalezeno ("+neco+")");
+			return true;
+		} catch (Exception e) {
+			log.error("###\t\t   ... PR cislo neexistuje");
+			return false;
+		}
+	}
 }

@@ -91,10 +91,10 @@
 
 		<H3>Test databáze</H3>
 		<TABLE>
-			<col width="300px" />
-			<col width="150px" />
+			<col width="230px" />
 			<col width="130px" />
-			<col width="200px" />
+			<col width="50px" />
+			<col width="170px" />
 			<col width="100px" />
 			<THEAD>
 				<TH>Databáze</TH>
@@ -106,7 +106,7 @@
 			<TBODY>
 				<TR>
 					<TD></TD>
-					<TD class="rowOdd">PRCEK</TD>
+					<TD class="rowOdd" title="Všechny uživatelské data">PRCEK</TD>
 					<TD align="center"><INPUT id="ButtonPrcekDate" type="button"
 						style="background: transparent url(${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png) no-repeat center;"></INPUT></TD>
 					<TD align="center" id="datumPrcek"></TD>
@@ -114,7 +114,7 @@
 				</TR>
 				<TR>
 					<TD align="center"><B>${db}</B></TD>
-					<TD class="rowOdd">MBT_P</TD>
+					<TD class="rowOdd" title="Databáze PR podmínke (kontkola)">MBT_P</TD>
 					<TD align="center"><INPUT id="ButtonMbtDate" type="button"
 						style="background: transparent url(${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png) no-repeat center;"></INPUT></TD>
 					<TD align="center" id="datumMbt"></TD>
@@ -122,7 +122,7 @@
 				</TR>
 				<TR>
 					<TD></TD>
-					<TD class="rowOdd">KOMUNIKACE</TD>
+					<TD class="rowOdd" title="Databáze zakázek">KOMUNIKACE</TD>
 					<TD align="center"><INPUT id="ButtonKomunikaceDate"
 						type="button"
 						style="background: transparent url(${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png) no-repeat center;"></INPUT></TD>
@@ -149,14 +149,17 @@
 		<H3>Návštěvní kniha</H3>
 		<DIV style="padding-left: 20px; font-size: 14px;">
 			Vaše poslední přihlášení: <B>${lastUserLogin}</B><BR /> 
-			Do aplikace jste se celkem přihlásíl: <B>${userLogin}</B><BR /> 
-			Do aplikace se přihlásilo celkem uživatelů: <B>${allUserLogin}</B>
+			Do aplikace jste se celkem přihlásíl: <B>${userLogin}</B><BR /><BR /> 
+			Aplikaci používá celkem: <B>${allUsers}</B> uživatelů. <BR /> 
+			Počet všech přihlášení: <B>${allUserLogin}</B>
 		</DIV>
 
-		<!-- 
+<!-- 		 
 		<script>
 			document.write("<BR />Jméno prohlížeče: ");
 			document.write(navigator.appName);
+			
+			document.write("<BR />User Agent: ");
 			document.write(navigator.userAgent); 
 
 			document.write("<BR />Číslo verze: ");
@@ -167,9 +170,8 @@
 
 			document.write("<BR />Kódové jméno aplikace: ");
 			document.write(navigator.appCodeName);
-			alert(window.navigator.appName); 
 		</script>
- -->
+ --> 
 
 		<DIV style="height: 250px;">&#160;</DIV>
 		<jsp:include page="footer.jsp" />

@@ -111,7 +111,8 @@
 						 
 							<td><c:choose>
 									<c:when test="${(empty(i.casUkonceni))}">
-										<SPAN style="color: red; height: 5px;"> ${i.proces}</SPAN>
+										<a onClick="return confirm('Opravdu smazat toto zpracování ???')"
+										href="${pageContext.servletContext.contextPath}/srv/offline/smazatVysledek/${i.id}"><SPAN style="color: red; height: 5px;"> ${i.proces}</SPAN></a>
 									</c:when>
 									<c:otherwise>
 										<f:formatDate pattern="yyyy-MM-dd HH:mm"

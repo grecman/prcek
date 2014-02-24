@@ -48,6 +48,10 @@
 						$("#datepickerOd").datepicker();
 						$("#datepickerDo").datepicker();
 					});
+
+	function displayBusyIndicator() {
+		$("#busyIndicator").css('display', 'inline');
+	};
 </script>
 
 
@@ -61,7 +65,7 @@
 
 		<c:set scope="request" var="actual" value="vypocet" />
 		<jsp:include page="header.jsp" />
-		
+
 		<BR />
 		<!-- OBDOBI -->
 		<TABLE>
@@ -99,7 +103,7 @@
 							<TD></TD>
 							<TD>Denní zpracování</TD>
 							<TD>od</TD>
-							<TD><form:input path="platnostOd" id="datepickerOd" 
+							<TD><form:input path="platnostOd" id="datepickerOd"
 									class="kalendar"></form:input></TD>
 							<TD>do</TD>
 							<TD><form:input path="platnostDo" id="datepickerDo"
@@ -272,8 +276,15 @@
 			<div class="zonaTlacitek">
 				<div class="tlacitka">
 					<c:if test="${not(empty(evidBod))}">
-						<input type="submit" value="Spustit výpočet" class="submit" />
+						<input onclick="displayBusyIndicator();" type="submit"
+							value="Spustit výpočet" class="submit" />
+						<SPAN id="busyIndicator"
+							style="display: none; color: red; font-weight: bold;"> <!-- <img src="${pageContext.servletContext.contextPath}/resources/images/progress_bar_sipky.gif" /> -->
+							Pracuji...
+						</SPAN>
 						<SPAN style="color: red; font-weight: bold;">&#160;${info}</SPAN>
+						<!-- Progress bar ... busy indicator -->
+
 					</c:if>
 				</div>
 			</div>

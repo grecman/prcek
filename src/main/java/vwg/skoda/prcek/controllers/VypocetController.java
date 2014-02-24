@@ -237,7 +237,7 @@ public class VypocetController {
 				off.setCasSpusteni(new Date());
 				// off.setStorno((f.getStornoVetyVystup()) ? "ano" : "ne");
 				off.setStornoZakazky(f.getStornoVetyVystup());
-				off.setPocetZakazek(new BigDecimal(zakCount));
+				off.setPocetZakazek(zakCount);
 				if (zakCount < 1) {
 					off.setProces("Nebude zpracováno");
 				}

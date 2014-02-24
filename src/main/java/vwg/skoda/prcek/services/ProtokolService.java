@@ -26,15 +26,19 @@ public class ProtokolService {
 	}
  	
 	public List<Protokol> getUserLogin(String netusername) {
-		log.debug("###\t\t getUserProtokol("+netusername+");");
+		log.debug("###\t\t getUserLogin("+netusername+");");
 		return entityManager.createQuery("SELECT a FROM Protokol a WHERE a.action='Login' AND a.netusername=:netusername ORDER BY a.time desc", Protokol.class).setParameter("netusername", netusername).getResultList();
 	}
 	
 	public List<Protokol> getAllLogin() {
-		log.debug("###\t\t getAllUserProtokol();");
+		log.debug("###\t\t getAllUser();");
 		return entityManager.createQuery("SELECT a FROM Protokol a WHERE a.action='Login'", Protokol.class).getResultList();
 	}
 
+	public List<Protokol> getAllUsers() {
+		log.debug("###\t\t getAllUsers();");
+		return entityManager.createQuery("SELECT distinct a.netusername FROM Protokol a", Protokol.class).getResultList();
+	}
  	
 
 }
