@@ -127,7 +127,7 @@ public class ExportXls {
 			} else {
 				row.createCell(bunka++).setCellValue(v.getSk30tPrPodminka().getPoradi().doubleValue());
 			}
-			row.createCell(bunka++).setCellValue(v.getSk30tPrPodminka().getErrMbt() == null ? "" : "Invalidní PR podmínka");
+			row.createCell(bunka++).setCellValue(v.getSk30tPrPodminka().getErrMbt().startsWith("zzzKontrolovano") ? "" : v.getSk30tPrPodminka().getErrMbt());
 		}
 
 		// popis exportu
@@ -512,84 +512,7 @@ public class ExportXls {
 			
 		}
 		
-/*		
-		for (Vysledek v : vysledek) {
-			// v prvnim cyklu se to vzdy nechytne, pac neni zadny predchozi vysledek k porovani ...
-			if (v.getSk30tPrPodminka().getPr().equals(prPom)) {
-				//System.out.println("PR 1:\t" + v.getSk30tPrPodminka().getPr() + "\t\t" + prPom);
-				poradiCelkove++;
-				bunka = 0;
-				row = sheet.createRow(radka++);
-				row.createCell(bunka++).setCellValue(v.getSk30tPrPodminka().getSk30tSada().getSk30tMt().getMt());
-				row.createCell(bunka++).setCellValue(v.getSk30tPrPodminka().getPr());
-				row.createCell(bunka++).setCellValue(v.getSoucet().doubleValue());
-				row.createCell(bunka++).setCellValue(v.getSk30tOfflineJob().getPocetZakazek().doubleValue());
-				row.createCell(bunka++).setCellValue(v.getSk30tPrPodminka().getPoznamka());
-				if (v.getSk30tPrPodminka().getPoradi() == null) {
-					row.createCell(bunka++).setCellValue("");
-				} else {
-					row.createCell(bunka++).setCellValue(v.getSk30tPrPodminka().getPoradi().doubleValue());
-				}
-				row.createCell(bunka++).setCellValue(poradiCelkove);
-				if (v.getSk30tPrPodminka().getErrMbt() == null){
-					row.createCell(bunka++).setCellValue("PR podmínka nebyla zkontrolována.");
-				} else {
-					row.createCell(bunka++).setCellValue(v.getSk30tPrPodminka().getErrMbt().startsWith("zzz") ? "" : v.getSk30tPrPodminka().getErrMbt());
-				}
-				
-				// vytvoreni SUMArizacniho radku
-				poradiCelkove++;
-				bunka = 0;
-				row = sheet.createRow(radka++);
-				cell = row.createCell(bunka++);
-				cell.setCellValue("Suma");
-				cell.setCellStyle(greenFontStyle);
 
-				cell = row.createCell(bunka++);
-				cell.setCellValue(v.getSk30tPrPodminka().getPr());
-				cell.setCellStyle(greenFontStyle);
-
-				cell = row.createCell(bunka++);
-				cell.setCellValue(predchoziSoucet + v.getSoucet().doubleValue());
-				cell.setCellStyle(greenFontStyle);
-
-				cell = row.createCell(bunka++);
-				cell.setCellValue(pocZak + v.getSk30tOfflineJob().getPocetZakazek().doubleValue());
-				cell.setCellStyle(greenFontStyle);
-				
-				row.createCell(bunka++).setCellValue("");
-				row.createCell(bunka++).setCellValue("");
-				row.createCell(bunka++).setCellValue(poradiCelkove);
-				row.createCell(bunka++).setCellValue("");
-			} else {
-				//System.out.println("PR 2:\t" + v.getSk30tPrPodminka().getPr() + "\t\t" + prPom);
-				poradiCelkove++;
-				bunka = 0;
-				row = sheet.createRow(radka++);
-				row.createCell(bunka++).setCellValue(v.getSk30tPrPodminka().getSk30tSada().getSk30tMt().getMt());
-				row.createCell(bunka++).setCellValue(v.getSk30tPrPodminka().getPr());
-				row.createCell(bunka++).setCellValue(v.getSoucet().doubleValue());
-				row.createCell(bunka++).setCellValue(v.getSk30tOfflineJob().getPocetZakazek().doubleValue());
-				row.createCell(bunka++).setCellValue(v.getSk30tPrPodminka().getPoznamka());
-				if (v.getSk30tPrPodminka().getPoradi() == null) {
-					row.createCell(bunka++).setCellValue("");
-				} else {
-					row.createCell(bunka++).setCellValue(v.getSk30tPrPodminka().getPoradi().doubleValue());
-				}
-				row.createCell(bunka++).setCellValue(poradiCelkove);
-				if (v.getSk30tPrPodminka().getErrMbt() == null){
-					row.createCell(bunka++).setCellValue("PR podmínka nebyla zkontrolována.");
-				} else {
-					row.createCell(bunka++).setCellValue(v.getSk30tPrPodminka().getErrMbt().startsWith("zzz") ? "" : v.getSk30tPrPodminka().getErrMbt());
-				}
-			}
-
-			prPom = v.getSk30tPrPodminka().getPr();
-			predchoziSoucet = v.getSoucet().doubleValue();
-			pocZak = v.getSk30tOfflineJob().getPocetZakazek().doubleValue();
-
-		}
-*/
 		// popis exportu
 		sheet = wb.createSheet("Popis exportu");
 

@@ -57,9 +57,9 @@ public class PrPodminkaService {
 
 	public List<PrPodminka> getPrPodminkaOrderByErrMbt(Sada sada) {
 		log.trace("###\t\t getPrPodminkaOrderByTest(" + sada.getSk30tMt().getMt() + " - " + sada.getNazev() + ")");
-		// Pri uspesne kontrole PR podminky dle MTB se do pole errMbt ulozi hodnota 'zzz'. Nize uvedeny ORDER BY zajisti to, aby se data seradila tak,
+		// Pri uspesne kontrole PR podminky dle MTB se do pole errMbt ulozi hodnota 'zzzZkontrolovano'. Nize uvedeny ORDER BY zajisti to, aby se data seradila tak,
 		// ze chyby budou jako prvni (nejaky text z MBT), NULL hodnoty jako druhe (nahrazen hodnotou 'zza') a uspesne zkontrolovane PR podminky jako
-		// treti (ulozena hodnota 'zzz').
+		// treti (ulozena hodnota 'zzzZkontrolovano').
 		return entityManager.createQuery("SELECT u FROM PrPodminka u WHERE u.sk30tSada=:sd ORDER BY coalesce(u.errMbt,'zza'), u.pr", PrPodminka.class).setParameter("sd", sada).getResultList();
 	}
 
