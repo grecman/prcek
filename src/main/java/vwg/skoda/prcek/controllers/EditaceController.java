@@ -223,6 +223,36 @@ public class EditaceController {
 
 		return "/editace";
 	}
+	
+	@RequestMapping(value = "/zobrazPrJenDuplicity/{vybranyUzivatel}/{vybranaMt}/{vybranaSada}")
+	public String zobrazPrJenDuplicity(@PathVariable String vybranyUzivatel, @PathVariable String vybranaMt, @PathVariable long vybranaSada, User netusername, Mt mt, Sada sada, Model model,
+			HttpServletRequest req) {
+		log.debug("###\t zobrazPrJenDuplicity(" + vybranyUzivatel + ", " + vybranaMt + ", " + vybranaSada + ")");
+
+		User u = serviceUser.getUser(vybranyUzivatel);
+		Mt m = serviceMt.getMtOne(u.getId(), vybranaMt);
+		Sada s = serviceSada.getSadaOne(vybranaSada);
+
+		// zajistit aby se editacni tlacitka pro sadu objevilo jen uzivateli, ktery muze sadu editovat (mazat/prejmenovat)!
+		User uPrihlaseny = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
+		if (uPrihlaseny.getId() == u.getId()) {
+			model.addAttribute("moznoEditovatSadu", true);
+		} else {
+			model.addAttribute("moznoEditovatSadu", false);
+		}
+
+		List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminkaJenDuplicity(s);
+		model.addAttribute("prPodminkaList", prPodminkaList);
+
+		Long prCount = servicePrPodminka.getPrPodminkaCount(s);
+		model.addAttribute("prCount", prCount);
+
+		model.addAttribute("vybranyUzivatel", u);
+		model.addAttribute("vybranaMt", m);
+		model.addAttribute("vybranaSada", s);
+
+		return "/editace";
+	}
 
 	@RequestMapping(value = "/smazatSadu/{vybranyUziv}/{vybranaMt}/{vybranaSada}")
 	public String smazatSadu(@PathVariable String vybranyUziv, @PathVariable String vybranaMt, @PathVariable long vybranaSada, User netusername, Sada sada, Mt mt, Model model, HttpServletRequest req) {
@@ -326,10 +356,10 @@ public class EditaceController {
 	public String duplikovatSadu(@PathVariable long vybranaSada, FormObj f, Model model, HttpServletRequest req) {
 		log.debug("###\t duplikovatSadu(" + vybranaSada + ")");
 
+		User u = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		Sada s = serviceSada.getSadaOne(vybranaSada);
-		model.addAttribute("prihlasenyUzivatel", s.getSk30tMt().getSk30tUser().getPrijmeni() + " " + s.getSk30tMt().getSk30tUser().getJmeno() + ", " + s.getSk30tMt().getSk30tUser().getOddeleni()
-				+ " (" + s.getSk30tMt().getSk30tUser().getNetusername() + ")");
-
+		model.addAttribute("prihlasenyUzivatel",u.getPrijmeni() + " " + u.getJmeno() + ", " + u.getOddeleni()+ " (" + u.getNetusername()+ ")");
+		
 		model.addAttribute("vybranaSada", s);
 
 		List<MtSeznam> mt = serviceMtSeznam.getMt();

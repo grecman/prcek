@@ -129,15 +129,15 @@
 						<input type="submit" value="${duplikovatSaduPopisek}"
 							class="submit" />
 					</form:form>
-					
+
 					<c:if test="${moznoEditovatSadu}">
 						<c:set var="smazatSaduPopisek">
 							<f:message>smazatSadu</f:message>
 						</c:set>
 						<form:form commandName="sada"
 							action="${pageContext.servletContext.contextPath}/srv/editace/smazatSadu/${vybranyUzivatel.netusername}/${vybranaMt.mt}/${vybranaSada.id}">
-							<input onClick="return confirm('Opravdu smazat vybranou sadu?!')" type="submit"
-								value="${smazatSaduPopisek}" class="submit" />
+							<input onClick="return confirm('Opravdu smazat vybranou sadu?!')"
+								type="submit" value="${smazatSaduPopisek}" class="submit" />
 						</form:form>
 
 						<c:set var="prejmenovatSaduPopisek">
@@ -167,7 +167,7 @@
 					<col width="60px" />
 					<thead>
 						<tr>
-							<th style="color: #4BA82E;" title="Seřadit"><a
+							<th style="color: #4BA82E;" title="Seřadit dle pořadí"><a
 								href="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${vybranaSada.sk30tMt.sk30tUser.netusername}/${vybranaSada.sk30tMt.mt}/${vybranaSada.id}">Pořadí</a></th>
 							<c:choose>
 								<c:when test="${prCount==vybranaSada.pocet}">
@@ -180,9 +180,10 @@
 								</c:otherwise>
 							</c:choose>
 							<th>Poznámka</th>
-							<th style="color: #4BA82E;" title="Seřadit"><a
+							<th style="color: #4BA82E;" title="Seřadit dle chyb PR podmínek"><a
 								href="${pageContext.servletContext.contextPath}/srv/editace/zobrazPrOrderByTest/${vybranaSada.sk30tMt.sk30tUser.netusername}/${vybranaSada.sk30tMt.mt}/${vybranaSada.id}">MBT</a></th>
-							<th></th>
+							<th style="color: #4BA82E;" title="Zobrazit jen duplicity"><a
+								href="${pageContext.servletContext.contextPath}/srv/editace/zobrazPrJenDuplicity/${vybranaSada.sk30tMt.sk30tUser.netusername}/${vybranaSada.sk30tMt.mt}/${vybranaSada.id}">Duplicity</a></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -196,16 +197,18 @@
 										<c:when test="${not(empty(i.errMbt))	}">
 											<c:choose>
 												<c:when test="${i.errMbt=='zzzKontrolovano'}">
-													<img  src="${pageContext.servletContext.contextPath}/resources/ico/ok.png" />
+													<img
+														src="${pageContext.servletContext.contextPath}/resources/ico/ok.png" />
 												</c:when>
 												<c:otherwise>
-													<img  title="${i.errMbt}"
+													<img title="${i.errMbt}"
 														src="${pageContext.servletContext.contextPath}/resources/ico/zrusit.png" />
 												</c:otherwise>
 											</c:choose>
 										</c:when>
 										<c:otherwise>
-											<img  title="Neprověřená PR podmínka" src="${pageContext.servletContext.contextPath}/resources/ico/159.png" />
+											<img title="Neprověřená PR podmínka"
+												src="${pageContext.servletContext.contextPath}/resources/ico/159.png" />
 										</c:otherwise>
 									</c:choose></td>
 								<td align="center"><c:if test="${moznoEditovatSadu}">
@@ -213,11 +216,11 @@
 											href="${pageContext.servletContext.contextPath}/srv/editace/editovatPr/${i.id}"><img
 											title="Editovat" style="border: 0px;"
 											src="${pageContext.servletContext.contextPath}/resources/ico/edit.png" /></a>
-											
+
 										<a
 											href="${pageContext.servletContext.contextPath}/srv/editace/duplikovatPr/${i.id}"><img
 											title="Duplikace" style="border: 0px;"
-											src="${pageContext.servletContext.contextPath}/resources/ico/copy.png" /></a>											
+											src="${pageContext.servletContext.contextPath}/resources/ico/copy.png" /></a>
 
 										<a
 											onClick="return confirm('Opravdu smazat PR podmínku: ${i.pr} ???')"
@@ -253,8 +256,9 @@
 							</c:set>
 							<form:form commandName="sada"
 								action="${pageContext.servletContext.contextPath}/srv/editace/smazatVsechnyPr/${vybranaSada.id}">
-								<input onClick="return confirm('Opravdu chcete smazat všechny PR podmínky v zobrazené sadě ?!')" type="submit"
-									value="${smazatVsePopisek}" class="submit" />
+								<input
+									onClick="return confirm('Opravdu chcete smazat všechny PR podmínky v zobrazené sadě ?!')"
+									type="submit" value="${smazatVsePopisek}" class="submit" />
 							</form:form>
 						</c:if>
 

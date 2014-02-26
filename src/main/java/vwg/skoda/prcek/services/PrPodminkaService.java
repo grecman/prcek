@@ -62,6 +62,17 @@ public class PrPodminkaService {
 		// treti (ulozena hodnota 'zzzZkontrolovano').
 		return entityManager.createQuery("SELECT u FROM PrPodminka u WHERE u.sk30tSada=:sd ORDER BY coalesce(u.errMbt,'zza'), u.pr", PrPodminka.class).setParameter("sd", sada).getResultList();
 	}
+	
+	public List<PrPodminka> getPrPodminkaJenDuplicity(Sada sada) {
+		log.trace("###\t\t getPrPodminkaJenDuplicity(" + sada.getSk30tMt().getMt() + " - " + sada.getNazev() + ")");
+		return entityManager.createQuery(
+			"SELECT p FROM PrPodminka p where p.sk30tSada=:sd and p.pr in ( "+
+				"SELECT u.pr FROM PrPodminka u "+ 
+				  "WHERE u.sk30tSada=:sd " +
+				  "GROUP BY u.pr " + 
+				  "HAVING count(u.poradi)>1) " +
+		     "ORDER BY p.pr, p.poradi", PrPodminka.class).setParameter("sd", sada).getResultList();
+	}
 
 	public Long getPrPodminkaCount(Sada sada) {
 		log.trace("###\t\t getPrPodminkaCount(" + sada.getSk30tMt().getMt() + " - " + sada.getNazev() + ")");

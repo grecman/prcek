@@ -30,7 +30,6 @@ import vwg.skoda.prcek.services.OfflineJobService;
 import vwg.skoda.prcek.services.PrPodminkaService;
 import vwg.skoda.prcek.services.UserService;
 import vwg.skoda.prcek.services.VysledekService;
-import vwg.skoda.prcek.services.VystupSAgregaciService;
 import vwg.skoda.prcek.services.ZakazkyService;
 import cz.skoda.mbt.JobPRCondition;
 
@@ -53,9 +52,6 @@ public class OfflineController {
 
 	@Autowired
 	private VysledekService serviceVysledek;
-
-	@Autowired
-	private VystupSAgregaciService serviceVystupSAgregaci;
 
 	@RequestMapping(value = "/offline")
 	public String offline(Model model, HttpServletRequest req) {

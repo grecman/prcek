@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import vwg.skoda.prcek.entities.OfflineJob;
 import vwg.skoda.prcek.entities.Sada;
 import vwg.skoda.prcek.entities.Vysledek;
-import vwg.skoda.prcek.entities.VystupSAgregaci;
 import vwg.skoda.prcek.objects.VysledekExpSAgregaci;
 
 @Service
