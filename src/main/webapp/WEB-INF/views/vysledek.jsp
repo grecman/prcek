@@ -55,7 +55,7 @@
 							<td>${i.sk30tPrPodminka.sk30tSada.nazev}</td>
 							<td>${i.sk30tPrPodminka.pr}</td>
 							<td align="right">${i.soucet}</td>
-							<td align="right">${i.sk30tOfflineJob.pocetZakazek}</td>
+							<td align="right" title="ID zpracování: ${i.sk30tOfflineJob.id}">${i.sk30tOfflineJob.pocetZakazek}</td>
 							<td>${i.sk30tPrPodminka.poznamka}</td>
 							<td align="right">${i.sk30tPrPodminka.poradi}</td>
 						</tr>

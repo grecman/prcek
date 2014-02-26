@@ -122,7 +122,12 @@ public class ExportXls {
 			} else {
 				row.createCell(bunka++).setCellValue(v.getSk30tPrPodminka().getPoradi().doubleValue());
 			}
-			row.createCell(bunka++).setCellValue(v.getSk30tPrPodminka().getErrMbt().startsWith("zzzKontrolovano") ? "" : v.getSk30tPrPodminka().getErrMbt());
+			if (v.getSk30tPrPodminka().getErrMbt() == null) {
+				row.createCell(bunka++).setCellValue("Neprověřená PR podmínka");
+			} else {
+				row.createCell(bunka++).setCellValue(v.getSk30tPrPodminka().getErrMbt().startsWith("zzzKontrolovano") ? "" : v.getSk30tPrPodminka().getErrMbt());
+			}
+			
 		}
 
 		// popis exportu
@@ -499,7 +504,7 @@ public class ExportXls {
 				}
 				row.createCell(bunka++).setCellValue(v.getPorCelk());
 				if (v.getMbt() == null){
-					row.createCell(bunka++).setCellValue("PR podmínka nebyla zkontrolována.");
+					row.createCell(bunka++).setCellValue("Neprověřená PR podmínka");
 				} else {
 					row.createCell(bunka++).setCellValue(v.getMbt().startsWith("zzzKontrolovano") ? "" : v.getMbt());
 				}				

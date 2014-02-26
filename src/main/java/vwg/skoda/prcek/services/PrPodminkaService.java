@@ -65,6 +65,7 @@ public class PrPodminkaService {
 	
 	public List<PrPodminka> getPrPodminkaJenDuplicity(Sada sada) {
 		log.trace("###\t\t getPrPodminkaJenDuplicity(" + sada.getSk30tMt().getMt() + " - " + sada.getNazev() + ")");
+		// select vrati jen ty entity (PR podminky), ktere se v dane sade vyskytuji vicekrat nez jednou.
 		return entityManager.createQuery(
 			"SELECT p FROM PrPodminka p where p.sk30tSada=:sd and p.pr in ( "+
 				"SELECT u.pr FROM PrPodminka u "+ 

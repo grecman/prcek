@@ -149,7 +149,7 @@
 		<H3>Návštěvní kniha</H3>
 		<DIV style="padding-left: 20px; font-size: 14px;">
 			Vaše poslední přihlášení: <B>${lastUserLogin}</B><BR /> 
-			Do aplikace jste se celkem přihlásíl: <B>${userLogin}</B><BR /><BR /> 
+			Do aplikace jste se celkem přihlásil: <B>${userLogin}</B><BR /><BR /> 
 			Aplikaci používá celkem: <B>${allUsers}</B> uživatelů. <BR /> 
 			Počet všech přihlášení: <B>${allUserLogin}</B>
 		</DIV>
