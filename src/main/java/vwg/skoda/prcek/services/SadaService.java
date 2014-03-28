@@ -58,7 +58,7 @@ public class SadaService {
 	}
 
 	public Boolean existSada(String nazevSady, String mt) {
-		log.trace("###\t\t existSada( '" + nazevSady + "', " + mt + ")");
+		log.trace("###\t\t existSada( '" + nazevSady + "', " + mt + ");");
 		try {
 			String neco = null;
 			neco = entityManager.createQuery("SELECT m.nazev FROM Sada m WHERE m.nazev=:nazevSady and m.sk30tMt.mt=:mt", String.class)
@@ -72,7 +72,7 @@ public class SadaService {
 	}
 	
 	public List<Sada> getSady(User u) {
-		log.trace("###\t\t getSada(" + u.getNetusername() + "));");
+		log.trace("###\t\t getSada(" + u.getNetusername() + ");");
 		return entityManager
 				.createQuery("SELECT s FROM Sada s WHERE s.sk30tMt.sk30tUser.netusername=:user ORDER BY s.sk30tMt.mt, s.nazev",
 						Sada.class).setParameter("user", u.getNetusername()).getResultList();

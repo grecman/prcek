@@ -16,7 +16,8 @@
 				<div class="lang"><a href="#" onClick="switchLocale('CZ');">CZ</a>|<a href="#" onClick="switchLocale('DE');" style="color: gray;">DE</a>|<a href="#" onClick="switchLocale('EN');" style="color: gray;">EN</a></div>
 			</div>
 			<div class="headerLinks">
-			 	&#160;|&#160;<a class="${actual eq 'editace' ? 'active' : 'passive'}" href="${pageContext.servletContext.contextPath}/srv/editace"><f:message key="editace"/></a>
+		<!--	&#160;|&#160;<a class="${actual eq 'editace' ? 'active' : 'passive'}" href="${pageContext.servletContext.contextPath}/srv/editace"><f:message key="editace"/></a>  -->
+				&#160;|&#160;<a class="${actual eq 'editace' ? 'active' : 'passive'}" href="${pageContext.servletContext.contextPath}/srv/editace/vyberMt/${pageContext.request.userPrincipal.name}"><f:message key="editace"/></a>
 				&#160;|&#160;<a class="${actual eq 'vypocet' ? 'active' : 'passive'}" href="${pageContext.servletContext.contextPath}/srv/vypocet"><f:message key="vypocet"/></a>
 				&#160;|&#160;<a class="${actual eq 'offline' ? 'active' : 'passive'}" href="${pageContext.servletContext.contextPath}/srv/offline"><f:message key="vysledkyZpracovani"/></a>
 				&#160;|&#160;<a class="${actual eq 'monitoring' ? 'active' : 'passive'}" href="${pageContext.servletContext.contextPath}/srv/monitoring"><f:message key="monitoring"/></a>

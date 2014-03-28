@@ -13,12 +13,15 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFPalette;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -37,7 +40,8 @@ public class ExportXls {
 	public void vysledek(List<Vysledek> vysledek, List<Zakazky> zakazky, HttpServletResponse res) throws IOException {
 
 		log.debug("###\t vysledek(" + vysledek.size() + ", " + (zakazky == null ? null : zakazky.size()) + ")");
-		res.setContentType("application/ms-excel");
+		//res.setContentType("application/ms-excel");
+		res.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 		res.setHeader("Content-Disposition", "attachment; filename=\"PRCEK_"+vysledek.get(0).getSk30tPrPodminka().getSk30tSada().getSk30tMt().getMt() + "_" + vysledek.get(0).getSk30tPrPodminka().getSk30tSada().getNazev()+".xlsx\"");
 		res.setHeader("Pragma", "public");
 		res.setHeader("Cache-Control", "max-age=0");
@@ -380,6 +384,44 @@ public class ExportXls {
 
 		XSSFWorkbook wb = new XSSFWorkbook();
 
+		// nadefinovani vsech moznych veci 
+		
+		XSSFFont boldFont = wb.createFont();
+		boldFont.setBold(true);
+		
+		XSSFFont blueFont = wb.createFont();
+		blueFont.setColor(IndexedColors.LIGHT_BLUE.getIndex());
+		
+		XSSFColor lightGrey = new XSSFColor(new java.awt.Color(242, 242, 242));
+		
+		XSSFFont smallFont = wb.createFont();
+		smallFont.setFontHeightInPoints((short) 7);
+		
+
+		// aplikace vyse nadefinovanych "veci" na styly
+
+		XSSFCellStyle boldFontStyle = wb.createCellStyle();
+		boldFontStyle.setFont(boldFont);
+		
+		XSSFCellStyle blueFontStyle = wb.createCellStyle();
+		blueFontStyle.setFont(blueFont);
+
+		XSSFCellStyle aquaBackground = wb.createCellStyle();
+		aquaBackground.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+		aquaBackground.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
+		
+		XSSFCellStyle lightGreyBackground = wb.createCellStyle();
+ 		lightGreyBackground.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
+		lightGreyBackground.setFillForegroundColor(lightGrey);
+		lightGreyBackground.setFont(boldFont);
+
+
+		XSSFCellStyle smallFontStyle = wb.createCellStyle();
+		smallFontStyle.setFont(smallFont);
+
+		XSSFCellStyle alignCenter = wb.createCellStyle();
+		alignCenter.setAlignment(HorizontalAlignment.CENTER);
+		
 		XSSFCellStyle dateFormat = wb.createCellStyle();
 		dateFormat.setDataFormat(wb.createDataFormat().getFormat("yyyy-MM-dd"));
 
@@ -391,30 +433,8 @@ public class ExportXls {
 		XSSFCellStyle floatFormat2 = wb.createCellStyle();
 		floatFormat2.setDataFormat(wb.createDataFormat().getFormat("##############0.00"));
 
-		XSSFFont boldFont = wb.createFont();
-		boldFont.setBold(true);
-		XSSFCellStyle boldFontStyle = wb.createCellStyle();
-		boldFontStyle.setFont(boldFont);
-
-		XSSFFont blueFont = wb.createFont();
-		blueFont.setColor(IndexedColors.LIGHT_BLUE.getIndex());
-		XSSFCellStyle blueFontStyle = wb.createCellStyle();
-		blueFontStyle.setFont(blueFont);
-
+		// ---------------------------------------------------------------------
 		
-		XSSFCellStyle aquaBackground = wb.createCellStyle();
-		aquaBackground.setFillForegroundColor(IndexedColors.AQUA.getIndex());
-		aquaBackground.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
-
-
-		XSSFFont smallFont = wb.createFont();
-		smallFont.setFontHeightInPoints((short) 7);
-		XSSFCellStyle smallFontStyle = wb.createCellStyle();
-		smallFontStyle.setFont(smallFont);
-
-		XSSFCellStyle alignCenter = wb.createCellStyle();
-		alignCenter.setAlignment(HorizontalAlignment.CENTER);
-
 		Sheet sheet = wb.createSheet("Výstup s agregací");
 
 		Cell cell = null;
@@ -459,35 +479,35 @@ public class ExportXls {
 				row = sheet.createRow(radka++);
 				cell = row.createCell(bunka++);
 				cell.setCellValue("Suma");
-				cell.setCellStyle(aquaBackground);
+				cell.setCellStyle(lightGreyBackground);
 
 				cell = row.createCell(bunka++);
 				cell.setCellValue(v.getPr());
-				cell.setCellStyle(aquaBackground);
+				cell.setCellStyle(lightGreyBackground);
 
 				cell = row.createCell(bunka++);
 				cell.setCellValue(v.getCetnost());
-				cell.setCellStyle(aquaBackground);
+				cell.setCellStyle(lightGreyBackground);
 
 				cell = row.createCell(bunka++);
 				cell.setCellValue(v.getPocZak());
-				cell.setCellStyle(aquaBackground);
+				cell.setCellStyle(lightGreyBackground);
 				
 				cell = row.createCell(bunka++);
 				cell.setCellValue("");
-				cell.setCellStyle(aquaBackground);
+				cell.setCellStyle(lightGreyBackground);
 				
 				cell = row.createCell(bunka++);
 				cell.setCellValue("");
-				cell.setCellStyle(aquaBackground);
+				cell.setCellStyle(lightGreyBackground);
 				
 				cell = row.createCell(bunka++);
 				cell.setCellValue(v.getPorCelk());
-				cell.setCellStyle(aquaBackground);
+				cell.setCellStyle(lightGreyBackground);
 				
 				cell = row.createCell(bunka++);
 				cell.setCellValue("");
-				cell.setCellStyle(aquaBackground);
+				cell.setCellStyle(lightGreyBackground);
 				
 			} else {
 				bunka = 0;

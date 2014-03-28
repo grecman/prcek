@@ -33,6 +33,7 @@
     <url-pattern>*.json</url-pattern>
     <url-pattern>/srv/*</url-pattern>
   </servlet-mapping>
+
   <servlet>
     <servlet-name>QueryServlet</servlet-name>
     <servlet-class>cz.gelion.jpqlw.QueryServlet</servlet-class>
@@ -46,6 +47,7 @@
     <servlet-name>QueryServlet</servlet-name>
     <url-pattern>/query</url-pattern>
   </servlet-mapping>
+
   <security-role>
     <description>Standardní uživatelé</description>
     <role-name>USERS</role-name>

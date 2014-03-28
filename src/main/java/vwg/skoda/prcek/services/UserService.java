@@ -32,7 +32,7 @@ public class UserService {
 	
 	public List<User> getUsers() {
 		log.trace("###\t\t getUsers();");
-		return entityManager.createQuery("SELECT u FROM User u ORDER BY u.prijmeni", User.class).getResultList();
+		return entityManager.createQuery("SELECT u FROM User u ORDER BY NLSSORT(u.prijmeni, 'NLS_SORT=CZECH')", User.class).getResultList();
 	}
 
 	@Transactional

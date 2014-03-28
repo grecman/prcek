@@ -15,6 +15,20 @@
 <!-- 	<non-jta-data-source>java://comp/env/jdbc/Prcek</non-jta-data-source>  -->
 		<non-jta-data-source>java:comp/env/jdbc/Prcek</non-jta-data-source>
 
+		<class>vwg.skoda.prcek.entities.EvidencniBody</class>
+		<class>vwg.skoda.prcek.entities.Mt</class>
+		<class>vwg.skoda.prcek.entities.MtSeznam</class>
+		<class>vwg.skoda.prcek.entities.Napoveda</class>
+		<class>vwg.skoda.prcek.entities.OfflineJob</class>
+		<class>vwg.skoda.prcek.entities.PrMbt</class>
+		<class>vwg.skoda.prcek.entities.PrPodminka</class>
+		<class>vwg.skoda.prcek.entities.Protokol</class>
+		<class>vwg.skoda.prcek.entities.Sada</class>
+		<class>vwg.skoda.prcek.entities.User</class>
+		<class>vwg.skoda.prcek.entities.UserZentaAdm</class>
+		<class>vwg.skoda.prcek.entities.Vysledek</class>
+		<class>vwg.skoda.prcek.entities.Zakazky</class>
+
 		<properties>
 			<!-- oracle driver, ktery hibernate pozije, otazka je jestli je to potreba, 
 				protoze na lokalu predhazujeme serveru knihovnu OJDBC.jar ale kdo vi jak 

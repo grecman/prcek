@@ -77,6 +77,13 @@ public class VypocetController {
 		User u = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		//List<SadyPrehled> s = serviceSady.getSady(u);
 		List<Sada> s = serviceSada.getSady(u);
+		if(s.size()>0){
+			model.addAttribute("vybraneSady", s);
+			model.addAttribute("noSada",null);
+		} else {
+			model.addAttribute("noSada","Nemáte vytvořenou žádnou sadu pro zpracování! Založte si jí v sekci EDITACE.");
+		}
+		
 
 		// priprava obsahu combo boxu
 		List<String> rokMesic = new ArrayList<String>();
@@ -88,9 +95,6 @@ public class VypocetController {
 			// System.out.println(date);
 			rokMesic.add(date);
 		}
-		
-
-		model.addAttribute("vybraneSady", s);
 		model.addAttribute("rokMesicList", rokMesic);
 		return "/vypocet";
 	}
