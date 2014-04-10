@@ -33,7 +33,8 @@ public class ZakazkyService {
 						Long.class).setParameter("modt", mt).setParameter("kkod", kod).setParameter("kwk", wk).setParameter("kevid", evid)
 				.setParameter("plOd", platOd).setParameter("plDo", platDo).setParameter("stv", sv).getSingleResult();
 	}
-
+	
+	
 	public List<Zakazky> getZakazky(String mt, String kbodkod, String wk, String evid, String platOd, String platDo, Boolean stornoVety) {
 		String sv = ((!stornoVety) ? "N" : "%"); 
 		log.trace("###\t\t getZakazky(" + mt + ", " + kbodkod + ", " + wk + ", " + evid + ", " + platOd + "-" + platDo + ", " + sv + ")");
@@ -42,6 +43,19 @@ public class ZakazkyService {
 						"SELECT s FROM Zakazky s WHERE s.modelTr=:modt AND s.kbodKod=:kkod AND s.kbodWk=:kwk AND s.kbodEvid=:kevid AND s.datSkut>=:plOd AND s.datSkut<=:plDo AND s.kbodOpak LIKE :stv ",
 						Zakazky.class).setParameter("modt", mt).setParameter("kkod", kbodkod).setParameter("kwk", wk).setParameter("kevid", evid)
 				.setParameter("plOd", platOd).setParameter("plDo", platDo).setParameter("stv", sv).getResultList();
+	}
+	
+	
+	int maxPocZakazek = 5000;
+	
+	public List<Zakazky> getZakazkyMaxPoc(String mt, String kbodkod, String wk, String evid, String platOd, String platDo, Boolean stornoVety, int firstPos) {
+		String sv = ((!stornoVety) ? "N" : "%"); 
+		log.trace("###\t\t getZakazky(" + mt + ", " + kbodkod + ", " + wk + ", " + evid + ", " + platOd + "-" + platDo + ", " + sv + "," + firstPos + ")");
+		return entityManager
+				.createQuery(
+						"SELECT s FROM Zakazky s WHERE s.modelTr=:modt AND s.kbodKod=:kkod AND s.kbodWk=:kwk AND s.kbodEvid=:kevid AND s.datSkut>=:plOd AND s.datSkut<=:plDo AND s.kbodOpak LIKE :stv ",
+						Zakazky.class).setParameter("modt", mt).setParameter("kkod", kbodkod).setParameter("kwk", wk).setParameter("kevid", evid)
+				.setParameter("plOd", platOd).setParameter("plDo", platDo).setParameter("stv", sv).setFirstResult(firstPos).setMaxResults(maxPocZakazek).getResultList();
 	}
 	
 	public Date getDbTime() {

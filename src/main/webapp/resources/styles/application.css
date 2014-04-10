@@ -11,7 +11,7 @@
 /* } */
 
 body {
-	z-index:0;
+	z-index: 0;
 	background: #FFFFFF 40px -6px url("../images/SA-logo.png") no-repeat;
 	margin:10px 0 0 0;
 	font-family: Verdana,"Arial CE",Arial,"Helvetica CE",sans-serif;
@@ -22,14 +22,24 @@ body {
 
 
 .page {
+	z-index: 2;
 	padding: 2px 40px 0px 40px;
 	border-top:  2px solid black;
 	margin: 40px 0 0 0;
 	background-color: #eeeae5;
-	min-height: 800px;
-
+	min-height: 1000px;
 }
 
+.progressBar {
+	/* DODELAT !!! zatim nefunkcni */
+	display: none;
+	z-index: 100;
+	background-color: grey;
+	width: 100%;
+	min-width: 1200px;
+	height: 100%;
+	position: absolute;
+}
 
 a {
 	color: inherit;

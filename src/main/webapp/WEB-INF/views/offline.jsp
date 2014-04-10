@@ -21,24 +21,31 @@
 
 <!-- ZDROJ: http://jquerybyexample.blogspot.com/2013/06/jquery-redirect-page-after-few-seconds.html  -->
 <script type="text/javascript">
-	$(document)
-			.ready(
-					function() {
-						window
-								.setInterval(
-										function() {
-											var iTimeRemaining = $(
-													"#spnSeconds").html();
-											iTimeRemaining = eval(iTimeRemaining);
-											if (iTimeRemaining == 0) {
-												//window.location.href = "${pageContext.servletContext.contextPath}/srv/offline/startJob";
-												window.location.href = "./offline/startJob";
-											} else {
-												$("#spnSeconds").html(
-														iTimeRemaining - 1);
-											}
-										}, 1000);
-					});
+	$(document).ready(function() {
+		window.setInterval(function() {
+			var iTimeRemaining = $("#spnSeconds").html();
+			iTimeRemaining = eval(iTimeRemaining);
+			if (iTimeRemaining == 0) {
+				//window.location.href = "${pageContext.servletContext.contextPath}/srv/offline/startJob";
+				window.location.href = "./offline/startJob";
+			} else {
+				$("#spnSeconds").html(iTimeRemaining - 1);
+			}
+		}, 1000);
+	});
+	
+	function displayProgressBar() {
+		var browser = "${header['User-Agent']}";
+		if (browser.indexOf("MSIE") >= 0) {
+			$("#progressBarIE")
+					.append(
+							'<img src="${pageContext.servletContext.contextPath}/resources/images/progress_bar_mix.gif" />');
+			$("#progressBarIE").show();
+		} else {
+			$("#progressBarFireFox").show();
+		}
+	};	
+	
 </script>
 
 </head>
@@ -65,7 +72,8 @@
 				<col width="135px" />
 				<col width="40px" />
 				<col width="30px" />
-				<col width="45px" /> 
+				<col width="60px" />
+				<col width="30px" />
 				<thead>
 					<tr>
 						<th>MT</th>
@@ -78,15 +86,16 @@
 							title="Zpracování starší jak 3 měsíce bude automaticky smazáno">Čas
 							spuštění</th>
 						<th>Čas ukončení</th>
-						<th colspan="2">Export s agregací</th>
-						<th>Export</th>
+						<th colspan="2">Výsledek s agregací</th>
+						<th>Výsledek</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach var="i" items="${offList}" varStatus="iterator">
 						<tr style="height: 30px;"
 							class="${ (iterator.index mod 2) == 0 ? 'rowOdd' : 'rowEven' }">
-							<td align="center">${i.sk30tSada.sk30tMt.mt}</td>
+							<td align="center" title="id:${i.id}">${i.sk30tSada.sk30tMt.mt}</td>
 							<td><a
 								href="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${i.sk30tSada.sk30tMt.sk30tUser.netusername}/${i.sk30tSada.sk30tMt.mt}/${i.sk30tSada.id}">
 									<span style="color: #4BA82E; font-weight: bold;">${i.sk30tSada.nazev}</span>
@@ -106,37 +115,45 @@
 									value="${i.platnostOd}" /> - <f:formatDate
 									pattern="yyyy-MM-dd" value="${i.platnostDo}" /></td>
 							<td><f:formatDate pattern="yyyy-MM-dd HH:mm"
-									value="${i.casSpusteni}" />
-							</td>
-						 
-							<td><c:choose>
-									<c:when test="${(empty(i.casUkonceni))}">
-										<a onClick="return confirm('Opravdu smazat toto zpracování ???')"
-										href="${pageContext.servletContext.contextPath}/srv/offline/smazatVysledek/${i.id}"><SPAN style="color: red; height: 5px;"> ${i.proces}</SPAN></a>
+									value="${i.casSpusteni}" /></td>
+
+							<td>
+								<c:choose>
+									<c:when test="${empty(i.casUkonceni)}">
+										<SPAN style="color: red; height: 5px;"> ${i.proces}</SPAN>
 									</c:when>
 									<c:otherwise>
 										<f:formatDate pattern="yyyy-MM-dd HH:mm"
 											value="${i.casUkonceni}" />
 									</c:otherwise>
-								</c:choose></td>
-	
-							<td align="center">${i.agregace}</td>
-							<td align="center">
-								<c:if
+								</c:choose>
+							</td>
+
+							<td align="center">${i.agregace}
+								<SPAN id="progressBarFireFox" style="display: none; z-index: 100; position: absolute;">
+									<img src="${pageContext.servletContext.contextPath}/resources/images/progress_bar_mix.gif" />
+								</SPAN>
+								<SPAN id="progressBarIE" style="display: none; z-index: 100; position: absolute;">&#160;</SPAN>									
+							</td>
+							<td align="center"><c:if
 									test="${not(empty(i.casUkonceni)) and not(empty(i.agregace))}">
-									<a
+									<a  onclick="displayProgressBar();"
 										href="${pageContext.servletContext.contextPath}/srv/offline/vysledekSAgregaci/${i.id}"><img
+										style="border: 0px; padding-top: 3px;"
+										src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a>
+								</c:if></td>
+							<td align="center"><c:if test="${not(empty(i.casUkonceni))}">
+									<a  onclick="displayProgressBar();"
+										href="${pageContext.servletContext.contextPath}/srv/offline/vysledek/${i.id}"><img
 										style="border: 0px; padding-top: 3px;"
 										src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a>
 								</c:if>
 							</td>
 							<td align="center">
-								<c:if test="${not(empty(i.casUkonceni))}">
-									<a
-										href="${pageContext.servletContext.contextPath}/srv/offline/vysledek/${i.id}"><img
-										style="border: 0px; padding-top: 3px;"
-										src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a>
-								</c:if>
+									<a onClick="return confirm('Opravdu smazat toto zpracování ???')"
+									href="${pageContext.servletContext.contextPath}/srv/offline/smazatVysledek/${i.id}"><img
+									title="Smazat" style="border: 0px;"
+									src="${pageContext.servletContext.contextPath}/resources/ico/smazat.png" /></a>							
 							</td>
 						</tr>
 					</c:forEach>
@@ -145,20 +162,21 @@
 		</DIV>
 
 		<p align="left" style="color: gray; font-size: xx-small;">
-			Další Off-line výpočet bude automaticky spuštěn za: <span
-				id="spnSeconds">59</span> sekund.
+			Další výpočet bude automaticky spuštěn za: <span id="spnSeconds">59</span>
+			sekund.
 		</p>
- 
- 		<c:if
+
+		<c:if
 			test="${(aktualUser.netusername=='DZC0ZEL') or (aktualUser.netusername=='DZC0GRP')}">
-		<div class="zonaTlacitek">
-			<div class="tlacitka">
-				<form:form 
-	 					action="${pageContext.servletContext.contextPath}/srv/offline/startJob"> 
-	 					<input type="submit" value="Ruční start"  class="submit"/> 
- 				</form:form> 
+			<!-- PREDELAT NA role PRCEK.ADMINS -->
+			<div class="zonaTlacitek">
+				<div class="tlacitka">
+					<form:form
+						action="${pageContext.servletContext.contextPath}/srv/offline/startJob">
+						<input type="submit" value="Ruční start" class="submit" />
+					</form:form>
+				</div>
 			</div>
-		</div>
 		</c:if>
 
 		<jsp:include page="footer.jsp" />

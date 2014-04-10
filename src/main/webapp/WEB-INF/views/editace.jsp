@@ -27,6 +27,8 @@
 		<c:set scope="request" var="actual" value="editace" />
 		<jsp:include page="header.jsp" />
 
+		<div class="progressBar">&#160;</div>
+
 		<div class="zonaFiltru">
 			<div class="filtry">
 				<c:choose>

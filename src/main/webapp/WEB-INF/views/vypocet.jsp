@@ -71,8 +71,17 @@
 						});
 					});
 
-	function displayBusyIndicator() {
-		$("#busyIndicator").css('display', 'inline');
+	
+	function displayProgressBar() {
+		var browser = "${header['User-Agent']}";
+		if (browser.indexOf("MSIE") >= 0) {
+			$("#progressBarIE")
+					.append(
+							'<img src="${pageContext.servletContext.contextPath}/resources/images/progress_bar_mix.gif" />');
+			$("#progressBarIE").show();
+		} else {
+			$("#progressBarFireFox").show();
+		}
 	};
 </script>
 
@@ -267,7 +276,9 @@
 						</TABLE>
 					</DIV>
 					<BR />
+					
 
+					
 					<!-- VYSTUPY -->
 					<TABLE>
 						<col width="100px" />
@@ -312,17 +323,17 @@
 							<TD>Zakázky včetně storno vět (opakované odvádění)</TD>
 						</TR>
 					</TABLE>
-
 					<BR />
+
+					<SPAN id="progressBarFireFox" style="display: none; z-index: 100; position: absolute;">
+						<img src="${pageContext.servletContext.contextPath}/resources/images/progress_bar_mix.gif" />
+					</SPAN>
+					<SPAN id="progressBarIE" style="display: none; z-index: 100; position: absolute;">&#160;</SPAN>		
 
 					<div class="zonaTlacitek">
 						<div class="tlacitka">
-							<input type="submit" class="submit" id="tlacitkoSpustitVypocet" value="Spustit výpočet" style="visibility: hidden;"/> 
-							<SPAN
-								id="busyIndicator"
-								style="display: none; color: red; font-weight: bold;"> <!-- <img src="${pageContext.servletContext.contextPath}/resources/images/progress_bar_sipky.gif" /> -->
-								Pracuji...
-							</SPAN> <SPAN style="color: red; font-weight: bold;">&#160;${info}</SPAN>
+					
+							<input type="submit" onclick="displayProgressBar();" class="submit" id="tlacitkoSpustitVypocet" value="Spustit výpočet" style="visibility: hidden;"/> 
 						</div>
 					</div>
 				</form:form>

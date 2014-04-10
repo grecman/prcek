@@ -146,7 +146,7 @@ public class FileUploadController {
 		// nastavi casovy limit pro vyse uvedeny proces
 		// tento WebAsyncTask jede vlastne soubezne s tim Callable a po uplynulem casovem limitu ji opusti a vrati "return" ktery je v tom
 		// ".onTimeout"
-		WebAsyncTask<String> w = new WebAsyncTask<String>(6000, c); // 1000 = 1s; 60000 = 1min
+		WebAsyncTask<String> w = new WebAsyncTask<String>(10000, c); // 1000 = 1s; 60000 = 1min
 
 		// pokud je limit prekrocenm, tak implementovana metoda call() okamzite vrati
 		w.onTimeout(new Callable<String>() {

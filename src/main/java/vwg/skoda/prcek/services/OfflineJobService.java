@@ -46,9 +46,9 @@ public class OfflineJobService {
 	}
 	
 	@Transactional
-	public void removeOldOfflineJob() {
-		log.trace("###\t\t removeOldOfflineJob();\t ... mazu joby starsi jak 92 dnu");
-		entityManager.createQuery("DELETE OfflineJob WHERE sysdate-92 > casSpusteni ").executeUpdate();
+	public void removeOldOfflineJob(User user) {
+		log.trace("###\t\t removeOldOfflineJob("+user.getNetusername()+");\t ... mazu joby starsi jak 92 dnu");
+		entityManager.createQuery("DELETE OfflineJob WHERE id IN (SELECT a.id FROM OfflineJob a WHERE a.sk30tSada.sk30tMt.sk30tUser.id=:idUser AND sysdate-92>a.casSpusteni)").setParameter("idUser", user.getId()).executeUpdate();
 	}
  	
 	public List<OfflineJob> getOfflineJob(User user) {
@@ -58,7 +58,7 @@ public class OfflineJobService {
 	
 	public List<OfflineJob> getOfflineJobKeZpracovani(User user) {
 		log.trace("###\t\t getOfflineJobKeZpracovani("+user.getNetusername()+");");
-		return entityManager.createQuery("SELECT u FROM OfflineJob u WHERE u.pocetZakazek>0 AND u.casUkonceni IS NULL AND u.proces IS NULL AND u.sk30tSada.sk30tMt.sk30tUser.id=:idUser ORDER BY u.casSpusteni DESC, u.agregace DESC, u.sk30tSada.sk30tMt.mt", OfflineJob.class).setParameter("idUser", user.getId()).getResultList();
+		return entityManager.createQuery("SELECT u FROM OfflineJob u WHERE u.pocetZakazek>0 AND u.casUkonceni IS NULL AND u.proces ='ve frontě' AND u.sk30tSada.sk30tMt.sk30tUser.id=:idUser ORDER BY u.casSpusteni DESC, u.agregace DESC, u.sk30tSada.sk30tMt.mt", OfflineJob.class).setParameter("idUser", user.getId()).getResultList();
 	}
 	
 	public List<OfflineJob> getOfflineJob(User user, Long agregace) {

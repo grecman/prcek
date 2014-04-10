@@ -19,20 +19,23 @@
 		$("#buttonNahratSoubor").click(function() {
 			if ($("#inputFilePrcek").val().length == 0) {
 				alert("Nevybrán žádný soubor k nahrání");
-				// 				$("#buttonNahratSoubor").submit(function(){
-				// 	 	 				return false;
-				// 	 	 				});		
 			} else {
 				$("#buttonNahratSoubor").prop('disabled', true);
 			}
 		});
-
-		//$("#pracujiPrilohyPlatiProVyber").css('display','inline');
-
 	});
 
-	function displayBusyIndicator() {
-		$("#busyIndicator").css('display', 'inline');
+	
+	function displayProgressBar() {
+		var browser = "${header['User-Agent']}";
+		if (browser.indexOf("MSIE") >= 0) {
+			$("#progressBarIE")
+					.append(
+							'<img src="${pageContext.servletContext.contextPath}/resources/images/progress_bar_mix.gif" />');
+			$("#progressBarIE").show();
+		} else {
+			$("#progressBarFireFox").show();
+		}
 	};
 </script>
 
@@ -46,8 +49,9 @@
 
 		<c:set scope="request" var="actual" value="editace" />
 		<jsp:include page="header.jsp" />
-
 		<BR />
+
+
 		<DIV>
 			Import PR podmínek pro sadu: <B>${vybranaSada.sk30tMt.mt} -
 				${vybranaSada.nazev}</B>
@@ -63,14 +67,22 @@
 						style="background: none; width: 300px; color: red; padding-left: 0px; font-weight: bold;" /></TD>
 					<TD><c:set var="nahratSouborPopisek">
 							<f:message>nahratSoubor</f:message>
-						</c:set> <input onclick="displayBusyIndicator();" type="submit"
+						</c:set> <input onclick="displayProgressBar();" type="submit"
 						value="${nahratSouborPopisek}" id="buttonNahratSoubor"
 						class="submit" /></TD>
 				</TR>
 				<TR height="100px;">
 					<TD />
-					<TD style="padding-left: 100px;"><SPAN id="busyIndicator"
-						style="display: none;"><img src="${pageContext.servletContext.contextPath}/resources/images/progress_bar_mix.gif" /></SPAN></TD>
+					<TD style="padding-left: 100px;">
+
+						<div id="progressBarFireFox" style="display: none;">
+							<img
+								src="${pageContext.servletContext.contextPath}/resources/images/progress_bar_mix.gif" />
+						</div>
+						<div id="progressBarIE" style="display: none;">&#160;</div>
+
+
+					</TD>
 
 				</TR>
 				<TR height="10px">

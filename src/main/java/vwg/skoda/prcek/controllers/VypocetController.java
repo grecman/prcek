@@ -1,6 +1,5 @@
 package vwg.skoda.prcek.controllers;
 
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -182,7 +181,6 @@ public class VypocetController {
 			model.addAttribute("evidBod", e);
 			model.addAttribute("vybraneSady", s);
 			model.addAttribute("platnostVyplnena", platnost);
-			model.addAttribute("info", "Nebyla vybrána žádná sada ke zpracování!");
 			return "/vypocet";
 		} else {
 			EvidencniBody e = serviceEvidencniBody.getEvidencniBodyOne(idEvidBod);
@@ -239,18 +237,21 @@ public class VypocetController {
 				off.setSk30tEvidencniBody(e);
 				off.setSk30tSada(s);
 				off.setCasSpusteni(new Date());
-				// off.setStorno((f.getStornoVetyVystup()) ? "ano" : "ne");
 				off.setStornoZakazky(f.getStornoVetyVystup());
 				off.setPocetZakazek(zakCount);
+				off.setZakazkyVystup(f.getZakazkyVystup());
 				if (zakCount < 1) {
 					off.setProces("Nebude zpracováno");
+				}/* else if (zakCount > 30000){
+					off.setProces("offline");
+				}*/ else {
+					off.setProces("ve frontě");
 				}
 				off.setPlatnostOd(platnostOd);
 				off.setPlatnostDo(platnostDo);
 				off.setVystupRazeni(f.getTriditDleVystup());
 				off.setUtime(new Date());
 				off.setUuser(u.getNetusername());
-				off.setZakazkyVystup(f.getZakazkyVystup());
 				if ("s".startsWith(f.getAgregaceVystup())) {
 					off.setAgregace((f.getIdcka().length <= 1) ? null : (lastAgr + 1));
 				}

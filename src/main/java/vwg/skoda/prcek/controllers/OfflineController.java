@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import javax.servlet.http.HttpServletRequest;
@@ -76,7 +78,7 @@ public class OfflineController {
 		User u = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 
 		// mazani jobu starsich jak 92 dnu
-		serviceOfflineJob.removeOldOfflineJob();
+		serviceOfflineJob.removeOldOfflineJob(u);
 
 		List<OfflineJob> off = serviceOfflineJob.getOfflineJobKeZpracovani(u);
 		log.debug("###\t\t ... nacteno jobu ke zpracovani: " + off.size());
@@ -84,18 +86,15 @@ public class OfflineController {
 		if (off.isEmpty() || off.size() < 1) {
 			return "redirect:/srv/offline";
 		} else {
+
+			OfflineJob offOne = serviceOfflineJob.getOfflineJobOne(off.get(0).getId());
+			offOne.setProces("v procesu");
+			serviceOfflineJob.setOfflineJob(offOne);
+			
 			return "redirect:/srv/offline/rozpad/" + off.get(0).getId();
 		}
 	}
 
-	@RequestMapping(value = "/offline/smazatVysledek/{idOfflineJob}")
-	public String smazatVysledek(@PathVariable final long idOfflineJob, Model model, HttpServletRequest req) {
-		log.debug("###\t smazatVysledek (" + idOfflineJob + ")");
-
-		serviceOfflineJob.removeOfflineJob(idOfflineJob);
-
-		return "redirect:/srv/offline";
-	}
 
 	@RequestMapping(value = "/offline/rozpad/{idOfflineJob}")
 	public WebAsyncTask<String> rozpad(@PathVariable final long idOfflineJob, User u, Model model, final HttpServletRequest req) {
@@ -119,17 +118,54 @@ public class OfflineController {
 				SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
 				String datumOd = DATE_FORMAT.format(off.getPlatnostOd());
 				String datumDo = DATE_FORMAT.format(off.getPlatnostDo());
-				List<Zakazky> zak = serviceZakazky.getZakazky(off.getSk30tSada().getSk30tMt().getMt(), off.getSk30tEvidencniBody().getKbodKod(), off.getSk30tEvidencniBody().getKbodWk(), off
-						.getSk30tEvidencniBody().getKbodEvid(), datumOd, datumDo, off.getStornoZakazky());
+				
+//				List<Zakazky> zak = serviceZakazky.getZakazky(off.getSk30tSada().getSk30tMt().getMt(), off.getSk30tEvidencniBody().getKbodKod(), off.getSk30tEvidencniBody().getKbodWk(), off
+//						.getSk30tEvidencniBody().getKbodEvid(), datumOd, datumDo, off.getStornoZakazky());
 
 				try {
 
+					Map<PrPodminka, Integer> m = new HashMap<PrPodminka, Integer>();
+					for (PrPodminka prPodminka : pr) m.put(prPodminka, 0);
+					
+					Long celkPocZak = off.getPocetZakazek();
+				    int zpracovanyPocZak = 0;
+				    
+					while (zpracovanyPocZak < celkPocZak) {
+						log.debug("### Zpracovano zakazek: " + zpracovanyPocZak + " / " + celkPocZak);
+						List<Zakazky> zak = serviceZakazky.getZakazkyMaxPoc(off.getSk30tSada().getSk30tMt().getMt(), off.getSk30tEvidencniBody().getKbodKod(), off.getSk30tEvidencniBody().getKbodWk(), off
+								.getSk30tEvidencniBody().getKbodEvid(), datumOd, datumDo, off.getStornoZakazky(), zpracovanyPocZak);
+						zpracovanyPocZak += zak.size();
+
+						for (Zakazky z : zak) {
+
+							for (Map.Entry<PrPodminka, Integer> e : m.entrySet()) {
+								vwg.skoda.mpz.core.matchers.PrPodminka prp = new vwg.skoda.mpz.core.matchers.PrPodminka(z.getPrpoz());
+								String s = e.getKey().getPr();
+								if (new vwg.skoda.mpz.core.matchers.PrPodminka(s).match(prp)) {
+									e.setValue(e.getValue() + 1);
+								}
+							}
+						}
+					}
+					
+					log.trace("Vypocet: " + m);
+					for (Map.Entry<PrPodminka, Integer> e: m.entrySet()) {
+						Vysledek v = new Vysledek();
+						v.setSk30tOfflineJob(off);
+						v.setSk30tPrPodminka(e.getKey());
+						v.setSoucet(e.getValue().longValue());
+						v.setUtime(new Date());
+						v.setUuser(off.getSk30tSada().getSk30tMt().getSk30tUser().getNetusername());
+						serviceVysledek.addVysledek(v);
+						
+					}				
+/*					
+					
 					for (PrPodminka prPodminka : pr) {
 						long soucet = 0;
 						for (Zakazky zakazka : zak) {
 							if (JobPRCondition.correspond(zakazka.getPrpoz(), prPodminka.getPr())) {
 								soucet++;
-								// System.out.println("PR vyhovuje:\t" + PRpod + "\t" + PRzak);
 							}
 						}
 						Vysledek v = new Vysledek();
@@ -140,13 +176,14 @@ public class OfflineController {
 						v.setUuser(off.getSk30tSada().getSk30tMt().getSk30tUser().getNetusername());
 						serviceVysledek.addVysledek(v);
 					}
+*/				
 					off.setProces("hotovo");
 					off.setCasUkonceni(new Date());
 					serviceOfflineJob.setOfflineJob(off);
 				} catch (Exception e) {
 					log.error("###\t Chyba porovnani PR zakazky s PR podminkou: ", e);
 				}
-
+	
 				return "redirect:/srv/offline";
 			}
 		};
@@ -154,7 +191,7 @@ public class OfflineController {
 		// nastavi casovy limit pro vyse uvedeny proces
 		// tento WebAsyncTask jede vlastne soubezne s tim Callable a po uplynulem casovem limitu ji opusti a vrati "return" ktery je v tom
 		// ".onTimeout"
-		WebAsyncTask<String> webAs = new WebAsyncTask<String>(20000, callAsyncThread); // 1000ms = 1s; 60000 = 1min;
+		WebAsyncTask<String> webAs = new WebAsyncTask<String>(1000, callAsyncThread); // 1000ms = 1s; 60000 = 1min;
 		webAs.onTimeout(new Callable<String>() {
 
 			@Override
@@ -211,7 +248,7 @@ public class OfflineController {
 		OfflineJob off = serviceOfflineJob.getOfflineJobOne(idOfflineJob);
 
 		List<Zakazky> zak = null;
-		if (off.getZakazkyVystup()) {
+		if (off.getZakazkyVystup() && off.getPocetZakazek()<30001) {
 			SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
 			String datumOd = DATE_FORMAT.format(off.getPlatnostOd());
 			String datumDo = DATE_FORMAT.format(off.getPlatnostDo());
@@ -334,6 +371,15 @@ public class OfflineController {
 
 		ExportXls exp = new ExportXls();
 		exp.vysledekSAgregaci(kompletVysledekVcetneSumy, offAgregace, res);
+	}
+	
+	@RequestMapping(value = "/offline/smazatVysledek/{idOfflineJob}")
+	public String smazatVysledek(@PathVariable final long idOfflineJob, Model model, HttpServletRequest req) {
+		log.debug("###\t smazatVysledek (" + idOfflineJob + ")");
+
+		serviceOfflineJob.removeOfflineJob(idOfflineJob);
+
+		return "redirect:/srv/offline";
 	}
 
 }
