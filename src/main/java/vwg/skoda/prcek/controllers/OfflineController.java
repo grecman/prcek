@@ -373,6 +373,7 @@ public class OfflineController {
 						maPosledniPrCisloSumu = true;
 					}
 				}
+
 				
 				if(!maPosledniPrCisloSumu){
 					struk = new VysledekExpSAgregaci();
