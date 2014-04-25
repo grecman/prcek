@@ -64,9 +64,9 @@
 				</tbody>
 			</TABLE>
 		</DIV>
+		
 		<BR />
-		<c:if
-			test="${(aktualUser.netusername=='DZC0ZEL') or (aktualUser.netusername=='DZC0GRP')}">
+		<c:if test="${adminRole}">
 			<form:form commandName="napoveda" name="kontrola"
 				action="${pageContext.servletContext.contextPath}/srv/napoveda/nova">
 				<TABLE id="tab1" width="100%" style="table-layout: fixed;">

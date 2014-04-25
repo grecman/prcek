@@ -15,6 +15,7 @@
 <jsp:include page="lib.jsp" />
 <title>P R C E K</title>
 <script type="text/javascript">
+	//varianta se zobrazovanim GIFu (v kodu se toto uz nevola)
 	function displayProgressBar() {
 		var browser = "${header['User-Agent']}";
 		if (browser.indexOf("MSIE") >= 0) {
@@ -25,8 +26,7 @@
 		} else {
 			$("#progressBarFireFox").show();
 		}
-	};	
-	
+	};
 </script>
 </head>
 
@@ -80,7 +80,7 @@
 							class="${ (iterator.index mod 2) == 0 ? 'rowOdd' : 'rowEven' }">
 							<td align="center">${i.sk30tPrPodminka.sk30tSada.sk30tMt.mt}</td>
 							<td>${i.sk30tPrPodminka.sk30tSada.nazev}</td>
-							<td>${i.sk30tPrPodminka.pr}</td>
+							<td style="overflow: hidden;">${i.sk30tPrPodminka.pr}</td>
 							<td align="right">${i.soucet}</td>
 							<td align="right">${i.sk30tOfflineJob.pocetZakazek}</td>
 							<td>${i.sk30tPrPodminka.poznamka}</td>
@@ -91,17 +91,18 @@
 			</TABLE>
 		</DIV>
 
-		<SPAN id="progressBarFireFox" style="display: none; z-index: 100; position: absolute;">
-			<img src="${pageContext.servletContext.contextPath}/resources/images/progress_bar_mix.gif" />
-		</SPAN>
-		<SPAN id="progressBarIE" style="display: none; z-index: 100; position: absolute;">&#160;</SPAN>	
+		<SPAN id="progressBarFireFox"
+			style="display: none; z-index: 100; position: absolute;"> <img
+			src="${pageContext.servletContext.contextPath}/resources/images/progress_bar_mix.gif" />
+		</SPAN> <SPAN id="progressBarIE"
+			style="display: none; z-index: 100; position: absolute;">&#160;</SPAN>
 
 		<div class="zonaTlacitek">
 			<div class="tlacitka">
 				<c:if test="${not(empty(vysledek))}">
-					<form:form onclick="displayProgressBar();"
+					<form:form
 						action="${pageContext.servletContext.contextPath}/srv/offline/exportXlsSAgregaci/${idOfflineJob}">
-						<input type="submit" value="Export do XLS"  class="submit"/>
+						<input type="submit" value="Export do XLS" class="submit" />
 					</form:form>
 				</c:if>
 			</div>

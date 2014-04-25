@@ -68,6 +68,31 @@ public class OfflineController {
 		List<OfflineJob> off = serviceOfflineJob.getOfflineJob(u);
 		model.addAttribute("offList", off);
 		model.addAttribute("aktualUser", u);
+		
+		if (req.isUserInRole("ADMINS")) {
+			model.addAttribute("adminRole", true);
+		} else {
+			model.addAttribute("adminRole", false);
+		}
+
+		return "/offline";
+	}
+	
+	@RequestMapping(value = "/offline/showAllUsers")
+	public String showAllUsers(Model model, HttpServletRequest req) {
+		log.debug("###\t showAllUsers()");
+
+		User u = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
+
+		List<OfflineJob> off = serviceOfflineJob.getOfflineJobAll();
+		model.addAttribute("offList", off);
+		model.addAttribute("aktualUser", u);
+		
+		if (req.isUserInRole("ADMINS")) {
+			model.addAttribute("adminRole", true);
+		} else {
+			model.addAttribute("adminRole", false);
+		}
 
 		return "/offline";
 	}

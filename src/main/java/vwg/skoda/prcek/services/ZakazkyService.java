@@ -46,7 +46,7 @@ public class ZakazkyService {
 	}
 	
 	
-	int maxPocZakazek = 5000;
+	int maxPocZakazek = 25000;
 	
 	public List<Zakazky> getZakazkyMaxPoc(String mt, String kbodkod, String wk, String evid, String platOd, String platDo, Boolean stornoVety, int firstPos) {
 		String sv = ((!stornoVety) ? "N" : "%"); 

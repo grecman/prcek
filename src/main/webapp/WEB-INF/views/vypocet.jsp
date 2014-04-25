@@ -19,6 +19,7 @@
 	$(document)
 			.ready(
 					function() {
+
 						$.datepicker.regional['cs'] = {
 							closeText : 'Cerrar',
 							prevText : 'Předchozí',
@@ -48,41 +49,71 @@
 						$("#datepickerOd").datepicker();
 						$("#datepickerDo").datepicker();
 
+						$(".klikZpracovani")
+								.click(
+										function() {
+											var pocetChecknutychZpracovani = 0;
+											$(".klikZpracovani")
+													.each(
+															function() {
+																if ($(this)
+																		.prop(
+																				'checked')) {
+																	pocetChecknutychZpracovani++;
+																}
+															});
+											//alert(pocetChecknutychZpracovani);
+											if (pocetChecknutychZpracovani >= 2) {
+												$("#tlacitkoSpustitVypocet")
+														.css("visibility",
+																"visible");
+												$("#RadButtagregaceVystup")
+														.css("visibility",
+																"visible");
+											} else if (pocetChecknutychZpracovani >= 1) {
+												$("#tlacitkoSpustitVypocet")
+														.css("visibility",
+																"visible");
+												$("#RadButtagregaceVystup")
+														.css("visibility",
+																"hidden");
+											} else {
+												$("#tlacitkoSpustitVypocet")
+														.css("visibility",
+																"hidden");
+												$("#RadButtagregaceVystup")
+														.css("visibility",
+																"hidden");
+											}
+										});
 
-						
-						$(".klikZpracovani").click(function() {
-							var pocetChecknutychZpracovani = 0;
-							$(".klikZpracovani").each(function() {
-								if ($(this).prop('checked')) {
-									pocetChecknutychZpracovani++;
-								}
-							});
-							//alert(pocetChecknutychZpracovani);
-							if(pocetChecknutychZpracovani>=2){
-								$("#tlacitkoSpustitVypocet").css("visibility", "visible");
-								$("#RadButtagregaceVystup").css("visibility", "visible");
-							} else if (pocetChecknutychZpracovani>=1) {
-								$("#tlacitkoSpustitVypocet").css("visibility", "visible");
-								$("#RadButtagregaceVystup").css("visibility", "hidden");
-							} else {
-								$("#tlacitkoSpustitVypocet").css("visibility", "hidden");
-								$("#RadButtagregaceVystup").css("visibility", "hidden");
-							}
+						$("#tlacitkoSpustitVypocet").click(function() {
+							$("#dialogBusy").dialog("open");
+							$("#dialogSpin").spin("mojeNastaveniSpinu");
+							$("#formZafrontovani").submit();
+						});
+
+						$("#dialogBusy").dialog({
+							autoOpen : false,
+							resizable : false,
+							position : "center",
+							open : function() {
+								$(".ui-dialog-titlebar-close").hide();
+								$(".ui-dialog .ui-dialog-titlebar").hide();
+								$(".ui-dialog-title").hide();
+								$(".ui-widget-content").css({
+									"border" : "0"
+								});
+								$(".ui-dialog").css({
+									"padding" : "0",
+									"background" : "transparent"
+								});
+							},
+							height : 500,
+							width : 500,
+							modal : true
 						});
 					});
-
-	
-	function displayProgressBar() {
-		var browser = "${header['User-Agent']}";
-		if (browser.indexOf("MSIE") >= 0) {
-			$("#progressBarIE")
-					.append(
-							'<img src="${pageContext.servletContext.contextPath}/resources/images/progress_bar_mix.gif" />');
-			$("#progressBarIE").show();
-		} else {
-			$("#progressBarFireFox").show();
-		}
-	};
 </script>
 
 
@@ -96,6 +127,11 @@
 
 		<c:set scope="request" var="actual" value="vypocet" />
 		<jsp:include page="header.jsp" />
+
+		<div id="dialogBusy" style="background: transparent;">
+			<p id="dialogSpin" style="height: 60%;"></p>
+		</div>
+
 
 		<BR />
 		<c:choose>
@@ -135,21 +171,22 @@
 								<TD></TD>
 								<TD></TD>
 							</TR>
-							<TR>
-								<form:form commandName="formObj"
-									action="${pageContext.servletContext.contextPath}/srv/vypocet/vybraneObdobiDenOdDo">
-
+							<form:form commandName="formObj"
+								action="${pageContext.servletContext.contextPath}/srv/vypocet/vybraneObdobiDenOdDo">
+								<TR>
 									<TD></TD>
 									<TD>Denní zpracování</TD>
 									<TD>od</TD>
+
 									<TD><form:input path="platnostOd" id="datepickerOd"
 											class="kalendar"></form:input></TD>
 									<TD>do</TD>
 									<TD><form:input path="platnostDo" id="datepickerDo"
 											class="kalendar"></form:input></TD>
 									<TD><input type="submit" value="ok" class="submit" /></TD>
-								</form:form>
-							</TR>
+
+								</TR>
+							</form:form>
 						</c:when>
 						<c:otherwise>
 							<TR>
@@ -230,7 +267,7 @@
 				<BR />
 
 				<!-- SADY (tabulka) -->
-				<form:form commandName="formObj"
+				<form:form commandName="formObj" id="formZafrontovani"
 					action="${pageContext.servletContext.contextPath}/srv/vypocet/zafrontovani/${platnostVyplnena}/${evidBod.id}/">
 					<DIV style="height: 20px; font-size: 14px; font-weight: bold;">Sady
 						PR-podmínek</DIV>
@@ -276,9 +313,9 @@
 						</TABLE>
 					</DIV>
 					<BR />
-					
 
-					
+
+
 					<!-- VYSTUPY -->
 					<TABLE>
 						<col width="100px" />
@@ -301,8 +338,9 @@
 							<TD></TD>
 							<TD
 								title="Četnost s agregací má smysl pouze v případě výberů dvou a více sad s různou modelovou třídou.">
-								<form:radiobutton
-									path="agregaceVystup" value="s" class="radiobutton" id="RadButtagregaceVystup" style="visibility: hidden;" />
+								<form:radiobutton path="agregaceVystup" value="s"
+									class="radiobutton" id="RadButtagregaceVystup"
+									style="visibility: hidden;" />
 							</TD>
 							<TD
 								title="Četnost s agregací má smysl pouze v případě výberů dvou a více sad s různou modelovou třídou.">Četnost
@@ -325,21 +363,17 @@
 					</TABLE>
 					<BR />
 
-					<SPAN id="progressBarFireFox" style="display: none; z-index: 100; position: absolute;">
-						<img src="${pageContext.servletContext.contextPath}/resources/images/progress_bar_mix.gif" />
-					</SPAN>
-					<SPAN id="progressBarIE" style="display: none; z-index: 100; position: absolute;">&#160;</SPAN>		
-
 					<div class="zonaTlacitek">
 						<div class="tlacitka">
-					
-							<input type="submit" onclick="displayProgressBar();" class="submit" id="tlacitkoSpustitVypocet" value="Spustit výpočet" style="visibility: hidden;"/> 
+
+							<input type="submit" class="submit" id="tlacitkoSpustitVypocet"
+								value="Spustit výpočet" style="visibility: hidden;" />
 						</div>
 					</div>
 				</form:form>
 			</c:otherwise>
 		</c:choose>
-		
+
 
 		<jsp:include page="footer.jsp" />
 

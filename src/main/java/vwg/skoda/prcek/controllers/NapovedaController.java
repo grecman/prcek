@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class NapovedaController {
 	private NapovedaService serviceNapoveda;
 
 	@RequestMapping
-	public String napovedaUvodniZobrazeni(Napoveda napoveda, Model model, HttpServletRequest req) {
+	public String napovedaUvodniZobrazeni(Napoveda napoveda, Model model, HttpServletRequest req, HttpSession session) {
 		log.debug("###\t napovedaUvodniZobrazeni()");
 
 		User aktualUser = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
@@ -38,6 +39,14 @@ public class NapovedaController {
 
 		List<Napoveda> n = serviceNapoveda.getNapoveda();
 		model.addAttribute("napovedaList", n);
+		
+		System.out.println(session.getAttribute("userRole"));
+		
+		if (req.isUserInRole("ADMINS")) {
+			model.addAttribute("adminRole", true);
+		} else {
+			model.addAttribute("adminRole", false);
+		}
 
 		return "/napoveda";
 	}

@@ -10,10 +10,10 @@
 	<link href="${pageContext.servletContext.contextPath}/resources/styles/jquery.ui.theme.css" rel="stylesheet" type="text/css" media="all" />
 	
 	<script src="${pageContext.servletContext.contextPath}/resources/js/jquery-1.9.1.js" type="text/javascript">/* na hovno */</script>
-	<script src="${pageContext.servletContext.contextPath}/resources/js/jquery-ui-1.9.1.js" type="text/javascript">/* ale musi to byt */</script>
+	<script src="${pageContext.servletContext.contextPath}/resources/js/jquery-ui.js" type="text/javascript">/* ale musi to tu byt */</script>
 	<script src="${pageContext.servletContext.contextPath}/resources/js/prcek.js">/* shit */</script>
-<!-- 	<script src="${pageContext.servletContext.contextPath}/resources/js/tablePagination.js">/* shit */</script> -->
-<!-- 	<script src="${pageContext.servletContext.contextPath}/resources/js/jquery.fileupload.js">/* shit */</script> -->
-<!-- 	<script src="${pageContext.servletContext.contextPath}/resources/js/jquery.iframe-transport.js">/* shit */</script> -->
+	<script src="${pageContext.servletContext.contextPath}/resources/js/spin.js">/* shit */</script>
+	<script src="${pageContext.servletContext.contextPath}/resources/js/jquery.spin.js">/* shit */</script>
+
 
 </jsp:root>

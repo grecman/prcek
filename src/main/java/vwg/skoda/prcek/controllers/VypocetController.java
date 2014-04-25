@@ -236,7 +236,7 @@ public class VypocetController {
 				OfflineJob off = new OfflineJob();
 				off.setSk30tEvidencniBody(e);
 				off.setSk30tSada(s);
-				off.setCasSpusteni(new Date());
+				//off.setCasSpusteni(new Date());
 				off.setStornoZakazky(f.getStornoVetyVystup());
 				off.setPocetZakazek(zakCount);
 				off.setZakazkyVystup(f.getZakazkyVystup());

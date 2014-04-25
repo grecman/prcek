@@ -51,6 +51,11 @@ public class OfflineJobService {
 		entityManager.createQuery("DELETE OfflineJob WHERE id IN (SELECT a.id FROM OfflineJob a WHERE a.sk30tSada.sk30tMt.sk30tUser.id=:idUser AND sysdate-92>a.casSpusteni)").setParameter("idUser", user.getId()).executeUpdate();
 	}
  	
+	public List<OfflineJob> getOfflineJobAll() {
+		log.trace("###\t\t getOfflineJob();");
+		return entityManager.createQuery("SELECT u FROM OfflineJob u ORDER BY u.casSpusteni DESC, u.agregace DESC, u.sk30tSada.sk30tMt.mt", OfflineJob.class).getResultList();
+	}
+	
 	public List<OfflineJob> getOfflineJob(User user) {
 		log.trace("###\t\t getOfflineJob("+user.getNetusername()+");");
 		return entityManager.createQuery("SELECT u FROM OfflineJob u WHERE u.sk30tSada.sk30tMt.sk30tUser.id=:idUser ORDER BY u.casSpusteni DESC, u.agregace DESC, u.sk30tSada.sk30tMt.mt", OfflineJob.class).setParameter("idUser", user.getId()).getResultList();

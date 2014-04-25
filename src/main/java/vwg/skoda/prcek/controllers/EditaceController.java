@@ -89,6 +89,8 @@ public class EditaceController {
 
 		User u = serviceUser.getUser(netusername.getNetusername());
 		model.addAttribute("vybranyUzivatel", u);
+		
+
 
 		List<Mt> mtList = serviceMt.getMt(u.getId());
 		model.addAttribute("mtList", mtList);
@@ -97,9 +99,13 @@ public class EditaceController {
 
 	// controller je zde kvuli funkci primeho odkazu na nazev MT, aby uzivatel mohl znovu vybrat jinou MT s jiz zvolenym userem
 	@RequestMapping(value = "/vyberMt/{vybranyUzivatel}")
-	public String vyberMt(@PathVariable String vybranyUzivatel, User netusername, Mt mt, Sada sada, Model model) {
+	public String vyberMt(@PathVariable String vybranyUzivatel, User netusername, Mt mt, Sada sada, Model model, HttpServletRequest req) {
 		log.debug("###\t vyberMt(" + vybranyUzivatel + ")");
 
+		if(req.isUserInRole("SERVICEDESK")){
+			return "redirect:/srv/monitoring";
+		}
+		
 		User u = serviceUser.getUser(vybranyUzivatel);
 		vyberMt(u, mt, sada, model);
 		return "/editace";

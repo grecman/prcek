@@ -193,7 +193,7 @@
 							<tr
 								class="${ (iterator.index mod 2) == 0 ? 'rowOdd' : 'rowEven' }">
 								<td>${i.poradi}</td>
-								<td>${i.pr}</td>
+								<td style="overflow: hidden;">${i.pr}</td>
 								<td>${i.poznamka}</td>
 								<td align="center"><c:choose>
 										<c:when test="${not(empty(i.errMbt))	}">

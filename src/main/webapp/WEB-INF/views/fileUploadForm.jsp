@@ -16,27 +16,38 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
+
 		$("#buttonNahratSoubor").click(function() {
 			if ($("#inputFilePrcek").val().length == 0) {
 				alert("Nevybrán žádný soubor k nahrání");
 			} else {
-				$("#buttonNahratSoubor").prop('disabled', true);
+				$("#dialogBusy").dialog("open");
+				$("#dialogSpin").spin("mojeNastaveniSpinu");
+				$("#formNahratSoubor").submit();
 			}
 		});
-	});
 
-	
-	function displayProgressBar() {
-		var browser = "${header['User-Agent']}";
-		if (browser.indexOf("MSIE") >= 0) {
-			$("#progressBarIE")
-					.append(
-							'<img src="${pageContext.servletContext.contextPath}/resources/images/progress_bar_mix.gif" />');
-			$("#progressBarIE").show();
-		} else {
-			$("#progressBarFireFox").show();
-		}
-	};
+		$("#dialogBusy").dialog({
+			autoOpen : false,
+			resizable : false,
+			position : "center",
+			open : function() {
+				$(".ui-dialog-titlebar-close").hide();
+				$(".ui-dialog .ui-dialog-titlebar").hide();
+				$(".ui-dialog-title").hide();
+				$(".ui-widget-content").css({
+					"border" : "0"
+				});
+				$(".ui-dialog").css({
+					"padding" : "0",
+					"background" : "transparent"
+				});
+			},
+			height : 500,
+			width : 500,
+			modal : true
+		});
+	});
 </script>
 
 </head>
@@ -51,41 +62,34 @@
 		<jsp:include page="header.jsp" />
 		<BR />
 
+		<div id="dialogBusy" style="background: transparent;">
+			<p id="dialogSpin" style="height: 60%;"></p>
+		</div>
+
 
 		<DIV>
 			Import PR podmínek pro sadu: <B>${vybranaSada.sk30tMt.mt} -
 				${vybranaSada.nazev}</B>
 		</DIV>
 		<BR /> <BR />
-		<form:form method="post"
+		<form:form method="post" id="formNahratSoubor"
 			action="${pageContext.servletContext.contextPath}/srv/fileUpload/saveFileAsync/${vybranaSada.id}"
 			modelAttribute="uploadForm" enctype="multipart/form-data">
 
 			<table id="fileTable">
 				<TR>
-					<TD><input name="filePrcek" type="file" id="inputFilePrcek"
-						style="background: none; width: 300px; color: red; padding-left: 0px; font-weight: bold;" /></TD>
-					<TD><c:set var="nahratSouborPopisek">
-							<f:message>nahratSoubor</f:message>
-						</c:set> <input onclick="displayProgressBar();" type="submit"
-						value="${nahratSouborPopisek}" id="buttonNahratSoubor"
-						class="submit" /></TD>
+					<TD style="font-weight: bold;">Krok 1. <input name="filePrcek"
+						type="file" id="inputFilePrcek"
+						style="background: none; width: 300px; color: red; padding-left: 0px;" /></TD>
+					<TD></TD>
 				</TR>
-				<TR height="100px;">
-					<TD />
-					<TD style="padding-left: 100px;">
-
-						<div id="progressBarFireFox" style="display: none;">
-							<img
-								src="${pageContext.servletContext.contextPath}/resources/images/progress_bar_mix.gif" />
-						</div>
-						<div id="progressBarIE" style="display: none;">&#160;</div>
-
-
+				<TR height="75px;">
+					<TD style="font-weight: bold;">Krok 2. <input type="button"
+						id="buttonNahratSoubor" value="Nahrát vybraný soubor" />
 					</TD>
-
+					<TD></TD>
 				</TR>
-				<TR height="10px">
+				<TR height="100px">
 					<TD></TD>
 					<TD></TD>
 				</TR>
@@ -103,7 +107,7 @@
 
 			</table>
 		</form:form>
-		<DIV style="height: 100px;">&#160;</DIV>
+		<DIV style="height: 120px;">&#160;</DIV>
 
 		<!--  
 		<div class="zonaTlacitek">

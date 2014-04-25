@@ -89,17 +89,6 @@ public class MonitoringController {
 			model.addAttribute("db", "Databaze nezjistena");
 		}
 
-		String role = null;
-
-		if (req.isUserInRole("USERS")) {
-			role = "USERS";
-		} else if (req.isUserInRole("SERVICEDESK")) {
-			role = "SERVICEDESK";
-		} else if (req.isUserInRole("EXPORT")) {
-			role = "EXPORT";
-		}
-		session.setAttribute("userRole", role);
-
 		return "/monitoring";
 	}
 

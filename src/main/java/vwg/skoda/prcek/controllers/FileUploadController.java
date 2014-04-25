@@ -84,9 +84,10 @@ public class FileUploadController {
 
 				List<MultipartFile> files = req.getFiles("filePrcek");
 				List<String> fileNames = new ArrayList<String>();
-				log.trace("#\t###\t Nacteny file: " + files);
+				log.debug("#\t###\t Nacteny file: " +files.get(0).getOriginalFilename() +"(" +files.get(0).getSize()+" bytes)");
 
-				if (null != files && files.size() > 0) {
+				if (!files.get(0).isEmpty() && files.get(0).getSize() > 0) {
+					// tento FOR cyklus je zde zbytecny, protoze nacitam vzdy jen jeden soubor!!! Ale je mozne jich nacitat vice najednou.
 					for (MultipartFile multipartFile : files) {
 
 						String fileName = multipartFile.getOriginalFilename();
@@ -94,9 +95,8 @@ public class FileUploadController {
 
 						LineNumberReader row = new LineNumberReader(new InputStreamReader(multipartFile.getInputStream()));
 
+						// tady to prochazim jen kvuli tomu, abych zjistil (a ulozil) celkovy pocet nacitanych radku (tedy validnich PR podminek)
 						String prpod;
-
-						// tady to prochazim jen kvuli tomu, abych zjistil (a ulozil) celkovy pocet nacitanych radku
 						List<String> prPodminky = new ArrayList<String>();
 						while ((prpod = row.readLine()) != null) {
 							//System.out.println("gre....:" + prpod + "...");

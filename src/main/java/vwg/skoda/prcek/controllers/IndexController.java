@@ -42,25 +42,39 @@ public class IndexController {
 		 * presmeruje na pozadovane JPS. Vsechny ostatni stranky se mapuji s prefixem /srv/* ... to je asi kvuli tomu, aby dispatcherController
 		 * neprohledaval cely WebContent (ale nejsem si uplne jisty :)).
 		 */
-		
-		//	Ulozeni role do promenne, ktera je videt v cele sessione ... pak v kteremkoliv JSP mohu vypsat stringovou hodnotu jako ${userRole} nebo session.getAttribute v controlleru
-		
+
+		// Ulozeni role do promenne, ktera je videt v cele sessione ... pak v kteremkoliv JSP mohu vypsat stringovou hodnotu jako ${userRole} nebo
+		// session.getAttribute v controlleru
+
 		String role = null;
-		
-		if(req.isUserInRole("USERS")){
-			role = "USERS";
-		} else if(req.isUserInRole("SERVICEDESK")){
-			role = "SERVICEDESK";
-		} else if(req.isUserInRole("EXPORT")){
-			role = "EXPORT";
+
+		if (req.isUserInRole("USERS")) {
+			if (role == null) {
+				role = "USERS";
+			}
 		}
+
+		if (req.isUserInRole("ADMINS")) {
+			if (role == null) {
+				role = "ADMINS";
+			} else
+				role = role + ",ADMINS";
+		}
+
+		if (req.isUserInRole("SERVICEDESK")) {
+			if (role == null) {
+				role = "SERVICEDESK";
+			} else
+				role = role + ",SERVICEDESK";
+		}
+
 		session.setAttribute("userRole", role);
-		log.debug("###\t ... for user:" + req.getUserPrincipal().getName().toUpperCase()+" ("+role+")");
-		
-		if(req.isUserInRole("SERVICEDESK")){
+		log.debug("###\t ... for user:" + req.getUserPrincipal().getName().toUpperCase() + " (" + role + ")");
+
+		if (req.isUserInRole("SERVICEDESK")) {
 			return "redirect:/srv/monitoring";
 		}
-		
+
 		// zalozeni noveho uzivatele pokud jeste neexistuje v entite USER !!!
 		if (!serviceUser.existUser(req.getUserPrincipal().getName().toUpperCase())) {
 			log.debug("###\t Uzivatel " + req.getUserPrincipal().getName().toUpperCase() + " neexistuje v entite USER ... zakladam!!!");
@@ -87,7 +101,7 @@ public class IndexController {
 			newProtokol.setSessionid(req.getSession().getId());
 			serviceProtokol.addProtokol(newProtokol);
 		}
-		
+
 		Protokol newProtokol = new Protokol();
 		newProtokol.setNetusername(req.getUserPrincipal().getName().toUpperCase());
 		newProtokol.setAction("Login");
@@ -95,7 +109,6 @@ public class IndexController {
 		newProtokol.setTime(new Date());
 		newProtokol.setSessionid(req.getSession().getId());
 		serviceProtokol.addProtokol(newProtokol);
-		
 
 		/*
 		 * TODO: - v pripade role SERVICEDESK presmerovat na MONITORING (ale toto asi bude reseno filtrem na cele session) nebo na kazde hlavni

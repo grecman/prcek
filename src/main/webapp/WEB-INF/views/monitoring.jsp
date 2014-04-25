@@ -173,7 +173,7 @@
 		</script>
  --> 
 
-		<DIV style="height: 250px;">&#160;</DIV>
+		<DIV style="height: 50px;">&#160;</DIV>
 		<jsp:include page="footer.jsp" />
 	</div>
 </body>

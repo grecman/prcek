@@ -21,19 +21,52 @@
 
 <!-- ZDROJ: http://jquerybyexample.blogspot.com/2013/06/jquery-redirect-page-after-few-seconds.html  -->
 <script type="text/javascript">
-	$(document).ready(function() {
-		window.setInterval(function() {
-			var iTimeRemaining = $("#spnSeconds").html();
-			iTimeRemaining = eval(iTimeRemaining);
-			if (iTimeRemaining == 0) {
-				//window.location.href = "${pageContext.servletContext.contextPath}/srv/offline/startJob";
-				window.location.href = "./offline/startJob";
-			} else {
-				$("#spnSeconds").html(iTimeRemaining - 1);
-			}
-		}, 1000);
-	});
-	
+	$(document)
+			.ready(
+					function() {
+						window
+								.setInterval(
+										function() {
+											var iTimeRemaining = $(
+													"#spnSeconds").html();
+											iTimeRemaining = eval(iTimeRemaining);
+											if (iTimeRemaining == 0) {
+												window.location.href = "${pageContext.servletContext.contextPath}/srv/offline/startJob";
+												//window.location.href = "./offline/startJob";
+											} else {
+												$("#spnSeconds").html(
+														iTimeRemaining - 1);
+											}
+										}, 1000);
+
+						$("#tab1 a").click(function() {
+							$("#dialogBusy").dialog("open");
+							$("#dialogSpin").spin("mojeNastaveniSpinu");
+							//$("#formZafrontovani").submit();
+						});
+
+						$("#dialogBusy").dialog({
+							autoOpen : false,
+							resizable : false,
+							position : "center",
+							open : function() {
+								$(".ui-dialog-titlebar-close").hide();
+								$(".ui-dialog .ui-dialog-titlebar").hide();
+								$(".ui-dialog-title").hide();
+								$(".ui-widget-content").css({
+									"border" : "0"
+								});
+								$(".ui-dialog").css({
+									"padding" : "0",
+									"background" : "transparent"
+								});
+							},
+							height : 500,
+							width : 500,
+							modal : true
+						});
+					});
+
 	function displayProgressBar() {
 		var browser = "${header['User-Agent']}";
 		if (browser.indexOf("MSIE") >= 0) {
@@ -44,8 +77,7 @@
 		} else {
 			$("#progressBarFireFox").show();
 		}
-	};	
-	
+	};
 </script>
 
 </head>
@@ -59,11 +91,16 @@
 		<c:set scope="request" var="actual" value="offline" />
 		<jsp:include page="header.jsp" />
 
+		<div id="dialogBusy" style="background: transparent;">
+			<p id="dialogSpin" style="height: 60%;"></p>
+		</div>
+
 		<BR />
 		<DIV class="scroll" style="height: 500px; overflow: auto;">
 			<TABLE id="tab1" width="100%" style="table-layout: fixed;">
 				<col width="30px" />
 				<col width="*" />
+				<col width="50px" />
 				<col width="45px" />
 				<col width="55px" />
 				<col width="100px" />
@@ -78,6 +115,7 @@
 					<tr>
 						<th>MT</th>
 						<th>Název sady</th>
+						<th>Vlastník sady</th>
 						<th>Počet PR</th>
 						<th>Počet zakázek</th>
 						<th>K.bod</th>
@@ -100,6 +138,7 @@
 								href="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${i.sk30tSada.sk30tMt.sk30tUser.netusername}/${i.sk30tSada.sk30tMt.mt}/${i.sk30tSada.id}">
 									<span style="color: #4BA82E; font-weight: bold;">${i.sk30tSada.nazev}</span>
 							</a></td>
+							<td style="font-size: 9px;">${i.sk30tSada.sk30tMt.sk30tUser.netusername}</td>
 							<td align="right">${i.sk30tSada.pocet}</td>
 							<c:choose>
 								<c:when test="${i.stornoZakazky}">
@@ -116,9 +155,7 @@
 									pattern="yyyy-MM-dd" value="${i.platnostDo}" /></td>
 							<td><f:formatDate pattern="yyyy-MM-dd HH:mm"
 									value="${i.casSpusteni}" /></td>
-
-							<td>
-								<c:choose>
+							<td><c:choose>
 									<c:when test="${empty(i.casUkonceni)}">
 										<SPAN style="color: red; height: 5px;"> ${i.proces}</SPAN>
 									</c:when>
@@ -126,34 +163,27 @@
 										<f:formatDate pattern="yyyy-MM-dd HH:mm"
 											value="${i.casUkonceni}" />
 									</c:otherwise>
-								</c:choose>
-							</td>
+								</c:choose></td>
 
-							<td align="center">${i.agregace}
-								<SPAN id="progressBarFireFox" style="display: none; z-index: 100; position: absolute;">
-									<img src="${pageContext.servletContext.contextPath}/resources/images/progress_bar_mix.gif" />
-								</SPAN>
-								<SPAN id="progressBarIE" style="display: none; z-index: 100; position: absolute;">&#160;</SPAN>									
-							</td>
+							<td align="center">${i.agregace}</td>
 							<td align="center"><c:if
 									test="${not(empty(i.casUkonceni)) and not(empty(i.agregace))}">
-									<a  onclick="displayProgressBar();"
+									<a type="submit"
 										href="${pageContext.servletContext.contextPath}/srv/offline/vysledekSAgregaci/${i.id}"><img
 										style="border: 0px; padding-top: 3px;"
 										src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a>
 								</c:if></td>
 							<td align="center"><c:if test="${not(empty(i.casUkonceni))}">
-									<a  onclick="displayProgressBar();"
+									<a type="submit"
 										href="${pageContext.servletContext.contextPath}/srv/offline/vysledek/${i.id}"><img
 										style="border: 0px; padding-top: 3px;"
 										src="${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png" /></a>
-								</c:if>
-							</td>
-							<td align="center">
-									<a onClick="return confirm('Opravdu smazat toto zpracování ???')"
-									href="${pageContext.servletContext.contextPath}/srv/offline/smazatVysledek/${i.id}"><img
+								</c:if></td>
+							<td align="center"><a
+								onClick="return confirm('Opravdu smazat toto zpracování ???')"
+								href="${pageContext.servletContext.contextPath}/srv/offline/smazatVysledek/${i.id}"><img
 									title="Smazat" style="border: 0px;"
-									src="${pageContext.servletContext.contextPath}/resources/ico/smazat.png" /></a>							
+									src="${pageContext.servletContext.contextPath}/resources/ico/smazat.png" /></a>
 							</td>
 						</tr>
 					</c:forEach>
@@ -166,18 +196,27 @@
 			sekund.
 		</p>
 
-		<c:if
-			test="${(aktualUser.netusername=='DZC0ZEL') or (aktualUser.netusername=='DZC0GRP')}">
-			<!-- PREDELAT NA role PRCEK.ADMINS -->
-			<div class="zonaTlacitek">
-				<div class="tlacitka">
+
+		<div class="zonaTlacitek">
+			<div class="tlacitka">
+				<form:form
+					action="${pageContext.servletContext.contextPath}/srv/offline">
+					<input type="submit" value="Aktualizovat" class="submit" />
+				</form:form>
+
+				<c:if test="${adminRole}">
 					<form:form
 						action="${pageContext.servletContext.contextPath}/srv/offline/startJob">
 						<input type="submit" value="Ruční start" class="submit" />
 					</form:form>
-				</div>
+					<form:form
+						action="${pageContext.servletContext.contextPath}/srv/offline/showAllUsers">
+						<input type="submit" value="Všichni uživatelé" class="submit" />
+					</form:form>
+				</c:if>
 			</div>
-		</c:if>
+		</div>
+
 
 		<jsp:include page="footer.jsp" />
 	</div>
