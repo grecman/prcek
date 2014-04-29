@@ -150,10 +150,14 @@ public class OfflineController {
 				try {
 
 					Map<PrPodminka, Integer> m = new HashMap<PrPodminka, Integer>();
-					for (PrPodminka prPodminka : pr) m.put(prPodminka, 0);
+					for (PrPodminka prPodminka : pr){
+						m.put(prPodminka, 0);
+					}
 					
 					Long celkPocZak = off.getPocetZakazek();
 				    int zpracovanyPocZak = 0;
+				    
+				    int grePocitadlo = 0;
 				    
 					while (zpracovanyPocZak < celkPocZak) {
 						log.debug("### Zpracovano zakazek: " + zpracovanyPocZak + " / " + celkPocZak);
@@ -162,8 +166,9 @@ public class OfflineController {
 						zpracovanyPocZak += zak.size();
 
 						for (Zakazky z : zak) {
-
+							//log.info("###\tZPRACOVANO:\t"+celkPocZak+"\t-\t"+grePocitadlo++);
 							for (Map.Entry<PrPodminka, Integer> e : m.entrySet()) {
+								
 								vwg.skoda.mpz.core.matchers.PrPodminka prp = new vwg.skoda.mpz.core.matchers.PrPodminka(z.getPrpoz());
 								String s = e.getKey().getPr();
 								if (new vwg.skoda.mpz.core.matchers.PrPodminka(s).match(prp)) {
