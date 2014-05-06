@@ -656,8 +656,14 @@ public class EditaceController {
 	@RequestMapping(value = "/testExistPrAjax/{idSady}/{prC}")
 	public Boolean testExistPrAjax(@PathVariable long idSady, @PathVariable String prC) {
 		log.debug("### testExistPrAjax("+idSady+"-"+prC.toUpperCase()+")");
-		//Boolean vysl = servicePrPodminka.existPr(prC.toUpperCase(), serviceSada.getSadaOne(idSady));
 		return servicePrPodminka.existPr(prC.toUpperCase(), serviceSada.getSadaOne(idSady));
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/testExistSadaAjax/{mt}/{nazevSady}")
+	public Boolean testExistSadaAjax(@PathVariable String mt, @PathVariable String nazevSady, HttpServletRequest req) {
+		log.debug("### testExistSadaAjax("+mt+"-"+nazevSady+")");
+		return serviceSada.existSadaForUser(nazevSady, mt, req.getUserPrincipal().getName().toUpperCase());
 	}
 
 

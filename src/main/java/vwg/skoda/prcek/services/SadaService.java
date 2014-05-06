@@ -71,6 +71,20 @@ public class SadaService {
 		}
 	}
 	
+	public Boolean existSadaForUser(String nazevSady, String mt, String userName) {
+		log.trace("###\t\t existSadaForUser( '" + nazevSady + "', " + mt+"', " + userName + ");");
+		try {
+			String neco = null;
+			neco = entityManager.createQuery("SELECT m.nazev FROM Sada m WHERE m.nazev=:nazevSady and m.sk30tMt.mt=:mt and m.sk30tMt.sk30tUser.netusername=:userName ", String.class)
+					.setParameter("nazevSady", nazevSady.trim()).setParameter("mt", mt).setParameter("userName", userName).getSingleResult();
+			log.trace("\t\t  ... Sada nalezena (" + neco + ")");
+			return true;
+		} catch (Exception e) {
+			log.trace("\t\t  ... Sada neexistuje! " + e);
+			return false;
+		}
+	}
+	
 	public List<Sada> getSady(User u) {
 		log.trace("###\t\t getSada(" + u.getNetusername() + ");");
 		return entityManager

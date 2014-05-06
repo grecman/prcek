@@ -12,8 +12,77 @@
 <head>
 
 <jsp:include page="lib.jsp" />
-
 <title>P R C E K</title>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		
+		$("#tlacitkoSave").click(function() {
+			//alert($("#InputMT").val() +"-"+  $("#InputNazevSady").val());
+			
+			if(check('kontrola', {'sada' : /^[a-zA-Z0-9áäéëěíóöôúůüýčďňřšťžĺľĚŠČŘŽÝÁÍÉ]{1}[/,-.a-zA-Z0-9áäéëěíóöôúůüýčďňřšťžĺľĚŠČŘŽÝÁÍÉ\u0020]{0,35}$/})){
+				//alert($("#InputMT").val() +"-"+  $("#InputNazevSady").val());
+			
+				if(testExistSadaAjax()){
+					alert("Tato sada pro uvedeného uživatele a modelovou třídu již existuje!");	
+				} else {
+					$("#formSada").submit();
+				}
+			}
+			
+		});
+
+		// kontrola duplicity SADY pri kliknuti kamkoliv jinam ... 
+		// Pozor, funguje jen kdyz uz "nekdo" kliknul do pole na editaci nazvu sady, proto pouzivam ten prvni focus, abych byl uz primo v te editaci daneho pole. 
+// 		$("#InputNazevSady").focus();
+// 		$("#InputNazevSady").focusout(function() {
+// 			alert("gre");
+// 			if (testExistSadaAjax()) {
+// 				alert("Sada je duplicitní!");
+// 				setTimeout(function() {
+// 					$("#InputNazevSady").focus();
+// 				}, 1);
+// 			}
+// 		});
+	});
+
+	function testExistSadaAjax() {
+		//alert("testExistSadaAjax() - "+ $("#InputMT").val() +"-"+  $("#InputNazevSady").val());
+		var checkUrl = "/prcek/editace/testExistSadaAjax/"+ $("#InputMT").val()+"/"+ $("#InputNazevSady").val() + ".json";
+		var vysledek = false;
+		$.ajax({
+			url : checkUrl,
+			async : false, // default je true, pokud není false, tak následný if(result) proběhne dříve než se vrátí objekt z ajaxu !!!
+			cache : false
+		}).done(function(data) {
+			if (data) {
+				vysledek = true;
+			}
+		});
+		if (vysledek) {
+			return true;
+		}
+		return false;
+	}
+	
+	function check(f, v) {
+		var fr = document.forms[f];
+		var errs = "";
+		for (n in v) {
+			if (! fr[n].value.match(v[n])) {
+				errs = errs + fr[n].name +  ': ' + fr[n].value + "\n";
+			} ;
+		}
+		if (errs) {
+			alert("Chyba syntaxe:\n" + errs);
+			return false;
+		}
+		//fr.submit();
+		return true;
+	}
+</script>
+
+
 </head>
 
 <body>
@@ -27,7 +96,7 @@
 		
 		<BR />
 
-		<form:form commandName="formObj" name="kontrola"
+		<form:form commandName="formObj" name="kontrola" id="formSada"
 			action="${pageContext.servletContext.contextPath}/srv/editace/novaSadaTed">
 
 			<TABLE style="table-layout: auto; overflow: auto;">
@@ -43,23 +112,21 @@
 					<TD><f:message>modelovaTrida</f:message>&#160;(<f:message>produktM</f:message>)</TD>
 					<TD><form:select path="mt">
 							<c:forEach var="i" items="${seznamMt}">
-								<form:option value="${i.mt}">${i.mt}&#160;</form:option>
+								<form:option id="InputMT" value="${i.mt}">${i.mt}&#160;</form:option>
 							</c:forEach>
 						</form:select></TD>
 				</TR>
 				<TR height="15px;"></TR>
 				<TR>
 					<TD><f:message>nazevSady</f:message></TD>
-					<TD bgcolor="WHITE"><form:input class="textovePole"
+					<TD bgcolor="WHITE"><form:input id="InputNazevSady" class="textovePole"
 							path="sada"></form:input></TD>
 				</TR>
 				<TR height="15px;"></TR>
 				<TR>
 					<TD></TD>
-					<TD><input
-						onclick="return check('kontrola', {'sada' : /^[a-zA-Z0-9áäéëěíóöôúůüýčďňřšťžĺľĚŠČŘŽÝÁÍÉ]{1}[/,-.a-zA-Z0-9áäéëěíóöôúůüýčďňřšťžĺľĚŠČŘŽÝÁÍÉ\u0020]{0,35}$/});"
-						type="submit" value="ok" class="submit"/></TD>
-					<!-- <td><button onclick="return check('loc', {'partNumber' : /^[a-zA-Z0-9\u0020]{1}[a-zA-Z0-9\u0020]{0,14}$/, 'partDescription' : /^[a-zA-Z0-9]{1}[/,-.a-zA-Z0-9\u0020]{0,35}$/,'quantity' : /^([,.0-9])+$/, 'uom' : /^[1-5]{1}$/});">Add</button></td>-->
+					<TD><input type="button" value="ok" class="submit" id="tlacitkoSave"/></TD>
+			<!-- 	onclick="return check('kontrola', {'sada' : /^[a-zA-Z0-9áäéëěíóöôúůüýčďňřšťžĺľĚŠČŘŽÝÁÍÉ]{1}[/,-.a-zA-Z0-9áäéëěíóöôúůüýčďňřšťžĺľĚŠČŘŽÝÁÍÉ\u0020]{0,35}$/});"  -->
 				</TR>
 				<TR height="300px;"></TR>
 			</TABLE>

@@ -24,10 +24,8 @@
 
 		// kontrola PR duplicity v aktualni SADE pri kliknuti kamkoliv jinam ... 
 		// Pozor, funguje jen kdyz uz "nekdo" kliknul do pole na editaci PR podminky, proto pouzivam ten prvni focus, abych byl uz primo v te editaci daneho pole. 
-		// ... a cele to delam tak proto, pac nefunguje ten vyse uvedeny script!
 		$("#InputPrPodminka").focus();
 		$("#InputPrPodminka").focusout(function() {
-			//alert(testExistPrAjax());
 			if (testExistPrAjax()) {
 				alert("PR číslo je duplicitní!");
 				setTimeout(function() {
