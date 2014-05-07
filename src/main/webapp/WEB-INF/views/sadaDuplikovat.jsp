@@ -19,10 +19,10 @@
 	$(document).ready(function() {
 		
 		$("#tlacitkoSave").click(function() {
-			//alert($("#InputMT").val() +"-"+  $("#InputNazevSady").val());
+			//alert($("#InputMT option:selected").val() +"-"+  $("#InputNazevSady").val());
 			
 			if(check('kontrola', {'sada' : /^[a-zA-Z0-9áäéëěíóöôúůüýčďňřšťžĺľĚŠČŘŽÝÁÍÉ]{1}[/,-.a-zA-Z0-9áäéëěíóöôúůüýčďňřšťžĺľĚŠČŘŽÝÁÍÉ\u0020]{0,35}$/})){
-				//alert($("#InputMT").val() +"-"+  $("#InputNazevSady").val());
+				//alert($("#InputMT option:selected").val() +"-"+  $("#InputNazevSady").val());
 			
 				if(testExistSadaAjax()){
 					alert("Tato sada pro uvedeného uživatele a modelovou třídu již existuje!");	
@@ -59,7 +59,7 @@
 
 	function testExistSadaAjax() {
 		//alert("testExistSadaAjax() - "+ $("#InputMT").val() +"-"+  $("#InputNazevSady").val());
-		var checkUrl = "/prcek/editace/testExistSadaAjax/"+ $("#InputMT").val()+"/"+ $("#InputNazevSady").val() + ".json";
+		var checkUrl = "/prcek/editace/testExistSadaAjax/"+ $("#InputMT option:selected").val()+"/"+ $("#InputNazevSady").val() + ".json";
 		var vysledek = false;
 		$.ajax({
 			url : checkUrl,
@@ -121,9 +121,9 @@
 				<TR height="15px;"></TR>
 				<TR>
 					<TD><f:message>modelovaTrida</f:message>&#160;(<f:message>produktM</f:message>)</TD>
-					<TD><form:select path="mt">
+					<TD><form:select path="mt" id="InputMT">
 							<c:forEach var="i" items="${seznamMt}">
-								<form:option id="InputMT" value="${i.mt}">${i.mt}&#160;</form:option>
+								<form:option value="${i.mt}">${i.mt}&#160;</form:option>
 							</c:forEach>
 						</form:select></TD>
 				</TR>
