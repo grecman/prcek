@@ -144,20 +144,18 @@
 
 				<!-- OBDOBI -->
 				<TABLE>
-					<col width="100px" />
-					<col width="200px" />
-					<col width="*" />
-					<col width="175px" />
-					<col width="30px" />
-					<col width="175px" />
-					<col width="175px" />
+
 					<c:choose>
 						<c:when test="${empty(platnostVyplnena)}">
+							<col width="150px" />
+							<col width="200px" />
+							<col width="*" />
+							<col width="700px" />
 							<TR>
 								<TD style="font-size: 14px; font-weight: bold;">Období</TD>
 								<TD>Zpracování jednoho měsíce</TD>
-								<TD></TD>
-								<TD><form:form commandName="formObj"
+								<TD>&#160;</TD>
+								<TD align="left"><form:form commandName="formObj"
 										action="${pageContext.servletContext.contextPath}/srv/vypocet/vybraneObdobiMesic">
 										<form:select onchange="this.form.submit(); return true;"
 											path="platnostOd">
@@ -167,28 +165,26 @@
 											</c:forEach>
 										</form:select>
 									</form:form></TD>
-								<TD></TD>
-								<TD></TD>
-								<TD></TD>
 							</TR>
-							<form:form commandName="formObj"
-								action="${pageContext.servletContext.contextPath}/srv/vypocet/vybraneObdobiDenOdDo">
-								<TR>
-									<TD></TD>
-									<TD>Denní zpracování</TD>
-									<TD>od</TD>
-
-									<TD><form:input path="platnostOd" id="datepickerOd"
-											class="kalendar"></form:input></TD>
-									<TD>do</TD>
-									<TD><form:input path="platnostDo" id="datepickerDo"
-											class="kalendar"></form:input></TD>
-									<TD><input type="submit" value="ok" class="submit" /></TD>
-
-								</TR>
-							</form:form>
+							<TR>
+								<TD></TD>
+								<TD>Denní zpracování</TD>
+								<TD>od</TD>
+								
+									<TD><form:form commandName="formObj"
+									action="${pageContext.servletContext.contextPath}/srv/vypocet/vybraneObdobiDenOdDo"><form:input path="platnostOd" id="datepickerOd"
+											class="kalendar"></form:input>
+									&#160;&#160;do&#160;&#160;
+									<form:input path="platnostDo" id="datepickerDo"	class="kalendar"></form:input> &#160;
+									<input type="submit" value="ok" class="submit" />
+									</form:form></TD>
+								
+							</TR>
 						</c:when>
 						<c:otherwise>
+							<col width="150px" />
+							<col width="148px" />
+							<col width="*" />
 							<TR>
 								<TD style="font-size: 14px; font-weight: bold;">Období</TD>
 								<TD></TD>
@@ -293,7 +289,7 @@
 										<td><a
 											href="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${i.sk30tMt.sk30tUser.netusername}/${i.sk30tMt.mt}/${i.id}">
 												<span style="color: #4BA82E; font-weight: bold;">${i.nazev}</span>
-										</a></td>
+										</a>${i.rozpracovano}</td>
 										<c:choose>
 											<c:when test="${i.pocet > 0}">
 												<td align="right">${i.pocet}</td>

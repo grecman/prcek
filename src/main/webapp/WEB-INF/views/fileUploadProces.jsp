@@ -50,7 +50,8 @@
 		<jsp:include page="header.jsp" />
 		
 		<BR />
-		<H2>Nahráno ${prCount} / ${vybranaSada.pocet}</H2>
+		<!-- <H2>Nahráno ${prCount} / ${vybranaSada.pocet}</H2> -->
+		<H2>Nahráno ${prCount}</H2>
 		<BR />
 		<DIV style="color: gray; font-size: smaller; width: 650px;">
 			POZOR: tato akce může trvat i desítky minut! Buď počkáte na konec

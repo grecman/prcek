@@ -99,14 +99,13 @@ public class FileUploadController {
 						String prpod;
 						List<String> prPodminky = new ArrayList<String>();
 						while ((prpod = row.readLine()) != null) {
-							//System.out.println("gre....:" + prpod + "...");
 							if (!prpod.isEmpty() && prpod.trim().length() > 3) {
 								prPodminky.add(prpod.toUpperCase().trim());
 							}
 						}
 
-						Long prCount = servicePrPodminka.getPrPodminkaCount(s);
-						s.setPocet(prPodminky.size() + prCount.intValue());
+						s.setUtime(new Date());
+						s.setRozpracovano("Probíhá import "+prPodminky.size()+" PR podmínek ze souboru ");
 						serviceSada.setSada(s);
 
 						int poradiPr = 0;
@@ -135,6 +134,10 @@ public class FileUploadController {
 							}
 							servicePrPodminka.addPrPodminka(prp);
 						}
+						
+						s.setUtime(new Date());
+						s.setRozpracovano(null);
+						serviceSada.setSada(s);
 
 					}
 				}
@@ -146,7 +149,7 @@ public class FileUploadController {
 		// nastavi casovy limit pro vyse uvedeny proces
 		// tento WebAsyncTask jede vlastne soubezne s tim Callable a po uplynulem casovem limitu ji opusti a vrati "return" ktery je v tom
 		// ".onTimeout"
-		WebAsyncTask<String> w = new WebAsyncTask<String>(10000, c); // 1000 = 1s; 60000 = 1min
+		WebAsyncTask<String> w = new WebAsyncTask<String>(6000, c); // 1000 = 1s; 60000 = 1min
 
 		// pokud je limit prekrocenm, tak implementovana metoda call() okamzite vrati
 		w.onTimeout(new Callable<String>() {

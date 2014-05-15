@@ -138,7 +138,7 @@
 								href="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${i.sk30tSada.sk30tMt.sk30tUser.netusername}/${i.sk30tSada.sk30tMt.mt}/${i.sk30tSada.id}">
 									<span style="color: #4BA82E; font-weight: bold;">${i.sk30tSada.nazev}</span>
 							</a></td>
-							<td style="font-size: 9px;">${i.sk30tSada.sk30tMt.sk30tUser.netusername}</td>
+							<td align="center" style="font-size: 8px;">${i.sk30tSada.sk30tMt.sk30tUser.netusername}</td>
 							<td align="right">${i.sk30tSada.pocet}</td>
 							<c:choose>
 								<c:when test="${i.stornoZakazky}">

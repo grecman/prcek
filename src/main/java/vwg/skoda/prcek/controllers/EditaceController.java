@@ -158,7 +158,12 @@ public class EditaceController {
 			model.addAttribute("moznoEditovatSadu", false);
 		}
 
+		// drive byl update poctu PR v dane sade vzdy tam, kde se to zrovna menilo (novaPR)
+		// ale protoze IE8 vkladal zaznamy duplicitne, tak jsem to musel prehodit sem.
 		List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminka(s);
+		s.setPocet(prPodminkaList.size());
+		serviceSada.setSada(s);
+		
 		model.addAttribute("prPodminkaList", prPodminkaList);
 
 		Long prCount = servicePrPodminka.getPrPodminkaCount(s);
@@ -186,8 +191,13 @@ public class EditaceController {
 		} else {
 			model.addAttribute("moznoEditovatSadu", false);
 		}
-
+		
+		// drive byl update poctu PR v dane sade vzdy tam, kde se to zrovna menilo (novaPR)
+		// ale protoze IE8 vkladal zaznamy duplicitne, tak jsem to musel prehodit sem.
 		List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminka(s);
+		s.setPocet(prPodminkaList.size());
+		serviceSada.setSada(s);
+		
 		model.addAttribute("prPodminkaList", prPodminkaList);
 
 		Long prCount = servicePrPodminka.getPrPodminkaCount(s);
@@ -398,7 +408,7 @@ public class EditaceController {
 		Sada newSada = new Sada();
 		newSada.setNazev(f.getSada().trim());
 		newSada.setUuser(u.getNetusername());
-		newSada.setPocet(sPuv.getPocet());
+		//newSada.setPocet(sPuv.getPocet());
 		newSada.setUtime(new Date());
 		newSada.setSk30tMt(serviceMt.getMtOne(u.getId(), f.getMt()));
 		serviceSada.addSada(newSada);
@@ -418,18 +428,6 @@ public class EditaceController {
 
 			// TODO: tady delat kontrolu kvuli tomu, ze duplikace se provede do jine MT kde by nejaka PR nemusela byt platna! Prolem je, ze by se to
 			// melo delat asi async :(
-
-			// MBT kontrola
-			// try {
-			// List<PrMbt> prMbt = servicePrMbt.getPr(mt.getProdukt());
-			// MBT mbt = new MBT();
-			// mbt.setMBTSource(prMbt);
-			// mbt.getPRCondition(p.getPr());
-			// newPr.setErrMbt("zzzKontrolovano");
-			// } catch (Exception e) {
-			// // log.error("###\t Chyba pri obsahove kontrole PR podminky (import TXT): " + e);
-			// newPr.setErrMbt(e.getMessage());
-			// }
 
 			servicePrPodminka.addPrPodminka(newPr);
 		}
@@ -452,11 +450,11 @@ public class EditaceController {
 
 	@RequestMapping(value = "/novaPrPodminkaTed/{vybranaSada}")
 	public String novaPrPodminkaTed(@PathVariable long vybranaSada, User user, Sada sada, FormObj f, Model model, HttpServletRequest req) {
-		log.debug("###\t novaPrPodminkaTed(" + f.getPoradi() + ", " + f.getPrPodminka() + ", " + f.getPoznamka() + ", " + vybranaSada + ")");
+		log.debug("### novaPrPodminkaTed(" + f.getPoradi() + ", " + f.getPrPodminka() + ", " + f.getPoznamka() + ", " + vybranaSada + ")");
 
 		User u = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		Sada s = serviceSada.getSadaOne(vybranaSada);
-
+			
 		PrPodminka prp = new PrPodminka();
 		prp.setPr(f.getPrPodminka().toUpperCase());
 		prp.setPoradi(f.getPoradi());
@@ -465,7 +463,7 @@ public class EditaceController {
 		prp.setUtime(new Date());
 		prp.setSk30tSada(s);
 		
-		// MBT kontrola
+		// MBT kontrola (zde se jeste pouziva MBTLIB)
 		try {
 			Mt mt = serviceMt.getMtOne(s.getSk30tMt().getId());
 			List<PrMbt> pr = servicePrMbt.getPr(mt.getProdukt());
@@ -482,7 +480,9 @@ public class EditaceController {
 
 		servicePrPodminka.addPrPodminka(prp);
 		
-		s.setPocet(s.getPocet()==null ? 1 : s.getPocet()+1);
+		// debil IE8 mi z nejakeho duvodu novou PR podminku zalozi 2x a proto se nasledne posral soucet PR v dane sade
+		// z toho duvodu uz setetuji tento pocet tady, ale az pri zobrazeni seznamu PR ve vybrane sade
+		//s.setPocet(s.getPocet()==null ? 1 : s.getPocet()+1);
 		serviceSada.setSada(s);
 
 		return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
@@ -587,8 +587,10 @@ public class EditaceController {
 		}
 
 		servicePrPodminka.addPrPodminka(prp);
-		
-		s.setPocet(s.getPocet()==null ? 1 : s.getPocet()+1);
+
+		// debil IE8 mi z nejakeho duvodu novou PR podminku zalozi 2x a proto se nasledne posral soucet PR v dane sade
+		// z toho duvodu uz setetuji tento pocet tady, ale az pri zobrazeni seznamu PR ve vybrane sade
+		//s.setPocet(s.getPocet()==null ? 1 : s.getPocet()+1);
 		serviceSada.setSada(s);
 
 		return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
@@ -605,8 +607,8 @@ public class EditaceController {
 		int pocetSmazanychPr = pr.size();
 		servicePrPodminka.removeAllPrPodminka(s);
 		
-		s.setPocet(0);
-		serviceSada.setSada(s);
+		//s.setPocet(0);
+		//serviceSada.setSada(s);
 
 		Protokol newProtokol = new Protokol();
 		newProtokol.setNetusername(req.getUserPrincipal().getName().toUpperCase());
@@ -626,10 +628,12 @@ public class EditaceController {
 		PrPodminka pr = servicePrPodminka.getPrPodminkaOne(idPr);
 		User u = serviceUser.getUser(pr.getSk30tSada().getSk30tMt().getSk30tUser().getNetusername());
 		servicePrPodminka.removePrPodminka(idPr);
-		
-		Sada s = pr.getSk30tSada();
-		s.setPocet(s.getPocet()-1);
-		serviceSada.setSada(s);
+				
+		// debil IE8 mi z nejakeho duvodu novou PR podminku zalozi 2x a proto se nasledne posral soucet PR v dane sade
+		// z toho duvodu uz setetuji tento pocet tady, ale az pri zobrazeni seznamu PR ve vybrane sade
+		//Sada s = pr.getSk30tSada();
+		//s.setPocet(s.getPocet()-1);
+		//serviceSada.setSada(s);
 
 		Protokol newProtokol = new Protokol();
 		newProtokol.setNetusername(req.getUserPrincipal().getName().toUpperCase());

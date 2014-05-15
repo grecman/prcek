@@ -172,13 +172,11 @@
 							<th style="color: #4BA82E;" title="Seřadit dle pořadí"><a
 								href="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${vybranaSada.sk30tMt.sk30tUser.netusername}/${vybranaSada.sk30tMt.mt}/${vybranaSada.id}">Pořadí</a></th>
 							<c:choose>
-								<c:when test="${prCount==vybranaSada.pocet}">
-									<th title="Počet zobrazených PR podmínek" style="color: black;">PR
-										- ${prCount} / ${vybranaSada.pocet}</th>
+								<c:when test="${(empty(vybranaSada.rozpracovano))}">
+									<th title="Počet zobrazených PR podmínek" style="color: black;">PR - ${prCount} / ${vybranaSada.pocet}</th>
 								</c:when>
 								<c:otherwise>
-									<th title="Počet zobrazených PR podmínek" style="color: red;">PR
-										- ${prCount} / ${vybranaSada.pocet}</th>
+									<th title="Počet zobrazených PR podmínek" style="color: red;">${vybranaSada.rozpracovano} - ${prCount}</th>
 								</c:otherwise>
 							</c:choose>
 							<th>Poznámka</th>

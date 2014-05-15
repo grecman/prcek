@@ -31,6 +31,9 @@ public class Sada implements Serializable {
 	// pocet importovanych PR ze vstupniho souboru
 	@Column
 	private Integer pocet;
+	
+	@Column
+	private String rozpracovano;
 
 	//bi-directional many-to-one association to PrPodminka
 	@OneToMany(mappedBy="sk30tSada")
@@ -113,6 +116,16 @@ public class Sada implements Serializable {
 
 	public void setPocet(Integer pocet) {
 		this.pocet = pocet;
+	}
+
+	public String getRozpracovano() {
+		return rozpracovano;
+	}
+
+	public void setRozpracovano(String rozpracovano) {
+		this.rozpracovano = rozpracovano;
 	}	
+	
+	
 
 }
