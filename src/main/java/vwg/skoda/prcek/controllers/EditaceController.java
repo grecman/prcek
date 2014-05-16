@@ -158,17 +158,10 @@ public class EditaceController {
 			model.addAttribute("moznoEditovatSadu", false);
 		}
 
-		// drive byl update poctu PR v dane sade vzdy tam, kde se to zrovna menilo (novaPR)
-		// ale protoze IE8 vkladal zaznamy duplicitne, tak jsem to musel prehodit sem.
 		List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminka(s);
-		s.setPocet(prPodminkaList.size());
-		serviceSada.setSada(s);
-		
 		model.addAttribute("prPodminkaList", prPodminkaList);
-
-		Long prCount = servicePrPodminka.getPrPodminkaCount(s);
-		model.addAttribute("prCount", prCount);
-
+		model.addAttribute("prCount", prPodminkaList.size());
+		
 		model.addAttribute("vybranyUzivatel", u);
 		model.addAttribute("vybranaMt", m);
 		model.addAttribute("vybranaSada", s);
@@ -192,16 +185,9 @@ public class EditaceController {
 			model.addAttribute("moznoEditovatSadu", false);
 		}
 		
-		// drive byl update poctu PR v dane sade vzdy tam, kde se to zrovna menilo (novaPR)
-		// ale protoze IE8 vkladal zaznamy duplicitne, tak jsem to musel prehodit sem.
 		List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminka(s);
-		s.setPocet(prPodminkaList.size());
-		serviceSada.setSada(s);
-		
 		model.addAttribute("prPodminkaList", prPodminkaList);
-
-		Long prCount = servicePrPodminka.getPrPodminkaCount(s);
-		model.addAttribute("prCount", prCount);
+		model.addAttribute("prCount", prPodminkaList.size());
 
 		model.addAttribute("vybranyUzivatel", u);
 		model.addAttribute("vybranaMt", m);
@@ -229,9 +215,7 @@ public class EditaceController {
 
 		List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminkaOrderByErrMbt(s);
 		model.addAttribute("prPodminkaList", prPodminkaList);
-
-		Long prCount = servicePrPodminka.getPrPodminkaCount(s);
-		model.addAttribute("prCount", prCount);
+		model.addAttribute("prCount", prPodminkaList.size());
 
 		model.addAttribute("vybranyUzivatel", u);
 		model.addAttribute("vybranaMt", m);
@@ -259,9 +243,7 @@ public class EditaceController {
 
 		List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminkaJenDuplicity(s);
 		model.addAttribute("prPodminkaList", prPodminkaList);
-
-		Long prCount = servicePrPodminka.getPrPodminkaCount(s);
-		model.addAttribute("prCount", prCount);
+		model.addAttribute("prCount", prPodminkaList.size());
 
 		model.addAttribute("vybranyUzivatel", u);
 		model.addAttribute("vybranaMt", m);
@@ -408,7 +390,7 @@ public class EditaceController {
 		Sada newSada = new Sada();
 		newSada.setNazev(f.getSada().trim());
 		newSada.setUuser(u.getNetusername());
-		//newSada.setPocet(sPuv.getPocet());
+		newSada.setPocet(sPuv.getPocet());
 		newSada.setUtime(new Date());
 		newSada.setSk30tMt(serviceMt.getMtOne(u.getId(), f.getMt()));
 		serviceSada.addSada(newSada);
@@ -477,14 +459,13 @@ public class EditaceController {
 			//System.out.println(e.getID());
 			prp.setErrMbt(e.getLocalizedMessage());
 		}
-
 		servicePrPodminka.addPrPodminka(prp);
 		
-		// debil IE8 mi z nejakeho duvodu novou PR podminku zalozi 2x a proto se nasledne posral soucet PR v dane sade
-		// z toho duvodu uz setetuji tento pocet tady, ale az pri zobrazeni seznamu PR ve vybrane sade
-		//s.setPocet(s.getPocet()==null ? 1 : s.getPocet()+1);
+		List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminka(s);
+		s.setPocet(prPodminkaList.size());
+		s.setUtime(new Date());
 		serviceSada.setSada(s);
-
+		
 		return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
 	}
 
@@ -588,9 +569,9 @@ public class EditaceController {
 
 		servicePrPodminka.addPrPodminka(prp);
 
-		// debil IE8 mi z nejakeho duvodu novou PR podminku zalozi 2x a proto se nasledne posral soucet PR v dane sade
-		// z toho duvodu uz setetuji tento pocet tady, ale az pri zobrazeni seznamu PR ve vybrane sade
-		//s.setPocet(s.getPocet()==null ? 1 : s.getPocet()+1);
+		List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminka(s);
+		s.setPocet(prPodminkaList.size());
+		s.setUtime(new Date());
 		serviceSada.setSada(s);
 
 		return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
@@ -607,8 +588,8 @@ public class EditaceController {
 		int pocetSmazanychPr = pr.size();
 		servicePrPodminka.removeAllPrPodminka(s);
 		
-		//s.setPocet(0);
-		//serviceSada.setSada(s);
+		s.setPocet(0);
+		serviceSada.setSada(s);
 
 		Protokol newProtokol = new Protokol();
 		newProtokol.setNetusername(req.getUserPrincipal().getName().toUpperCase());
@@ -629,12 +610,12 @@ public class EditaceController {
 		User u = serviceUser.getUser(pr.getSk30tSada().getSk30tMt().getSk30tUser().getNetusername());
 		servicePrPodminka.removePrPodminka(idPr);
 				
-		// debil IE8 mi z nejakeho duvodu novou PR podminku zalozi 2x a proto se nasledne posral soucet PR v dane sade
-		// z toho duvodu uz setetuji tento pocet tady, ale az pri zobrazeni seznamu PR ve vybrane sade
-		//Sada s = pr.getSk30tSada();
-		//s.setPocet(s.getPocet()-1);
-		//serviceSada.setSada(s);
-
+		Sada s = pr.getSk30tSada();
+		List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminka(s);
+		s.setPocet(prPodminkaList.size());
+		s.setUtime(new Date());
+		serviceSada.setSada(s);
+		
 		Protokol newProtokol = new Protokol();
 		newProtokol.setNetusername(req.getUserPrincipal().getName().toUpperCase());
 		newProtokol.setAction("Smazani PR podminky");

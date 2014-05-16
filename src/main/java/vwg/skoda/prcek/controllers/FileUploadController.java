@@ -105,7 +105,9 @@ public class FileUploadController {
 						}
 
 						s.setUtime(new Date());
-						s.setRozpracovano("Probíhá import "+prPodminky.size()+" PR podmínek ze souboru ");
+						
+						Integer pocetPR = prPodminky.size();
+						s.setRozpracovano(pocetPR.toString());
 						serviceSada.setSada(s);
 
 						int poradiPr = 0;
@@ -135,6 +137,8 @@ public class FileUploadController {
 							servicePrPodminka.addPrPodminka(prp);
 						}
 						
+						List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminka(s);
+						s.setPocet(prPodminkaList.size());
 						s.setUtime(new Date());
 						s.setRozpracovano(null);
 						serviceSada.setSada(s);
@@ -149,7 +153,7 @@ public class FileUploadController {
 		// nastavi casovy limit pro vyse uvedeny proces
 		// tento WebAsyncTask jede vlastne soubezne s tim Callable a po uplynulem casovem limitu ji opusti a vrati "return" ktery je v tom
 		// ".onTimeout"
-		WebAsyncTask<String> w = new WebAsyncTask<String>(6000, c); // 1000 = 1s; 60000 = 1min
+		WebAsyncTask<String> w = new WebAsyncTask<String>(1000, c); // 1000 = 1s; 60000 = 1min
 
 		// pokud je limit prekrocenm, tak implementovana metoda call() okamzite vrati
 		w.onTimeout(new Callable<String>() {
@@ -174,12 +178,13 @@ public class FileUploadController {
 		Sada s = serviceSada.getSadaOne(vybranaSada);
 		// ty co tam uz jsou + ty co tam chci
 		int celkovyPocerPR = s.getPocet();
-		Long prCount = servicePrPodminka.getPrPodminkaCount(s);
+		
+		List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminka(s);
 
-		if (celkovyPocerPR == prCount.intValue()) {
+		if (celkovyPocerPR == prPodminkaList.size()) {
 			return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
 		} else {
-			model.addAttribute("prCount", prCount);
+			model.addAttribute("prCount", prPodminkaList.size());
 			model.addAttribute("vybranaSada", s);
 			return "fileUploadProces";
 		}

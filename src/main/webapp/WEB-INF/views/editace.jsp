@@ -173,10 +173,13 @@
 								href="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${vybranaSada.sk30tMt.sk30tUser.netusername}/${vybranaSada.sk30tMt.mt}/${vybranaSada.id}">Pořadí</a></th>
 							<c:choose>
 								<c:when test="${(empty(vybranaSada.rozpracovano))}">
-									<th title="Počet zobrazených PR podmínek" style="color: black;">PR - ${prCount} / ${vybranaSada.pocet}</th>
+									<th title="Počet zobrazených PR podmínek" style="color: black;">Celkem PR
+										- ${prCount}</th>
 								</c:when>
 								<c:otherwise>
-									<th title="Počet zobrazených PR podmínek" style="color: red;">${vybranaSada.rozpracovano} - ${prCount}</th>
+									<th title="Počet zobrazených PR podmínek" style="color: red;">Importuji
+										${vybranaSada.rozpracovano} nových PR. Zatím nahráno
+										${prCount}/${vybranaSada.pocet+vybranaSada.rozpracovano}.</th>
 								</c:otherwise>
 							</c:choose>
 							<th>Poznámka</th>

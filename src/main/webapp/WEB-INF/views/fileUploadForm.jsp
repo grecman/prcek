@@ -70,8 +70,11 @@
 		<DIV>
 			Import PR podmínek pro sadu: <B>${vybranaSada.sk30tMt.mt} -
 				${vybranaSada.nazev}</B>
+		</DIV><BR />
+		<DIV>
+			Počet stávajících PR podmínek v sadě: <B>${vybranaSada.pocet}</B>
 		</DIV>
-		<BR /> <BR />
+		 <BR />
 		<form:form method="post" id="formNahratSoubor"
 			action="${pageContext.servletContext.contextPath}/srv/fileUpload/saveFileAsync/${vybranaSada.id}"
 			modelAttribute="uploadForm" enctype="multipart/form-data">

@@ -75,10 +75,10 @@ public class PrPodminkaService {
 		     "ORDER BY p.pr, p.poradi", PrPodminka.class).setParameter("sd", sada).getResultList();
 	}
 
-	public Long getPrPodminkaCount(Sada sada) {
-		log.trace("###\t\t getPrPodminkaCount(" + sada.getSk30tMt().getMt() + " - " + sada.getNazev() + ")");
-		return entityManager.createQuery("SELECT count(*) FROM PrPodminka u WHERE u.sk30tSada=:sd", Long.class).setParameter("sd", sada).getSingleResult();
-	}
+//	public Long getPrPodminkaCount(Sada sada) {
+//		log.trace("###\t\t getPrPodminkaCount(" + sada.getSk30tMt().getMt() + " - " + sada.getNazev() + ")");
+//		return entityManager.createQuery("SELECT count(*) FROM PrPodminka u WHERE u.sk30tSada=:sd", Long.class).setParameter("sd", sada).getSingleResult();
+//	}
 	
 	public Boolean existPr(String pr,Sada sada) {
 		log.trace("###\t\t existPr(" + sada.getNazev()+" - "+pr.toUpperCase()+")");
