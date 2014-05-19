@@ -1,84 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
-  <display-name>prcek</display-name>
-  <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-    <welcome-file>index.htm</welcome-file>
-    <welcome-file>index.jsp</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
-  </welcome-file-list>
-  <listener>
-    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-  </listener>
-  <filter>
-    <filter-name>Enc</filter-name>
-    <filter-class>vwg.skoda.prcek.objects.EncodingFiltr</filter-class>
-    <async-supported>true</async-supported>
-  </filter>
-  <filter-mapping>
-    <filter-name>Enc</filter-name>
-    <url-pattern>/srv/*</url-pattern>
-  </filter-mapping>
-  <servlet>
-    <servlet-name>dispatcher</servlet-name>
-    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-    <async-supported>true</async-supported>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>dispatcher</servlet-name>
-    <url-pattern>*.html</url-pattern>
-    <url-pattern>*.json</url-pattern>
-    <url-pattern>/srv/*</url-pattern>
-  </servlet-mapping>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+	<display-name>prcek</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
 
-  <servlet>
-    <servlet-name>QueryServlet</servlet-name>
-    <servlet-class>cz.gelion.jpqlw.QueryServlet</servlet-class>
-    <init-param>
-      <param-name>persistence.unit</param-name>
-      <param-value>PrcekPersistence</param-value>
-    </init-param>
-    <async-supported>true</async-supported>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>QueryServlet</servlet-name>
-    <url-pattern>/query</url-pattern>
-  </servlet-mapping>
+<!--
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>vwg.skoda.prcek.objects.EncodingFiltr</filter-class>
+		<async-supported>true</async-supported>
+	</filter>
+ -->
+<!-- SPRINGovy EncodingFiltr pro naSETotovani requestu na UTF-8 --> 
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<async-supported>true</async-supported>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/srv/*</url-pattern>
+	</filter-mapping>
 
-  <security-role>
-    <description>Standardní uživatelé</description>
-    <role-name>USERS</role-name>
-  </security-role>
-  
-  <security-role>
-    <description>Administátoři</description>
-    <role-name>ADMINS</role-name>
-  </security-role>  
-  
-  <security-role>
-    <description>Service Desk</description>
-    <role-name>SERVICEDESK</role-name>
-  </security-role>
-  
-  <security-constraint>
-    <web-resource-collection>
-      <web-resource-name>ALL</web-resource-name>
-      <url-pattern>/*</url-pattern>
-    </web-resource-collection>
-    <auth-constraint>
-      <role-name>USERS</role-name>
-      <role-name>ADMINS</role-name>
-      <role-name>SERVICEDESK</role-name>
-    </auth-constraint>
-  </security-constraint>
-  <resource-ref>
-    <description></description>
-    <res-ref-name>jdbc/Prcek</res-ref-name>
-    <res-type>javax.sql.DataSource</res-type>
-    <res-auth>Container</res-auth>
-    <res-sharing-scope>Shareable</res-sharing-scope>
-  </resource-ref>
+	<servlet>
+		<servlet-name>dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+		<async-supported>true</async-supported>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>dispatcher</servlet-name>
+		<url-pattern>*.html</url-pattern>
+		<url-pattern>*.json</url-pattern>
+		<url-pattern>/srv/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>QueryServlet</servlet-name>
+		<servlet-class>cz.gelion.jpqlw.QueryServlet</servlet-class>
+		<init-param>
+			<param-name>persistence.unit</param-name>
+			<param-value>PrcekPersistence</param-value>
+		</init-param>
+		<async-supported>true</async-supported>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>QueryServlet</servlet-name>
+		<url-pattern>/query</url-pattern>
+	</servlet-mapping>
+
+	<security-role>
+		<description>Standardní uživatelé</description>
+		<role-name>USERS</role-name>
+	</security-role>
+
+	<security-role>
+		<description>Administátoři</description>
+		<role-name>ADMINS</role-name>
+	</security-role>
+
+	<security-role>
+		<description>Service Desk</description>
+		<role-name>SERVICEDESK</role-name>
+	</security-role>
+
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>ALL</web-resource-name>
+			<url-pattern>/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>USERS</role-name>
+			<role-name>ADMINS</role-name>
+			<role-name>SERVICEDESK</role-name>
+		</auth-constraint>
+	</security-constraint>
+	<resource-ref>
+		<description></description>
+		<res-ref-name>jdbc/Prcek</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Container</res-auth>
+		<res-sharing-scope>Shareable</res-sharing-scope>
+	</resource-ref>
 </web-app>
