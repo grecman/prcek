@@ -139,9 +139,13 @@
 					<TD><input type="button" value="ok" class="submit" id="tlacitkoSave"/></TD>
 					<!-- <td><button onclick="return check('loc', {'partNumber' : /^[a-zA-Z0-9\u0020]{1}[a-zA-Z0-9\u0020]{0,14}$/, 'partDescription' : /^[a-zA-Z0-9]{1}[/,-.a-zA-Z0-9\u0020]{0,35}$/,'quantity' : /^([,.0-9])+$/, 'uom' : /^[1-5]{1}$/});">Add</button></td>-->
 				</TR>
-				<TR height="300px;"></TR>
+				<TR height="250px;"></TR>
 			</TABLE>
 		</form:form>
+		<BR /><BR />
+		<DIV style="font-size:x-small; color: gray;">Pozn.: Pokud se v sadě vyskytují stejné PR podminky, tak se tento duplicitní záznam nebude přenášet do nové, duplikované sady. 
+		<BR /><BR />
+		</DIV>
 
 		<div class="zonaTlacitek">
 			<div class="tlacitka">

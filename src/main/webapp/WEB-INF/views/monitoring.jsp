@@ -62,18 +62,18 @@
 		});
 	}
 
-	function testDbKomunikaceAjax() {
-		var checkUrl = "/prcek/monitoring/testDbKomunikaceAjax.json";
-		var datum = null;
-		$.ajax({
-			url : checkUrl,
-			async : false, // default je true, pokud není false, tak následný if(result) proběhne dříve než se vrátí objekt z ajaxu !!!
-			cache : false
-		}).done(function(data) {
-			$("#datumKomunikace").html(data.komunikaceDate);
-			$("#latenceKomunikace").html(data.komunikaceLatence);
-		});
-	}
+// 	function testDbKomunikaceAjax() {
+// 		var checkUrl = "/prcek/monitoring/testDbKomunikaceAjax.json";
+// 		var datum = null;
+// 		$.ajax({
+// 			url : checkUrl,
+// 			async : false, // default je true, pokud není false, tak následný if(result) proběhne dříve než se vrátí objekt z ajaxu !!!
+// 			cache : false
+// 		}).done(function(data) {
+// 			$("#datumKomunikace").html(data.komunikaceDate);
+// 			$("#latenceKomunikace").html(data.komunikaceLatence);
+// 		});
+// 	}
 </script>
 
 
@@ -105,7 +105,7 @@
 			</THEAD>
 			<TBODY>
 				<TR>
-					<TD></TD>
+					<TD align="center"><B>${db}</B></TD>
 					<TD class="rowOdd" title="Všechny uživatelské data">PRCEK</TD>
 					<TD align="center"><INPUT id="ButtonPrcekDate" type="button"
 						style="background: transparent url(${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png) no-repeat center;"></INPUT></TD>
@@ -114,13 +114,13 @@
 				</TR>
 				<TR>
 					<TD align="center"><B>${db}</B></TD>
-					<TD class="rowOdd" title="Databáze PR podmínke (kontkola)">MBT_P</TD>
+					<TD class="rowOdd" title="Databáze PR podmínke (kontkola)">TIWH</TD>
 					<TD align="center"><INPUT id="ButtonMbtDate" type="button"
 						style="background: transparent url(${pageContext.servletContext.contextPath}/resources/ico/diagona/nasledujici.png) no-repeat center;"></INPUT></TD>
 					<TD align="center" id="datumMbt"></TD>
 					<TD align="center" id="latenceMbt"></TD>
 				</TR>
-				<TR>
+<!-- 			<TR>
 					<TD></TD>
 					<TD class="rowOdd" title="Databáze zakázek">KOMUNIKACE</TD>
 					<TD align="center"><INPUT id="ButtonKomunikaceDate"
@@ -129,7 +129,7 @@
 					<TD align="center" id="datumKomunikace"></TD>
 					<TD align="center" id="latenceKomunikace"></TD>
 				</TR>
-			</TBODY>
+ -->		</TBODY>
 		</TABLE>
 		<BR /><HR />
 		<H3>Informace o uživateli</H3>

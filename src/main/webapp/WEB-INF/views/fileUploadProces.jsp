@@ -19,24 +19,18 @@
 
 <!-- ZDROJ: http://jquerybyexample.blogspot.com/2013/06/jquery-redirect-page-after-few-seconds.html  -->
 <script type="text/javascript">
-	$(document)
-			.ready(
-					function() {
-						window
-								.setInterval(
-										function() {
-											var iTimeRemaining = $(
-													"#spnSeconds").html();
-											iTimeRemaining = eval(iTimeRemaining);
-											if (iTimeRemaining == 0) {
-												//window.location.href = "${pageContext.servletContext.contextPath}/srv/fileUpload/fileUploadProces/"+${vybranaSada.id};
-												window.location.href = "./"+${vybranaSada.id};
-											} else {
-												$("#spnSeconds").html(
-														iTimeRemaining - 1);
-											}
-										}, 1000);
-					});
+	$(document).ready(function() {
+		window.setInterval(function() {
+			var iTimeRemaining = $("#spnSeconds").html();
+			iTimeRemaining = eval(iTimeRemaining);
+			if (iTimeRemaining == 0) {
+				//window.location.href = "${pageContext.servletContext.contextPath}/srv/fileUpload/fileUploadProces/"+${vybranaSada.id};
+				window.location.href = "./"+${vybranaSada.id};
+			} else {
+				$("#spnSeconds").html(iTimeRemaining - 1);
+			}
+		}, 1000);
+	});
 </script>
 </head>
 
@@ -45,32 +39,28 @@
 		<div class="headerNazevStranky">
 			<f:message key="importTxt" />
 		</div>
-		
+
 		<c:set scope="request" var="actual" value="editace" />
 		<jsp:include page="header.jsp" />
-		
+
 		<BR />
 		<H2>Nahráno ${prCount} / ${vybranaSada.pocet+vybranaSada.rozpracovano}</H2>
 		<BR />
-		<DIV style="color: gray; font-size: smaller; width: 650px;">
-			POZOR: tato akce může trvat i desítky minut! Buď počkáte na konec
-			importu PR podmínek, nebo máte možnost se vrátí zpět na detail své
-			sady, na obrazovku "Seznam PR podmínek sady" pomocí tlačítka "Zpět" a
-			import bude dobíhat na pozadí.<BR /> V tomto případě si musíte dát
-			pozor na to, aby jste nepoužili uvedenou sadu na "Výpočet" dříve, než
-			se všechny PR podmínky importují. To zjistíte pohledem na záhlaví
-			sloupce PR, kde je uveden aktuální počet PR podmínek / celkový počet
-			PR podmínek. Aktualizace aktuálního počtu PR podmínek provedete
-			pomocí tlačítka "Aktualizovat".
+		<DIV style="color: gray; font-size: smaller; width: 1050px;">
+			POZOR: tato akce může trvat i několik minut! Záleží na velikosti
+			sady. Buď počkáte na konec importu PR podmínek přímo na této
+			obrazovce, nebo máte možnost se vrátí zpět na detail své sady pomocí
+			tlačítka "Zpět", to znamená na obrazovku "Seznam PR podmínek sady" a import
+			bude dobíhat na pozadí.Pomocí tlačítka "Aktualizovat"
+			zjistíte počet nahraných PR podmínek v sadě. Dokud nebudou
+			importovány všechny PR podmínky ze souboru, nebude možné sadu použít
+			pro výpočet.
 		</DIV>
-		<BR />
-		<BR />
+		<BR /> 
 		<DIV>
 			<img
 				src="${pageContext.servletContext.contextPath}/resources/images/import_pr_pocet.jpg" />
 		</DIV>
-
-		<DIV style="height: 50px;">&#160;</DIV>
 		<p align="right" style="color: gray; font-size: xx-small;">
 			Další refresh za: <span id="spnSeconds">4</span> sekund.
 		</p>
@@ -81,8 +71,9 @@
 				<c:set var="zpetPopisek">
 					<f:message>zpet</f:message>
 				</c:set>
-				<form:form commandName="sada" action="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${vybranaSada.sk30tMt.sk30tUser.netusername}/${vybranaSada.sk30tMt.mt}/${vybranaSada.id}">
-					<input type="submit" value="${zpetPopisek}" class="submit"/>
+				<form:form commandName="sada"
+					action="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${vybranaSada.sk30tMt.sk30tUser.netusername}/${vybranaSada.sk30tMt.mt}/${vybranaSada.id}">
+					<input type="submit" value="${zpetPopisek}" class="submit" />
 				</form:form>
 			</div>
 		</div>

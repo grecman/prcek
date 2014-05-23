@@ -11,8 +11,9 @@ import javax.servlet.ServletResponse;
 
 public class EncodingFiltr implements Filter {
 
+	//TODO - pri pristim buildu SMAZAT!
 	//Tato trida byla implementovana ve web.xml, ale nahradil jsem ji SPRINGovou variatnou a tim padem jiz tato trida nadale neni potreba!
-	
+		
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 	}

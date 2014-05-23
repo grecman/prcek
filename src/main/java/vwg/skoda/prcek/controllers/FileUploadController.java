@@ -134,7 +134,12 @@ public class FileUploadController {
 								log.info("###\t Chyba pri obsahove kontrole PR podminky (import TXT): " + e);
 								prp.setErrMbt(e.getMessage());
 							}
-							servicePrPodminka.addPrPodminka(prp);
+							// kvuli debilnimu IE8 ktere zdvojuje zaznamy, tak proto chytam vyjimku a druhy duplicitni zaznam natvrdo zahazuji (DB-unique key)
+							try {
+								servicePrPodminka.addPrPodminka(prp);	
+							} catch (Exception e) {
+								log.error("###\t\t Nezadouci duplicitni zaznam (PR podminky): "+ e.getMessage());
+							}							
 						}
 						
 						List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminka(s);

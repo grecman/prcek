@@ -233,7 +233,7 @@ public class EditaceController {
 		Mt m = serviceMt.getMtOne(u.getId(), vybranaMt);
 		Sada s = serviceSada.getSadaOne(vybranaSada);
 
-		// zajistit aby se editacni tlacitka pro sadu objevilo jen uzivateli, ktery muze sadu editovat (mazat/prejmenovat)!
+		// zajistit aby se editacni tlacitka pro sadu objevily jen uzivateli, ktery muze sadu editovat (mazat/prejmenovat)!
 		User uPrihlaseny = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		if (uPrihlaseny.getId() == u.getId()) {
 			model.addAttribute("moznoEditovatSadu", true);
@@ -310,6 +310,7 @@ public class EditaceController {
 		if (!serviceSada.existSada(f.getSada(), f.getMt())) {
 			Sada newSada = new Sada();
 			newSada.setNazev(f.getSada().trim());
+			newSada.setPocet(0);
 			newSada.setUuser(u.getNetusername());
 			newSada.setUtime(new Date());
 			newSada.setSk30tMt(serviceMt.getMtOne(u.getId(), f.getMt()));
@@ -410,8 +411,13 @@ public class EditaceController {
 
 			// TODO: tady delat kontrolu kvuli tomu, ze duplikace se provede do jine MT kde by nejaka PR nemusela byt platna! Prolem je, ze by se to
 			// melo delat asi async :(
-
-			servicePrPodminka.addPrPodminka(newPr);
+			// kvuli debilnimu IE8 ktere zdvojuje zaznamy, tak proto chytam vyjimku a druhy duplicitni zaznam natvrdo zahazuji (DB-unique key)
+			try {
+				servicePrPodminka.addPrPodminka(newPr);	
+			} catch (Exception e) {
+				log.error("###\t\t Nezadouci duplicitni zaznam (PR podminky): "+ e.getMessage());
+			}
+			
 		}
 
 		// return "redirect:/srv/editace/zobrazPr/"+u.getNetusername()+"/"+s.getSk30tMt().getMt()+"?sada="+s.getNazev();
@@ -459,7 +465,14 @@ public class EditaceController {
 			//System.out.println(e.getID());
 			prp.setErrMbt(e.getLocalizedMessage());
 		}
-		servicePrPodminka.addPrPodminka(prp);
+		
+		// kvuli debilnimu IE8 ktere zdvojuje zaznamy, tak proto chytam vyjimku a druhy duplicitni zaznam natvrdo zahazuji (DB-unique key)
+		try {
+			servicePrPodminka.addPrPodminka(prp);	
+		} catch (Exception e) {
+			log.error("###\t\t Nezadouci duplicitni zaznam (PR podminky): "+ e.getMessage());
+		}
+		
 		
 		List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminka(s);
 		s.setPocet(prPodminkaList.size());
@@ -567,8 +580,13 @@ public class EditaceController {
 			prp.setErrMbt(e.getLocalizedMessage());
 		}
 
-		servicePrPodminka.addPrPodminka(prp);
-
+		// kvuli debilnimu IE8 ktere zdvojuje zaznamy, tak proto chytam vyjimku a druhy duplicitni zaznam natvrdo zahazuji (DB-unique key)
+		try {
+			servicePrPodminka.addPrPodminka(prp);	
+		} catch (Exception e) {
+			log.error("###\t\t Nezadouci duplicitni zaznam (PR podminky): "+ e.getMessage());
+		}
+		
 		List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminka(s);
 		s.setPocet(prPodminkaList.size());
 		s.setUtime(new Date());

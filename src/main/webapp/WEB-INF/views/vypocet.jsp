@@ -170,15 +170,17 @@
 								<TD></TD>
 								<TD>Denní zpracování</TD>
 								<TD>od</TD>
-								
-									<TD><form:form commandName="formObj"
-									action="${pageContext.servletContext.contextPath}/srv/vypocet/vybraneObdobiDenOdDo"><form:input path="platnostOd" id="datepickerOd"
+
+								<TD><form:form commandName="formObj"
+										action="${pageContext.servletContext.contextPath}/srv/vypocet/vybraneObdobiDenOdDo">
+										<form:input path="platnostOd" id="datepickerOd"
 											class="kalendar"></form:input>
 									&#160;&#160;do&#160;&#160;
-									<form:input path="platnostDo" id="datepickerDo"	class="kalendar"></form:input> &#160;
+									<form:input path="platnostDo" id="datepickerDo"
+											class="kalendar"></form:input> &#160;
 									<input type="submit" value="ok" class="submit" />
 									</form:form></TD>
-								
+
 							</TR>
 						</c:when>
 						<c:otherwise>
@@ -270,21 +272,33 @@
 					<DIV class="scroll" style="height: 250px; overflow: auto;">
 						<TABLE id="tab1" width="100%" style="table-layout: fixed;">
 							<col width="100px" />
-							<col width="*" />
 							<col width="100px" />
+							<col width="*" />
 							<col width="100px" />
 							<thead>
 								<tr>
+									<c:choose>
+										<c:when test="${not(empty(evidBod))}">
+											<th style="color: red;">Zpracování</th>
+										</c:when>
+										<c:otherwise>
+											<th>Zpracování</th>
+										</c:otherwise>
+									</c:choose>
 									<th>Modelová třída</th>
 									<th>Název sady</th>
 									<th>Počet PR</th>
-									<th>Zpracování</th>
 								</tr>
 							</thead>
 							<tbody>
 								<c:forEach var="i" items="${vybraneSady}" varStatus="iterator">
 									<tr
 										class="${ (iterator.index mod 2) == 0 ? 'rowOdd' : 'rowEven' }">
+										<td align="center"><c:if
+												test="${not(empty(evidBod)) and (i.pocet > 0)}">
+												<form:checkbox cssClass="klikZpracovani" path="idcka"
+													value="${i.id}" />
+											</c:if></td>
 										<td align="center">${i.sk30tMt.mt}</td>
 										<td><a
 											href="${pageContext.servletContext.contextPath}/srv/editace/zobrazPr/${i.sk30tMt.sk30tUser.netusername}/${i.sk30tMt.mt}/${i.id}">
@@ -298,11 +312,6 @@
 												<td align="right" style="color: red; font-weight: bold;">0</td>
 											</c:otherwise>
 										</c:choose>
-										<td align="center"><c:if
-												test="${not(empty(evidBod)) and (i.pocet > 0)}">
-												<form:checkbox cssClass="klikZpracovani" path="idcka"
-													value="${i.id}" />
-											</c:if></td>
 									</tr>
 								</c:forEach>
 							</tbody>

@@ -41,7 +41,7 @@ public class PrPodminkaService {
 	@Transactional
 	public void addPrPodminka(PrPodminka newPrPodminka) {
 		log.trace("###\t\t addPrPodminka(" + newPrPodminka.getPr() + ")");
-		entityManager.persist(newPrPodminka);
+			entityManager.persist(newPrPodminka);
 	}
 
 	@Transactional
@@ -71,7 +71,7 @@ public class PrPodminkaService {
 				"SELECT u.pr FROM PrPodminka u "+ 
 				  "WHERE u.sk30tSada=:sd " +
 				  "GROUP BY u.pr " + 
-				  "HAVING count(u.poradi)>1) " +
+				  "HAVING count(u.pr)>1) " +
 		     "ORDER BY p.pr, p.poradi", PrPodminka.class).setParameter("sd", sada).getResultList();
 	}
 
