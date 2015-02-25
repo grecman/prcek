@@ -241,11 +241,11 @@ public class VypocetController {
 				off.setPocetZakazek(zakCount);
 				off.setZakazkyVystup(f.getZakazkyVystup());
 				if (zakCount < 1) {
-					off.setProces("Nebude zpracováno");
+					off.setProces("nebude zpracovano");
 				}/* else if (zakCount > 30000){
 					off.setProces("offline");
 				}*/ else {
-					off.setProces("ve frontě");
+					off.setProces("zafrontovano");
 				}
 				off.setPlatnostOd(platnostOd);
 				off.setPlatnostDo(platnostDo);

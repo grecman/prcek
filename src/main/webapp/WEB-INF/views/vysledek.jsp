@@ -98,7 +98,7 @@
 				<c:if test="${not(empty(vysledek))}">
 					<form:form 
 						action="${pageContext.servletContext.contextPath}/srv/offline/exportXls/${idOfflineJob}">
-						<input type="submit" value="Export do XLS"  class="submit"/>
+						<input type="submit" value="Export do XLSx"  class="submit"/>
 					</form:form>
 				</c:if>
 			</div>

@@ -19,7 +19,7 @@
 	<!-- component-scan can also do what annotation-config does but component-scan also scans packages to find and register beans within the application context. -->
  	<!-- GRE: bacha!!! pokud oskenuji vsechno, tedy: "vwg.skoda.prcek" ... nebudou pak fungovat transakce !!!! -->
  	<context:component-scan base-package="vwg.skoda.prcek.controllers" /> 
-
+ 	
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 	</bean>

@@ -289,7 +289,6 @@ public class OfflineController {
 		List<Vysledek> vys = serviceVysledek.getVysledek(off);
 		ExportXls exp = new ExportXls();
 		exp.vysledek(vys, zak, res);
-
 	}
 
 	@RequestMapping(value = "/offline/exportXlsSAgregaci/{idOfflineJob}")
@@ -402,6 +401,7 @@ public class OfflineController {
 
 		ExportXls exp = new ExportXls();
 		exp.vysledekSAgregaci(kompletVysledekVcetneSumy, offAgregace, res);
+		
 	}
 	
 	@RequestMapping(value = "/offline/smazatVysledek/{idOfflineJob}")

@@ -110,11 +110,6 @@ public class IndexController {
 		newProtokol.setSessionid(req.getSession().getId());
 		serviceProtokol.addProtokol(newProtokol);
 
-		/*
-		 * TODO: - v pripade role SERVICEDESK presmerovat na MONITORING (ale toto asi bude reseno filtrem na cele session) nebo na kazde hlavni
-		 * obrazovce (edicate/vypocet/offline) ... napovedu bych jim nechal.
-		 */
-
 		return "redirect:/srv/vypocet";
 	}
 

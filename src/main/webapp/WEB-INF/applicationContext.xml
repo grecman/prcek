@@ -9,8 +9,8 @@
 	<!-- Automaticke oskenovani anotaci aspektu -->
 	<context:component-scan base-package="vwg.skoda.prcek.entities" />
 	<context:component-scan base-package="vwg.skoda.prcek.objects" />
-	<context:component-scan base-package="vwg.skoda.prcek.outputs" />
 	<context:component-scan base-package="vwg.skoda.prcek.services" />
+	<context:component-scan base-package="vwg.skoda.prcek.outputs" />
 
 	<bean id="messageSource"
 		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">

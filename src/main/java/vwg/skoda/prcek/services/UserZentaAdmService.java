@@ -13,7 +13,7 @@ public class UserZentaAdmService {
 	
 	static Logger log = Logger.getLogger(UserZentaAdm.class);
 	
-	@PersistenceContext(name = "UserService")
+	@PersistenceContext(name = "UserZentaAdm")
 	private EntityManager entityManager;
 	
 	public UserZentaAdm getUserZentaAdm(String id) {

@@ -111,8 +111,4 @@ public class EvidencniBody implements Serializable {
 		this.sk30tOfflineJobs = sk30tOfflineJobs;
 	}
 	
-	
-	
-	
-
 }

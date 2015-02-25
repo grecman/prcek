@@ -279,7 +279,7 @@
 								<tr>
 									<c:choose>
 										<c:when test="${not(empty(evidBod))}">
-											<th style="color: red;">Zpracování</th>
+											<th style="color: blue;">Zpracování</th>
 										</c:when>
 										<c:otherwise>
 											<th>Zpracování</th>

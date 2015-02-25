@@ -120,7 +120,7 @@
 					<TD align="center" id="datumMbt"></TD>
 					<TD align="center" id="latenceMbt"></TD>
 				</TR>
-<!-- 			<TR>
+				<!-- 			<TR>
 					<TD></TD>
 					<TD class="rowOdd" title="Databáze zakázek">KOMUNIKACE</TD>
 					<TD align="center"><INPUT id="ButtonKomunikaceDate"
@@ -129,32 +129,40 @@
 					<TD align="center" id="datumKomunikace"></TD>
 					<TD align="center" id="latenceKomunikace"></TD>
 				</TR>
- -->		</TBODY>
+ -->
+			</TBODY>
 		</TABLE>
-		<BR /><HR />
+		<BR />
+		<HR />
 		<H3>Informace o uživateli</H3>
 		<DIV style="padding-left: 20px; font-size: 14px;">
-			Uživatelské jméno:<B>${userName}</B><BR />
-			Uživatel: <B>${aktualUser.prijmeni} ${aktualUser.jmeno} - ${aktualUser.oddeleni}</B><BR /> 
+			Uživatelské jméno:<B>${userName}</B><BR /> 
+			Uživatel: <B>${aktualUser.prijmeni}	${aktualUser.jmeno} - ${aktualUser.oddeleni}</B><BR /> 
 			Role: <B>${userRole}</B>
 		</DIV>
-		<BR /><HR />
-		<H3>Informace o serveru</H3>
+		<BR />
+		<HR />
+		<H3>Informace o aplikaci</H3>
 		<DIV style="padding-left: 20px; font-size: 14px;">
-			Server: <B>${server}</B><BR /> 
+			Server: <B>${server}</B><BR />
 			IP: <B>${ip}</B><BR /> 
-			Root aplikace: <B>${pageContext.servletContext.contextPath}</B>
+			Root aplikace: <B>${pageContext.servletContext.contextPath}</B><BR /> 
+			<!-- 
+			Verze aplikace: ${initParam.buildTimeStamp}<BR /> 
+			Verze aplikace: ${timestamp}<BR />
+			 --> 
 		</DIV>
-		<BR /><HR />
+		<BR />
+		<HR />
 		<H3>Návštěvní kniha</H3>
 		<DIV style="padding-left: 20px; font-size: 14px;">
 			Vaše poslední přihlášení: <B>${lastUserLogin}</B><BR /> 
-			Do aplikace jste se celkem přihlásil: <B>${userLogin}</B><BR /><BR /> 
-			Aplikaci používá celkem: <B>${allUsers}</B> uživatelů. <BR /> 
-			Počet všech přihlášení: <B>${allUserLogin}</B>
+			Do aplikace jste se celkem přihlásil: <B>${userLogin}</B><BR />
+			<BR /> Aplikaci používá celkem: <B>${allUsers}</B> uživatelů. 
+			<BR /> Počet všech přihlášení: <B>${allUserLogin}</B>
 		</DIV>
 
-<!-- 		 
+		<!-- 		 
 		<script>
 			document.write("<BR />Jméno prohlížeče: ");
 			document.write(navigator.appName);
@@ -171,7 +179,7 @@
 			document.write("<BR />Kódové jméno aplikace: ");
 			document.write(navigator.appCodeName);
 		</script>
- --> 
+ -->
 
 		<DIV style="height: 50px;">&#160;</DIV>
 		<jsp:include page="footer.jsp" />

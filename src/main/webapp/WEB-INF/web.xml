@@ -16,14 +16,9 @@
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 
-<!--
-	<filter>
-		<filter-name>encodingFilter</filter-name>
-		<filter-class>vwg.skoda.prcek.objects.EncodingFiltr</filter-class>
-		<async-supported>true</async-supported>
-	</filter>
- -->
-<!-- SPRINGovy EncodingFiltr pro naSETotovani requestu na UTF-8 --> 
+	<!-- <filter> <filter-name>encodingFilter</filter-name> <filter-class>vwg.skoda.prcek.objects.EncodingFiltr</filter-class> 
+		<async-supported>true</async-supported> </filter> -->
+	<!-- SPRINGovy EncodingFiltr pro naSETotovani requestu na UTF-8 -->
 	<filter>
 		<filter-name>encodingFilter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -102,4 +97,9 @@
 		<res-auth>Container</res-auth>
 		<res-sharing-scope>Shareable</res-sharing-scope>
 	</resource-ref>
+
+	<context-param>
+		<param-name>buildTimeStamp</param-name>
+		<param-value>${timestamp}</param-value>
+	</context-param>
 </web-app>

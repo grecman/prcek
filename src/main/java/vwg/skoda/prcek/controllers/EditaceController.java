@@ -69,17 +69,17 @@ public class EditaceController {
 	@RequestMapping
 	public String editaceStart(User netusername, Mt mt, Sada sada, Model model, HttpServletRequest req) {
 		log.debug("###\t editaceStart()");
-		
+
 		User aktualUser = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		model.addAttribute("aktualUser", aktualUser);
 
-		if(req.isUserInRole("SERVICEDESK")){
+		if (req.isUserInRole("SERVICEDESK")) {
 			return "redirect:/srv/monitoring";
 		}
-		
+
 		List<User> uzivatelList = serviceUser.getUsers();
 		model.addAttribute("uzivatelList", uzivatelList);
-		
+
 		return "/editace";
 	}
 
@@ -89,8 +89,6 @@ public class EditaceController {
 
 		User u = serviceUser.getUser(netusername.getNetusername());
 		model.addAttribute("vybranyUzivatel", u);
-		
-
 
 		List<Mt> mtList = serviceMt.getMt(u.getId());
 		model.addAttribute("mtList", mtList);
@@ -102,10 +100,10 @@ public class EditaceController {
 	public String vyberMt(@PathVariable String vybranyUzivatel, User netusername, Mt mt, Sada sada, Model model, HttpServletRequest req) {
 		log.debug("###\t vyberMt(" + vybranyUzivatel + ")");
 
-		if(req.isUserInRole("SERVICEDESK")){
+		if (req.isUserInRole("SERVICEDESK")) {
 			return "redirect:/srv/monitoring";
 		}
-		
+
 		User u = serviceUser.getUser(vybranyUzivatel);
 		vyberMt(u, mt, sada, model);
 		return "/editace";
@@ -161,7 +159,7 @@ public class EditaceController {
 		List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminka(s);
 		model.addAttribute("prPodminkaList", prPodminkaList);
 		model.addAttribute("prCount", prPodminkaList.size());
-		
+
 		model.addAttribute("vybranyUzivatel", u);
 		model.addAttribute("vybranaMt", m);
 		model.addAttribute("vybranaSada", s);
@@ -184,7 +182,7 @@ public class EditaceController {
 		} else {
 			model.addAttribute("moznoEditovatSadu", false);
 		}
-		
+
 		List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminka(s);
 		model.addAttribute("prPodminkaList", prPodminkaList);
 		model.addAttribute("prCount", prPodminkaList.size());
@@ -223,7 +221,7 @@ public class EditaceController {
 
 		return "/editace";
 	}
-	
+
 	@RequestMapping(value = "/zobrazPrJenDuplicity/{vybranyUzivatel}/{vybranaMt}/{vybranaSada}")
 	public String zobrazPrJenDuplicity(@PathVariable String vybranyUzivatel, @PathVariable String vybranaMt, @PathVariable long vybranaSada, User netusername, Mt mt, Sada sada, Model model,
 			HttpServletRequest req) {
@@ -357,8 +355,8 @@ public class EditaceController {
 
 		User u = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		Sada s = serviceSada.getSadaOne(vybranaSada);
-		model.addAttribute("prihlasenyUzivatel",u.getPrijmeni() + " " + u.getJmeno() + ", " + u.getOddeleni()+ " (" + u.getNetusername()+ ")");
-		
+		model.addAttribute("prihlasenyUzivatel", u.getPrijmeni() + " " + u.getJmeno() + ", " + u.getOddeleni() + " (" + u.getNetusername() + ")");
+
 		model.addAttribute("vybranaSada", s);
 
 		List<MtSeznam> mt = serviceMtSeznam.getMt();
@@ -413,11 +411,11 @@ public class EditaceController {
 			// melo delat asi async :(
 			// kvuli debilnimu IE8 ktere zdvojuje zaznamy, tak proto chytam vyjimku a druhy duplicitni zaznam natvrdo zahazuji (DB-unique key)
 			try {
-				servicePrPodminka.addPrPodminka(newPr);	
+				servicePrPodminka.addPrPodminka(newPr);
 			} catch (Exception e) {
-				log.error("###\t\t Nezadouci duplicitni zaznam (PR podminky): "+ e.getMessage());
+				log.error("###\t\t Nezadouci duplicitni zaznam (PR podminky): " + e.getMessage());
 			}
-			
+
 		}
 
 		// return "redirect:/srv/editace/zobrazPr/"+u.getNetusername()+"/"+s.getSk30tMt().getMt()+"?sada="+s.getNazev();
@@ -442,7 +440,7 @@ public class EditaceController {
 
 		User u = serviceUser.getUser(req.getUserPrincipal().getName().toUpperCase());
 		Sada s = serviceSada.getSadaOne(vybranaSada);
-			
+
 		PrPodminka prp = new PrPodminka();
 		prp.setPr(f.getPrPodminka().toUpperCase());
 		prp.setPoradi(f.getPoradi());
@@ -450,7 +448,7 @@ public class EditaceController {
 		prp.setUuser(u.getNetusername());
 		prp.setUtime(new Date());
 		prp.setSk30tSada(s);
-		
+
 		// MBT kontrola (zde se jeste pouziva MBTLIB)
 		try {
 			Mt mt = serviceMt.getMtOne(s.getSk30tMt().getId());
@@ -461,24 +459,26 @@ public class EditaceController {
 			prp.setErrMbt("zzzKontrolovano");
 			log.debug("###\t Kontrola PR podminky MBT (rucni zadani) " + prCond.toString() + " ... OK");
 		} catch (MBTException e) {
-			log.info("###\t Chyba pri obsahove kontrole PR podminky (rucni zadani):\t"+ e);
-			//System.out.println(e.getID());
+			log.info("###\t Chyba pri obsahove kontrole PR podminky (rucni zadani):\t" + e);
+			// System.out.println(e.getID());
 			prp.setErrMbt(e.getLocalizedMessage());
 		}
-		
-		// kvuli debilnimu IE8 ktere zdvojuje zaznamy, tak proto chytam vyjimku a druhy duplicitni zaznam natvrdo zahazuji (DB-unique key)
-		try {
-			servicePrPodminka.addPrPodminka(prp);	
-		} catch (Exception e) {
-			log.error("###\t\t Nezadouci duplicitni zaznam (PR podminky): "+ e.getMessage());
+
+		// kvuli debilnimu IE8 ktere zdvojuje zaznamy, tak proto chytam vyjimku a druhy duplicitni zaznam natvrdo zahazuji (navic tam je i DB-unique
+		// key)
+
+		if (!servicePrPodminka.existPr(f.getPrPodminka().toUpperCase(), s)) {
+			servicePrPodminka.addPrPodminka(prp);
+			log.info("###\t\t Zakladam novou PR podminku ...");
+		} else {
+			log.info("###\t\t Nezadouci duplicitni zaznam (PR podminky)");
 		}
-		
-		
+
 		List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminka(s);
 		s.setPocet(prPodminkaList.size());
 		s.setUtime(new Date());
 		serviceSada.setSada(s);
-		
+
 		return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
 	}
 
@@ -531,7 +531,7 @@ public class EditaceController {
 
 		return "redirect:/srv/editace/zobrazPr/" + u.getNetusername() + "/" + s.getSk30tMt().getMt() + "/" + s.getId();
 	}
-	
+
 	@RequestMapping(value = "/duplikovatPr/{idPr}")
 	public String duplikovatPr(@PathVariable long idPr, FormObj f, Model model, HttpServletRequest req) {
 		log.debug("###\t duplikovatPr(" + idPr + ")");
@@ -549,7 +549,7 @@ public class EditaceController {
 
 		return "/prPodminkaDuplikovat";
 	}
-	
+
 	@RequestMapping(value = "/duplikovatPrTed/{vybranaSada}")
 	public String duplikovatPrTed(@PathVariable long vybranaSada, User user, Sada sada, FormObj f, Model model, HttpServletRequest req) {
 		log.debug("###\t duplikovatPrTed(" + f.getPoradi() + ", " + f.getPrPodminka() + ", " + f.getPoznamka() + ", " + vybranaSada + ")");
@@ -564,7 +564,7 @@ public class EditaceController {
 		prp.setUuser(u.getNetusername());
 		prp.setUtime(new Date());
 		prp.setSk30tSada(s);
-		
+
 		// MBT kontrola
 		try {
 			Mt mt = serviceMt.getMtOne(s.getSk30tMt().getId());
@@ -575,18 +575,18 @@ public class EditaceController {
 			prp.setErrMbt("zzzKontrolovano");
 			log.debug("###\t Kontrola PR podminky MBT (rucni zadani) " + prCond.toString() + " ... OK");
 		} catch (MBTException e) {
-			log.info("###\t Chyba pri obsahove kontrole PR podminky (rucni zadani):\t"+ e);
-			//System.out.println(e.getID());
+			log.info("###\t Chyba pri obsahove kontrole PR podminky (rucni zadani):\t" + e);
+			// System.out.println(e.getID());
 			prp.setErrMbt(e.getLocalizedMessage());
 		}
 
 		// kvuli debilnimu IE8 ktere zdvojuje zaznamy, tak proto chytam vyjimku a druhy duplicitni zaznam natvrdo zahazuji (DB-unique key)
 		try {
-			servicePrPodminka.addPrPodminka(prp);	
+			servicePrPodminka.addPrPodminka(prp);
 		} catch (Exception e) {
-			log.error("###\t\t Nezadouci duplicitni zaznam (PR podminky): "+ e.getMessage());
+			log.error("###\t\t Nezadouci duplicitni zaznam (PR podminky): " + e.getMessage());
 		}
-		
+
 		List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminka(s);
 		s.setPocet(prPodminkaList.size());
 		s.setUtime(new Date());
@@ -605,7 +605,7 @@ public class EditaceController {
 		List<PrPodminka> pr = servicePrPodminka.getPrPodminka(s);
 		int pocetSmazanychPr = pr.size();
 		servicePrPodminka.removeAllPrPodminka(s);
-		
+
 		s.setPocet(0);
 		serviceSada.setSada(s);
 
@@ -627,13 +627,13 @@ public class EditaceController {
 		PrPodminka pr = servicePrPodminka.getPrPodminkaOne(idPr);
 		User u = serviceUser.getUser(pr.getSk30tSada().getSk30tMt().getSk30tUser().getNetusername());
 		servicePrPodminka.removePrPodminka(idPr);
-				
+
 		Sada s = pr.getSk30tSada();
 		List<PrPodminka> prPodminkaList = servicePrPodminka.getPrPodminka(s);
 		s.setPocet(prPodminkaList.size());
 		s.setUtime(new Date());
 		serviceSada.setSada(s);
-		
+
 		Protokol newProtokol = new Protokol();
 		newProtokol.setNetusername(req.getUserPrincipal().getName().toUpperCase());
 		newProtokol.setAction("Smazani PR podminky");
@@ -648,26 +648,25 @@ public class EditaceController {
 	@RequestMapping(value = "/exportXlsPr/{idSady}")
 	public void exportXlsPr(@PathVariable long idSady, Model model, HttpServletRequest req, HttpServletResponse res) throws IOException {
 		log.debug("###\t exportXlsPr(" + idSady + ")");
-		
+
 		List<PrPodminka> prP = servicePrPodminka.getPrPodminka(serviceSada.getSadaOne(idSady));
 
 		ExportXls exp = new ExportXls();
 		exp.prPodminkySady(prP, res);
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/testExistPrAjax/{idSady}/{prC}")
 	public Boolean testExistPrAjax(@PathVariable long idSady, @PathVariable String prC) {
-		log.debug("### testExistPrAjax("+idSady+"-"+prC.toUpperCase()+")");
+		log.debug("### testExistPrAjax(" + idSady + "-" + prC.toUpperCase() + ")");
 		return servicePrPodminka.existPr(prC.toUpperCase(), serviceSada.getSadaOne(idSady));
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/testExistSadaAjax/{mt}/{nazevSady}")
 	public Boolean testExistSadaAjax(@PathVariable String mt, @PathVariable String nazevSady, HttpServletRequest req) {
-		log.debug("### testExistSadaAjax("+mt+"-"+nazevSady+")");
+		log.debug("### testExistSadaAjax(" + mt + "-" + nazevSady + ")");
 		return serviceSada.existSadaForUser(nazevSady, mt, req.getUserPrincipal().getName().toUpperCase());
 	}
-
 
 }

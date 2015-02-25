@@ -90,26 +90,44 @@ public class ExportXls {
 		row = sheet.createRow(radka++);
 
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Modelová třída");
+		cell.setCellValue("Modelova trida");
 		cell.setCellStyle(boldFontStyle);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("PR podmínka");
+		cell.setCellValue("PR podminka");
 		cell.setCellStyle(boldFontStyle);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Četnost");
+		cell.setCellValue("Cetnost");
 		cell.setCellStyle(boldFontStyle);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Počet zakázek");
+		cell.setCellValue("Pocet zakazek".toString());
 		cell.setCellStyle(boldFontStyle);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Poznámka");
+		cell.setCellValue("Poznamka");
 		cell.setCellStyle(boldFontStyle);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Pořadí");
+		cell.setCellValue("Poradi"); 
 		cell.setCellStyle(boldFontStyle);
 		cell = row.createCell(bunka++);
 		cell.setCellValue("MBT kontrola");
 		cell.setCellStyle(boldFontStyle);
+//		cell = row.createCell(bunka++);
+//		cell.setCellValue(new String("Pořadí".getBytes(), "UTF-8"));
+//		cell = row.createCell(bunka++);
+//		cell.setCellValue(new String("Pořadí".getBytes(), "Cp1250")); 
+//		cell = row.createCell(bunka++);
+//		cell.setCellValue(new String("Pořadí".getBytes(), "ASCII")); 
+//		cell = row.createCell(bunka++);
+//		cell.setCellValue(new String("Pořadí".getBytes(), "ISO646-US")); 
+//		cell = row.createCell(bunka++);
+//		cell.setCellValue(new String("Pořadí".getBytes(), "ISO_8859-2")); 		
+//		cell = row.createCell(bunka++);
+//		cell.setCellValue(new String("Pořadí".getBytes(), "ISO_8859_1")); 
+//		cell = row.createCell(bunka++);
+//		cell.setCellValue(new String("Pořadí".getBytes(), "UTF_16")); 
+//		cell = row.createCell(bunka++);
+//		cell.setCellValue(new String("Pořadí".getBytes(), "UTF_16LE")); 
+//		cell = row.createCell(bunka++);
+//		cell.setCellValue(new String("Pořadí".getBytes(), "UTF_16BE")); 
 
 		for (Vysledek v : vysledek) {
 			bunka = 0;
@@ -125,7 +143,7 @@ public class ExportXls {
 				row.createCell(bunka++).setCellValue(v.getSk30tPrPodminka().getPoradi().doubleValue());
 			}
 			if (v.getSk30tPrPodminka().getErrMbt() == null) {
-				row.createCell(bunka++).setCellValue("Neprověřená PR podmínka");
+				row.createCell(bunka++).setCellValue("Neproverena PR podminka");
 			} else {
 				row.createCell(bunka++).setCellValue(v.getSk30tPrPodminka().getErrMbt().startsWith("zzzKontrolovano") ? "" : v.getSk30tPrPodminka().getErrMbt());
 			}
@@ -140,7 +158,7 @@ public class ExportXls {
 
 		row = sheet.createRow(radka++);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Uživatel:");
+		cell.setCellValue("Uzivatel:");
 		cell.setCellStyle(boldFontStyle);
 		row.createCell(bunka++).setCellValue(
 				vysledek.get(0).getSk30tPrPodminka().getSk30tSada().getSk30tMt().getSk30tUser().getNetusername() + " - "
@@ -162,14 +180,14 @@ public class ExportXls {
 		bunka = 0;
 		row = sheet.createRow(radka++);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Závod:");
+		cell.setCellValue("Zavod:");
 		cell.setCellStyle(boldFontStyle);
 		row.createCell(bunka++).setCellValue(vysledek.get(0).getSk30tOfflineJob().getSk30tEvidencniBody().getKbodWk());
 
 		bunka = 0;
 		row = sheet.createRow(radka++);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Kontrolní bod:");
+		cell.setCellValue("Kontrolni bod:");
 		cell.setCellStyle(boldFontStyle);
 		row.createCell(bunka++).setCellValue(
 				vysledek.get(0).getSk30tOfflineJob().getSk30tEvidencniBody().getKbodKod() + " / " + vysledek.get(0).getSk30tOfflineJob().getSk30tEvidencniBody().getKbodEvid() + " / "
@@ -178,7 +196,7 @@ public class ExportXls {
 		bunka = 0;
 		row = sheet.createRow(radka++);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Období od:");
+		cell.setCellValue("Obdobi od:");
 		cell.setCellStyle(boldFontStyle);
 		cell = row.createCell(bunka++);
 		cell.setCellValue(vysledek.get(0).getSk30tOfflineJob().getPlatnostOd());
@@ -187,7 +205,7 @@ public class ExportXls {
 		bunka = 0;
 		row = sheet.createRow(radka++);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Období do:");
+		cell.setCellValue("Obdobi do:");
 		cell.setCellStyle(boldFontStyle);
 		cell = row.createCell(bunka++);
 		cell.setCellValue(vysledek.get(0).getSk30tOfflineJob().getPlatnostDo());
@@ -206,7 +224,7 @@ public class ExportXls {
 		cell.setCellValue("Agregace:");
 		cell.setCellStyle(boldFontStyle);
 		if (vysledek.get(0).getSk30tOfflineJob().getAgregace() == null) {
-			row.createCell(bunka++).setCellValue("není");
+			row.createCell(bunka++).setCellValue("neni");
 		} else {
 			row.createCell(bunka++).setCellValue(vysledek.get(0).getSk30tOfflineJob().getAgregace());
 		}
@@ -214,20 +232,20 @@ public class ExportXls {
 		bunka = 0;
 		row = sheet.createRow(radka++);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Setříděno:");
+		cell.setCellValue("Setrideno:");
 		cell.setCellStyle(boldFontStyle);
 		row.createCell(bunka++).setCellValue(vysledek.get(0).getSk30tOfflineJob().getVystupRazeni());
 
 		// export zakazek
 		if (zakazky != null && zakazky.size() > 0) {
 
-			sheet = wb.createSheet("Zakázky");
+			sheet = wb.createSheet("Zakazky");
 			radka = 0;
 
 			bunka = 0;
 			row = sheet.createRow(radka++);
 			cell = row.createCell(bunka++);
-			cell.setCellValue("Uživatel:");
+			cell.setCellValue("Uzivatel:");
 			cell.setCellStyle(boldFontStyle);
 			row.createCell(bunka++).setCellValue(
 					vysledek.get(0).getSk30tPrPodminka().getSk30tSada().getSk30tMt().getSk30tUser().getNetusername() + " - "
@@ -249,14 +267,14 @@ public class ExportXls {
 			bunka = 0;
 			row = sheet.createRow(radka++);
 			cell = row.createCell(bunka++);
-			cell.setCellValue("Závod:");
+			cell.setCellValue("Zavod:");
 			cell.setCellStyle(boldFontStyle);
 			row.createCell(bunka++).setCellValue(vysledek.get(0).getSk30tOfflineJob().getSk30tEvidencniBody().getKbodWk());
 
 			bunka = 0;
 			row = sheet.createRow(radka++);
 			cell = row.createCell(bunka++);
-			cell.setCellValue("Kontrolní bod:");
+			cell.setCellValue("Kontrolni bod:");
 			cell.setCellStyle(boldFontStyle);
 			row.createCell(bunka++).setCellValue(
 					vysledek.get(0).getSk30tOfflineJob().getSk30tEvidencniBody().getKbodKod() + " / " + vysledek.get(0).getSk30tOfflineJob().getSk30tEvidencniBody().getKbodEvid() + " / "
@@ -265,7 +283,7 @@ public class ExportXls {
 			bunka = 0;
 			row = sheet.createRow(radka++);
 			cell = row.createCell(bunka++);
-			cell.setCellValue("Období od:");
+			cell.setCellValue("Obdobi od:");
 			cell.setCellStyle(boldFontStyle);
 			cell = row.createCell(bunka++);
 			cell.setCellValue(vysledek.get(0).getSk30tOfflineJob().getPlatnostOd());
@@ -274,7 +292,7 @@ public class ExportXls {
 			bunka = 0;
 			row = sheet.createRow(radka++);
 			cell = row.createCell(bunka++);
-			cell.setCellValue("Období do:");
+			cell.setCellValue("Obdobi do:");
 			cell.setCellStyle(boldFontStyle);
 			cell = row.createCell(bunka++);
 			cell.setCellValue(vysledek.get(0).getSk30tOfflineJob().getPlatnostDo());
@@ -292,7 +310,7 @@ public class ExportXls {
 			bunka = 0;
 			row = sheet.createRow(radka++);
 			cell = row.createCell(bunka++);
-			cell.setCellValue("Modelový klíč");
+			cell.setCellValue("Modelovy klic");
 			cell.setCellStyle(boldFontStyle);
 			cell = row.createCell(bunka++);
 			cell.setCellValue("KIFA");
@@ -313,22 +331,22 @@ public class ExportXls {
 			cell.setCellValue("Barva");
 			cell.setCellStyle(boldFontStyle);
 			cell = row.createCell(bunka++);
-			cell.setCellValue("Kod země");
+			cell.setCellValue("Kod zeme");
 			cell.setCellStyle(boldFontStyle);
 			cell = row.createCell(bunka++);
 			cell.setCellValue("SKD PR");
 			cell.setCellStyle(boldFontStyle);
 			cell = row.createCell(bunka++);
-			cell.setCellValue("Průchod KB");
+			cell.setCellValue("Pruchod KB");
 			cell.setCellStyle(boldFontStyle);
 			cell = row.createCell(bunka++);
-			cell.setCellValue("Datum odvádění");
+			cell.setCellValue("Datum odvadeni");
 			cell.setCellStyle(boldFontStyle);
 			cell = row.createCell(bunka++);
 			cell.setCellValue("Datum platnosti");
 			cell.setCellStyle(boldFontStyle);
 			cell = row.createCell(bunka++);
-			cell.setCellValue("Storno věta");
+			cell.setCellValue("Storno veta");
 			cell.setCellStyle(boldFontStyle);
 			cell = row.createCell(bunka++);
 			cell.setCellValue("PR popis");
@@ -433,7 +451,7 @@ public class ExportXls {
 
 		// ---------------------------------------------------------------------
 		
-		Sheet sheet = wb.createSheet("Výstup s agregací");
+		Sheet sheet = wb.createSheet("Vystup s agregaci");
 
 		Cell cell = null;
 		Row row = null;
@@ -445,25 +463,25 @@ public class ExportXls {
 
 		row = sheet.createRow(radka++);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Modelová třída");
+		cell.setCellValue("Modelova trida");
 		cell.setCellStyle(boldFontStyle);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("PR podmínka");
+		cell.setCellValue("PR podminka");
 		cell.setCellStyle(boldFontStyle);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Četnost");
+		cell.setCellValue("cetnost");
 		cell.setCellStyle(boldFontStyle);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Počet zakázek");
+		cell.setCellValue("Pocet zakazek");
 		cell.setCellStyle(boldFontStyle);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Poznámka");
+		cell.setCellValue("Poznamka");
 		cell.setCellStyle(boldFontStyle);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Pořadí");
+		cell.setCellValue("Poradi");
 		cell.setCellStyle(boldFontStyle);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Pořadí celkové");
+		cell.setCellValue("Poradi celkove");
 		cell.setCellStyle(boldFontStyle);
 		cell = row.createCell(bunka++);
 		cell.setCellValue("MBT kontrola");
@@ -522,7 +540,7 @@ public class ExportXls {
 				}
 				row.createCell(bunka++).setCellValue(v.getPorCelk());
 				if (v.getMbt() == null){
-					row.createCell(bunka++).setCellValue("Neprověřená PR podmínka");
+					row.createCell(bunka++).setCellValue("Neproverena PR podminka");
 				} else {
 					row.createCell(bunka++).setCellValue(v.getMbt().startsWith("zzzKontrolovano") ? "" : v.getMbt());
 				}				
@@ -539,7 +557,7 @@ public class ExportXls {
 
 		row = sheet.createRow(radka++);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Uživatel:");
+		cell.setCellValue("Uzivatel:");
 		cell.setCellStyle(boldFontStyle);
 		row.createCell(bunka++).setCellValue(
 				offlineJobs.get(0).getSk30tSada().getSk30tMt().getSk30tUser().getNetusername() + " - "
@@ -561,14 +579,14 @@ public class ExportXls {
 		bunka = 0;
 		row = sheet.createRow(radka++);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Závod:");
+		cell.setCellValue("Zavod:");
 		cell.setCellStyle(boldFontStyle);
 		row.createCell(bunka++).setCellValue(offlineJobs.get(0).getSk30tEvidencniBody().getKbodWk());
 
 		bunka = 0;
 		row = sheet.createRow(radka++);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Kontrolní bod:");
+		cell.setCellValue("Kontrolni bod:");
 		cell.setCellStyle(boldFontStyle);
 		row.createCell(bunka++).setCellValue(
 				offlineJobs.get(0).getSk30tEvidencniBody().getKbodKod() + " / " + offlineJobs.get(0).getSk30tEvidencniBody().getKbodEvid() + " / "
@@ -577,7 +595,7 @@ public class ExportXls {
 		bunka = 0;
 		row = sheet.createRow(radka++);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Období od:");
+		cell.setCellValue("Obdobi od:");
 		cell.setCellStyle(boldFontStyle);
 		cell = row.createCell(bunka++);
 		cell.setCellValue(offlineJobs.get(0).getPlatnostOd());
@@ -586,7 +604,7 @@ public class ExportXls {
 		bunka = 0;
 		row = sheet.createRow(radka++);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Období do:");
+		cell.setCellValue("Obdobi do:");
 		cell.setCellStyle(boldFontStyle);
 		cell = row.createCell(bunka++);
 		cell.setCellValue(offlineJobs.get(0).getPlatnostDo());
@@ -607,7 +625,7 @@ public class ExportXls {
 		cell.setCellValue("Agregace:");
 		cell.setCellStyle(boldFontStyle);
 		if (offlineJobs.get(0).getAgregace() == null) {
-			row.createCell(bunka++).setCellValue("není");
+			row.createCell(bunka++).setCellValue("neni");
 		} else {
 			row.createCell(bunka++).setCellValue(offlineJobs.get(0).getAgregace());
 		}
@@ -673,7 +691,7 @@ public class ExportXls {
 
 		// row = sheet.createRow(radka++);
 		// cell = row.createCell(bunka++);
-		// cell.setCellValue("PR podmínka");
+		// cell.setCellValue("PR podminka");
 		// cell.setCellStyle(boldFontStyle);
 
 		for (PrPodminka p : prPodminky) {
@@ -692,7 +710,7 @@ public class ExportXls {
 
 		row = sheet.createRow(radka++);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Uživatel:");
+		cell.setCellValue("Uzivatel:");
 		cell.setCellStyle(boldFontStyle);
 		row.createCell(bunka++).setCellValue(
 				prPodminky.get(0).getSk30tSada().getSk30tMt().getSk30tUser().getNetusername() + " - " + prPodminky.get(0).getSk30tSada().getSk30tMt().getSk30tUser().getPrijmeni() + " "
@@ -710,7 +728,7 @@ public class ExportXls {
 		bunka = 0;
 		row = sheet.createRow(radka++);
 		cell = row.createCell(bunka++);
-		cell.setCellValue("Modelová třída:");
+		cell.setCellValue("Modelova trida:");
 		cell.setCellStyle(boldFontStyle);
 		cell = row.createCell(bunka++);
 		cell.setCellValue(prPodminky.get(0).getSk30tSada().getSk30tMt().getMt());
